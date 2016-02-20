@@ -126,6 +126,11 @@ if(WIN32)
     list(append GISH_H video/glext.h)
 endif(WIN32)
 
+if(APPLE)
+    list(APPEND GISH_SRCS sdl/SDLMain.m)
+    list(APPEND GISH_H sdl/SDLMain.h)
+endif(APPLE)
+
 add_executable(freegish ${GISH_SRCS} ${GISH_H})
 
 target_link_libraries(freegish
