@@ -54,7 +54,7 @@ add_subdirectory(src)
 if(UNIX)
 
     if(NOT ICONS_DIR)
-	SET(ICONS_DIR "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/32x32/apps")
+	SET(ICONS_DIR "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps")
     endif(NOT ICONS_DIR)
 
     if(NOT PIXMAPS_DIR)
@@ -82,7 +82,7 @@ if(UNIX)
 
 
     install(FILES "freegish.bmp" DESTINATION ${DATA_DIR})
-    install(FILES "icons/freegish.png" DESTINATION ${ICONS_DIR})
+    install(FILES "icons/freegish.svg" DESTINATION ${ICONS_DIR})
     install(FILES "icons/freegish.xpm" DESTINATION ${PIXMAPS_DIR})
     install(FILES "icons/freegish.desktop" DESTINATION ${APPLICATIONS_DIR})
     install(FILES "freegish.6" DESTINATION ${MAN_DIR})
