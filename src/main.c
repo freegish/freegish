@@ -233,8 +233,7 @@ int main (int argc,char *argv[])
     {
     notsupportedmenu();
 
-    // TODO:
-    // SDL_WM_IconifyWindow();
+    SDL_MinimizeWindow(globalwindow);
     SDL_Quit();
     return(0);
     }
@@ -251,8 +250,7 @@ int main (int argc,char *argv[])
   if (config.sound)
     shutdownaudio();
 
-  // TODO:
-  // SDL_WM_IconifyWindow();
+  SDL_MinimizeWindow(globalwindow);
   SDL_Quit();
 
   return(0);

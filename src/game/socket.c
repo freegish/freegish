@@ -26,12 +26,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   #include <windows.h>
 #endif
 #if defined(LINUX) || defined(__FreeBSD_kernel__) || defined(__GNU__)
-  #include <SDL/SDL.h>
+
+  #include <SDL2/SDL.h>
   #include <stdlib.h>
   #include <string.h>
 #endif
 
 #include "../game/socket.h"
+#include "../sdl/video.h"
 
 char sockdata[1024];
 
@@ -53,7 +55,7 @@ unsigned int rotint(unsigned int x,int rotnum)
 void launchwebpage(char *webpagename)
   {
 #ifdef WINDOWS
-  SDL_WM_IconifyWindow();
+  SDL_MinimizeWindow(globalwindow);
   ShellExecute(NULL,"open",webpagename,"","c:\\",SW_SHOWNORMAL);
 #endif
 #ifdef MAC
@@ -62,7 +64,7 @@ void launchwebpage(char *webpagename)
   ICInstance inst;
   long length,start,end;
 
-  SDL_WM_IconifyWindow();
+  SDL_MinimizeWindow(globalwindow);
 
   err=ICStart(&inst,'Gish');
   if (err==noErr)
@@ -78,8 +80,7 @@ void launchwebpage(char *webpagename)
 #if defined(LINUX) || defined(__FreeBSD_kernel__) || defined(__GNU__)
   char command[100] = "xdg-open http://";
   strcat(command, webpagename);
-  // TODO:
-  //SDL_WM_IconifyWindow();
+  SDL_MinimizeWindow(globalwindow);
   system((const char*)command);
 #endif
   }
