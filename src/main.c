@@ -202,18 +202,17 @@ int main (int argc,char *argv[])
 
   if (config.joystick)
     {
-      // TODO:
-//    numofjoysticks=SDL_NumJoysticks();
-//    for (count=0;count<numofjoysticks;count++)
-//      {
-//      joy[count]=SDL_JoystickOpen(count);
-//      temp=SDL_JoystickName(count);
-//      strcpy(joystick[count].name,temp);
-//      joystick[count].numofbuttons=SDL_JoystickNumButtons(joy[count]);
-//      joystick[count].numofhats=SDL_JoystickNumHats(joy[count]);
-//      }
+    numofjoysticks=SDL_NumJoysticks();
+    for (count=0;count<numofjoysticks;count++)
+      {
+      joy[count]=SDL_JoystickOpen(count);
+      temp=SDL_JoystickName(joy[count]);
+      strcpy(joystick[count].name,temp);
+      joystick[count].numofbuttons=SDL_JoystickNumButtons(joy[count]);
+      joystick[count].numofhats=SDL_JoystickNumHats(joy[count]);
+      }
 
-//    SDL_JoystickEventState(SDL_IGNORE);
+    SDL_JoystickEventState(SDL_IGNORE);
     }
 
   font.texturenum=0;
