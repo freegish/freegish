@@ -21,8 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../config.h"
 
-#include "../sdl/sdl.h"
-
 #include "../sdl/video.h"
 
 int numofsdlvideomodes;
@@ -30,6 +28,7 @@ _sdlvideomode sdlvideomode[4096];
 
 SDL_Window *globalwindow = NULL;
 SDL_GLContext *glcontext = NULL;
+SDL_Surface *windowicon = NULL;
 
 void listvideomodes(void)
   {/*
