@@ -23,8 +23,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void checkkeyboard(void);
 
-extern unsigned char keyboard[323];
-extern unsigned char prevkeyboard[323];
+#include <SDL2/SDL.h>
+
+extern unsigned char keyboard[SDL_NUM_SCANCODES];
+extern unsigned char prevkeyboard[SDL_NUM_SCANCODES];
 
 typedef enum {
 	SCAN_ESC = 27,

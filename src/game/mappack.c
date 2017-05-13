@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../menu/menu.h"
 #include "../sdl/event.h"
 #include "../video/text.h"
+#include "../sdl/video.h"
 
 void mappackpostgamemenu(void)
   {
@@ -118,7 +119,7 @@ void mappackpostgamemenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     simcount=0;
     while (SDL_GetTicks()-simtimer>20 && simcount<5)
@@ -200,7 +201,7 @@ void mappackpregamemenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     if (menuitem[1].active)
       {
@@ -311,7 +312,7 @@ void mappackendingmenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
     }
 
   resetmenuitems();

@@ -134,7 +134,7 @@ endif(APPLE)
 add_executable(freegish ${GISH_SRCS} ${GISH_H})
 
 target_link_libraries(freegish
-    ${SDL_LIBRARY}
+    ${SDL2_LIBRARIES}
     ${OPENAL_LIBRARY}
     ${OPENGL_LIBRARIES}
     ${Vorbis_LIBRARIES}

@@ -78,7 +78,8 @@ void launchwebpage(char *webpagename)
 #if defined(LINUX) || defined(__FreeBSD_kernel__) || defined(__GNU__)
   char command[100] = "xdg-open http://";
   strcat(command, webpagename);
-  SDL_WM_IconifyWindow();
+  // TODO:
+  //SDL_WM_IconifyWindow();
   system((const char*)command);
 #endif
   }

@@ -3,6 +3,9 @@
 
 #ifdef __linux__
  #define LINUX 1
+ #ifndef ANDROID_NDK
+  #define TO_DEBUG_LOG(...) fprintf(stderr, __VA_ARGS__)
+ #endif
 #endif
 
 #ifdef _WIN32
