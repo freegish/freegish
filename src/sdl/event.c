@@ -42,16 +42,13 @@ void checksystemmessages(void)
     {
     if (event.type==SDL_WINDOWEVENT)
       {
-      if (event.window.event == SDL_WINDOWEVENT_SHOWN)
+      if (event.window.event == SDL_WINDOWEVENT_RESTORED)
         {
-          // TODO: ???
           if (windowinfo.fullscreen) {
             SDL_SetWindowSize(globalwindow, windowinfo.resolutionx,windowinfo.resolutiony);
             SDL_SetWindowFullscreen(globalwindow, SDL_WINDOW_FULLSCREEN);
-            // SDL_SetVideoMode(windowinfo.resolutionx,windowinfo.resolutiony,windowinfo.bitsperpixel,SDL_OPENGL|SDL_FULLSCREEN);
           } else {
             SDL_SetWindowSize(globalwindow, windowinfo.resolutionx,windowinfo.resolutiony);
-            // SDL_SetVideoMode(windowinfo.resolutionx,windowinfo.resolutiony,windowinfo.bitsperpixel,SDL_OPENGL);
           }
           for (count=0;count<2048;count++)
             if (texture[count].sizex!=0)
