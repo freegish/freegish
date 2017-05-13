@@ -44,12 +44,10 @@ void checksystemmessages(void)
       {
       if (event.window.event == SDL_WINDOWEVENT_RESTORED)
         {
-          if (windowinfo.fullscreen) {
-            SDL_SetWindowSize(globalwindow, windowinfo.resolutionx,windowinfo.resolutiony);
-            SDL_SetWindowFullscreen(globalwindow, SDL_WINDOW_FULLSCREEN);
-          } else {
-            SDL_SetWindowSize(globalwindow, windowinfo.resolutionx,windowinfo.resolutiony);
-          }
+          SDL_DisplayMode mode = { (windowinfo.bitsperpixel==32) ? SDL_PIXELFORMAT_RGB888 : SDL_PIXELFORMAT_RGB565, windowinfo.resolutionx, windowinfo.resolutiony, 0, 0 };
+          SDL_SetWindowDisplayMode(globalwindow, &mode);
+          SDL_SetWindowSize(globalwindow, windowinfo.resolutionx, windowinfo.resolutiony);
+          (windowinfo.fullscreen) ? SDL_SetWindowFullscreen(globalwindow, SDL_WINDOW_FULLSCREEN) : SDL_SetWindowFullscreen(globalwindow, 0);
           for (count=0;count<2048;count++)
             if (texture[count].sizex!=0)
               setuptexture(count);

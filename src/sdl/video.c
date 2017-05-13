@@ -31,48 +31,61 @@ SDL_GLContext *glcontext = NULL;
 SDL_Surface *windowicon = NULL;
 
 void listvideomodes(void)
-  {/*
-  int count;
-  SDL_Rect **sdlmode;
+  {
+    // https://wiki.libsdl.org/SDL_DisplayMode
+    static int display_in_use = 0; /* Only using first display */
 
-  numofsdlvideomodes=0;
+    int i, display_mode_count;
+    SDL_DisplayMode mode;
+    Uint32 f;
+    numofsdlvideomodes=0;
 
-  sdlmode=SDL_ListModes(NULL,SDL_OPENGL|SDL_FULLSCREEN);
+    TO_DEBUG_LOG("SDL_GetNumVideoDisplays(): %i\n", SDL_GetNumVideoDisplays());
 
-  if (sdlmode==(SDL_Rect **)-1)
-    {
-    sdlvideomode[numofsdlvideomodes].resolutionx=640;
-    sdlvideomode[numofsdlvideomodes].resolutiony=480;
-    sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
-    numofsdlvideomodes++;
-    sdlvideomode[numofsdlvideomodes].resolutionx=800;
-    sdlvideomode[numofsdlvideomodes].resolutiony=600;
-    sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
-    numofsdlvideomodes++;
-    sdlvideomode[numofsdlvideomodes].resolutionx=1024;
-    sdlvideomode[numofsdlvideomodes].resolutiony=768;
-    sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
-    numofsdlvideomodes++;
+    display_mode_count = SDL_GetNumDisplayModes(display_in_use);
+    if (display_mode_count < 1) {
+        TO_DEBUG_LOG("SDL_GetNumDisplayModes failed: %s\n", SDL_GetError());
+        sdlvideomode[numofsdlvideomodes].resolutionx=640;
+        sdlvideomode[numofsdlvideomodes].resolutiony=480;
+        sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
+        numofsdlvideomodes++;
+        sdlvideomode[numofsdlvideomodes].resolutionx=800;
+        sdlvideomode[numofsdlvideomodes].resolutiony=600;
+        sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
+        numofsdlvideomodes++;
+        sdlvideomode[numofsdlvideomodes].resolutionx=1024;
+        sdlvideomode[numofsdlvideomodes].resolutiony=768;
+        sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
+        numofsdlvideomodes++;
+        return;
+    }
+    TO_DEBUG_LOG("SDL_GetNumDisplayModes: %i\n", display_mode_count);
 
-    return;
+    if (display_mode_count < 1) {
+
     }
 
-  for (count=0;sdlmode[count]!=NULL && count<64;count++)
-    {
-    //if (SDL_VideoModeOK(sdlmode[count]->w,sdlmode[count]->h,32,SDL_OPENGL|SDL_FULLSCREEN))
-      {
-      sdlvideomode[numofsdlvideomodes].resolutionx=sdlmode[count]->w;
-      sdlvideomode[numofsdlvideomodes].resolutiony=sdlmode[count]->h;
-      sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
-      numofsdlvideomodes++;
-      }
-    //if (SDL_VideoModeOK(sdlmode[count]->w,sdlmode[count]->h,16,SDL_OPENGL|SDL_FULLSCREEN))
-      {
-      sdlvideomode[numofsdlvideomodes].resolutionx=sdlmode[count]->w;
-      sdlvideomode[numofsdlvideomodes].resolutiony=sdlmode[count]->h;
-      sdlvideomode[numofsdlvideomodes].bitsperpixel=16;
-      numofsdlvideomodes++;
-      }
-    }*/
-  }
+    for (i = 0; i < display_mode_count && display_mode_count < 64; ++i) {
+        if (SDL_GetDisplayMode(display_in_use, i, &mode) != 0) {
+            TO_DEBUG_LOG("SDL_GetDisplayMode failed: %s\n", SDL_GetError());
+            return;
+        }
+        f = mode.format;
 
+        TO_DEBUG_LOG("Mode %i\tbpp %i\t%s\t%i x %i\n", i,
+        SDL_BITSPERPIXEL(f), SDL_GetPixelFormatName(f), mode.w, mode.h);
+
+        // if (SDL_VideoModeOK(sdlmode[count]->w,sdlmode[count]->h,32,SDL_OPENGL|SDL_FULLSCREEN)) {
+            sdlvideomode[numofsdlvideomodes].resolutionx=mode.w;
+            sdlvideomode[numofsdlvideomodes].resolutiony=mode.h;
+            sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
+            numofsdlvideomodes++;
+        // }
+        // if (SDL_VideoModeOK(sdlmode[count]->w,sdlmode[count]->h,16,SDL_OPENGL|SDL_FULLSCREEN)) {
+            sdlvideomode[numofsdlvideomodes].resolutionx=mode.w;
+            sdlvideomode[numofsdlvideomodes].resolutiony=mode.h;
+            sdlvideomode[numofsdlvideomodes].bitsperpixel=16;
+            numofsdlvideomodes++;
+        // }
+    }
+  }
