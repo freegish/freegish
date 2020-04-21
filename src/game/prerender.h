@@ -45,7 +45,7 @@ typedef struct
   float alpha;
   } _objectrender;
 
-int numofobjectrenders;
-_objectrender objectrender[512];
+extern int numofobjectrenders;
+extern _objectrender objectrender[512];
 
 #endif /* GISH_GAME_PRERENDER_H */

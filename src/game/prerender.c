@@ -32,6 +32,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../physics/bond.h"
 #include "../physics/particle.h"
 
+int numofobjectrenders;
+_objectrender objectrender[512];
+
 void setuprenderobjects(void)
   {
   int count,count2;
