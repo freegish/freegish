@@ -34,6 +34,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../sdl/file.h"
 
+size_t (*fread2)(void *,size_t,size_t,FILE *);
+size_t (*fwrite2)(const void *,size_t,size_t,FILE *);
+
 int comparestrings(const void *arg1,const void *arg2)
   {
   return(strcmp(arg1,arg2));
