@@ -61,3 +61,5 @@ If you own the original assets, you may also copy those into this directory. You
 - sound
 - texture
 - tile01 ... tile07
+
+Afterwards run `rename-levels.sh DIRECTORY_WITH_ASSETS` script to rename files so that they match Freegish naming convention (see https://github.com/freegish/freegish/issues/2#issuecomment-48749365).
