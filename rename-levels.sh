@@ -5,8 +5,11 @@ if [[ -z "$1" ]]; then
 	exit 1
 fi
 
-cd "$1/level"
-mv racing.lvl 2racing1.lvl
+# there is no racing.lvl in gish1.6
+if [ -f racing.lvl ]
+then
+  mv racing.lvl 2racing1.lvl
+fi
 
 for X in "bathhouse sumo" "field football" "amber greed" "fight duel" "colvs collection" dragster; do
 	OLD="${X% *}"
