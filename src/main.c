@@ -74,17 +74,14 @@ int main (int argc,char *argv[])
 
   if ((display_count = SDL_GetNumVideoDisplays()) < 1)
     {
-    TO_DEBUG_LOG("SDL_GetNumVideoDisplays returned: %i\n", display_count);
     return 1;
     }
 
   if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0)
     {
-    TO_DEBUG_LOG("SDL_GetDisplayMode failed: %s\n", SDL_GetError());
     return 1;
     }
 
-  TO_DEBUG_LOG("SDL_GetDisplayMode(0, 0, &mode):\t\t%i bpp\t%i x %i\n", SDL_BITSPERPIXEL(mode.format), mode.w, mode.h);
 
   if (SDL_BITSPERPIXEL(mode.format)==16)
     config.bitsperpixel=16;

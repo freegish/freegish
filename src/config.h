@@ -3,9 +3,6 @@
 
 #ifdef __linux__
  #define LINUX 1
- #ifndef ANDROID_NDK
-  #define TO_DEBUG_LOG(...) fprintf(stderr, __VA_ARGS__)
- #endif
 #endif
 
 #ifdef _WIN32
@@ -30,11 +27,11 @@
 #define PATH_MAX 256
 #endif
 
-#ifndef min
+#if !defined(min) && !defined(_WIN32)
 #define min(x1,x2) ((x1) > (x2) ? (x2):(x1))
 #endif
 
-#ifndef max
+#if !defined(max) && !defined(_WIN32)
 #define max(x1,x2) ((x1) > (x2) ? (x1):(x2))
 #endif
 

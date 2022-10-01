@@ -123,7 +123,7 @@ set(GISH_H
 )
 
 if(WIN32)
-    list(append GISH_H video/glext.h)
+    list(APPEND GISH_H video/glext.h)
 endif(WIN32)
 
 if(APPLE)
@@ -131,16 +131,34 @@ if(APPLE)
     list(APPEND GISH_H sdl/SDLMain.h)
 endif(APPLE)
 
-add_executable(freegish ${GISH_SRCS} ${GISH_H})
+if(WIN32)
+    add_executable(freegish WIN32 ${GISH_SRCS} ${GISH_H})
+else()
+    add_executable(freegish ${GISH_SRCS} ${GISH_H})
+endif()
 
-target_link_libraries(freegish
-    ${SDL2_LIBRARIES}
-    ${OPENAL_LIBRARY}
-    ${OPENGL_LIBRARIES}
-    ${Vorbis_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${M_LIBRARIES}
-)
+if(MSVC)
+    target_link_libraries(freegish PRIVATE
+        ${OPENGL_LIBRARIES}
+        SDL2::SDL2
+        SDL2::SDL2main
+        Ogg::ogg
+        Vorbis::vorbis
+        Vorbis::vorbisenc
+        Vorbis::vorbisfile
+        png
+        OpenAL::OpenAL
+    )
+else()
+    target_link_libraries(freegish
+        ${SDL2_LIBRARIES}
+        ${OPENAL_LIBRARY}
+        ${OPENGL_LIBRARIES}
+        ${Vorbis_LIBRARIES}
+        ${PNG_LIBRARIES}
+        ${M_LIBRARIES}
+    )
+endif()
 
 if(UNIX)
     install(TARGETS freegish DESTINATION ${BIN_DIR})

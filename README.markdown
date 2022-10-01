@@ -10,7 +10,15 @@ Then simply issue
     cmake ..
     make
 
-# How to compile (Windows with VS2008)
+# How to compile (Windows with VS)
+
+```
+vcpkg install --triplet x64-windows openal-soft libogg libvorbis libpng sdl2 opengl
+mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows ..
+cmake --build . --config Release
+```
 
 Download and install the required libraries:
 
