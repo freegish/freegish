@@ -518,7 +518,7 @@ void optionsmenu(void)
     for (count=0;count<KEYALIAS_LENGTH;count++)
     if (menuitem[count+1].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -545,7 +545,7 @@ void optionsmenu(void)
     for (count=0;count<8;count++)
     if (menuitem[count+9].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -1355,7 +1355,7 @@ void optionsmenu2(void)
     for (count=0;count<KEYALIAS_LENGTH;count++)
     if (menuitem[count+1].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -1382,7 +1382,7 @@ void optionsmenu2(void)
     for (count=0;count<8;count++)
     if (menuitem[count+9].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {

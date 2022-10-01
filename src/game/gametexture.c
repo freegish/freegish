@@ -314,8 +314,7 @@ void edittextures(void)
 				setuptextdisplay();
 				drawmenuitems();
 				drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
-
-        SDL_GL_SwapWindow(globalwindow);
+				SDL_GL_SwapWindow(globalwindow);
 			}
 			if (menuitem[1].active)
 			{
