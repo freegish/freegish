@@ -42,8 +42,8 @@ int menuinputkeyboard=0;
 int menuinputselectpos;
 int menuinputcursorpos;
 int menuinputinsert;
-char menuinput[256];
-char menuinputtemp[256];
+char menuinput[SDL_NUM_SCANCODES];
+char menuinputtemp[SDL_NUM_SCANCODES];
 
 int joymenunum;
 int joystickmenu=1;
@@ -922,7 +922,6 @@ int deleteselectedtext(void)
       count2++;
       }
     }
-  menuinputtemp[count2]=0;
   strcpy(menuinput,menuinputtemp);
 
   menuinputcursorpos=cursortemp;

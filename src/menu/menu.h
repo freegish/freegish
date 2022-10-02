@@ -88,8 +88,8 @@ extern int menuinputkeyboard;
 extern int menuinputselectpos;
 extern int menuinputcursorpos;
 extern int menuinputinsert;
-extern char menuinput[256];
-extern char menuinputtemp[256];
+extern char menuinput[SDL_NUM_SCANCODES];
+extern char menuinputtemp[SDL_NUM_SCANCODES];
 
 extern int joymenunum;
 extern int joystickmenu;
