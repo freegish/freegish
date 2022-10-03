@@ -122,44 +122,37 @@ set(GISH_H
     config.h
 )
 
-if(WIN32)
-    list(APPEND GISH_H video/glext.h)
-endif(WIN32)
-
 if(APPLE)
     list(APPEND GISH_SRCS sdl/SDLMain.m)
     list(APPEND GISH_H sdl/SDLMain.h)
 endif(APPLE)
 
-if(WIN32)
-    add_executable(freegish WIN32 ${GISH_SRCS} ${GISH_H})
-else()
-    add_executable(freegish ${GISH_SRCS} ${GISH_H})
+add_executable(freegish ${GISH_SRCS} ${GISH_H})
+
+target_include_directories(freegish PRIVATE
+    ${SDL2_INCLUDE_DIRS}
+    ${OPENAL_INCLUDE_DIR}
+    ${OPENGL_INCLUDE_DIR}
+    ${Vorbis_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR}
+)
+
+target_link_libraries(freegish
+    ${SDL2_LIBRARIES}
+    ${OPENAL_LIBRARY}
+    ${OPENGL_LIBRARIES}
+    ${Vorbis_LIBRARIES}
+    ${PNG_LIBRARIES}
+)
+
+if(LIBM)
+  target_link_libraries(freegish m)
+endif(LIBM)
+
+set_property(TARGET freegish PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+
+if(INSTALL_FHS)
+  target_compile_definitions(freegish PRIVATE DATAPATH=${FREEGISH_INSTALL_DATA_DIR})
 endif()
 
-if(MSVC)
-    target_link_libraries(freegish PRIVATE
-        ${OPENGL_LIBRARIES}
-        SDL2::SDL2
-        SDL2::SDL2main
-        Ogg::ogg
-        Vorbis::vorbis
-        Vorbis::vorbisenc
-        Vorbis::vorbisfile
-        png
-        OpenAL::OpenAL
-    )
-else()
-    target_link_libraries(freegish
-        ${SDL2_LIBRARIES}
-        ${OPENAL_LIBRARY}
-        ${OPENGL_LIBRARIES}
-        ${Vorbis_LIBRARIES}
-        ${PNG_LIBRARIES}
-        ${M_LIBRARIES}
-    )
-endif()
-
-if(UNIX)
-    install(TARGETS freegish DESTINATION ${BIN_DIR})
-endif(UNIX)
+install(TARGETS freegish)
