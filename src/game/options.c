@@ -783,8 +783,6 @@ void videooptionsmenu(void)
       SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,8);
       }
 
-    printf( "options.c Opening screen %dx%dx%d\n", windowinfo.resolutionx, windowinfo.resolutiony, windowinfo.bitsperpixel );
-
     SDL_DisplayMode mode = { (windowinfo.bitsperpixel==32) ? SDL_PIXELFORMAT_RGB888 : SDL_PIXELFORMAT_RGB565, windowinfo.resolutionx, windowinfo.resolutiony, 0, 0 };
     SDL_SetWindowDisplayMode(globalwindow, &mode);
     SDL_SetWindowSize(globalwindow, windowinfo.resolutionx, windowinfo.resolutiony);
