@@ -25,10 +25,7 @@ if(MSVC)
     find_package(OpenGL REQUIRED)
 
 else()
-    # Find SDL2 with pkg-config
-    include(FindPkgConfig)
-    pkg_search_module(SDL2 REQUIRED sdl2)
-
+    find_package(SDL2 REQUIRED sdl2)
     find_package(OpenAL REQUIRED)
     find_package(OpenGL REQUIRED)
     find_package(Vorbis REQUIRED)
