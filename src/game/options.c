@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../sdl/video.h"
 #include "../video/text.h"
 #include "../video/texture.h"
+#include "../sdl/video.h"
 
 _option option;
 _control control[CONTROLS_LENGTH];
@@ -512,12 +513,12 @@ void optionsmenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     for (count=0;count<KEYALIAS_LENGTH;count++)
     if (menuitem[count+1].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -544,7 +545,7 @@ void optionsmenu(void)
     for (count=0;count<8;count++)
     if (menuitem[count+9].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -749,7 +750,7 @@ void videooptionsmenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
     }
 
   if (menuitem[1].active)
@@ -781,11 +782,11 @@ void videooptionsmenu(void)
       SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,8);
       SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,8);
       }
-  
-    if (windowinfo.fullscreen)
-      SDL_SetVideoMode(windowinfo.resolutionx,windowinfo.resolutiony,windowinfo.bitsperpixel,SDL_OPENGL|SDL_FULLSCREEN);
-    else
-      SDL_SetVideoMode(windowinfo.resolutionx,windowinfo.resolutiony,windowinfo.bitsperpixel,SDL_OPENGL);
+
+    SDL_DisplayMode mode = { (windowinfo.bitsperpixel==32) ? SDL_PIXELFORMAT_RGB888 : SDL_PIXELFORMAT_RGB565, windowinfo.resolutionx, windowinfo.resolutiony, 0, 0 };
+    SDL_SetWindowDisplayMode(globalwindow, &mode);
+    SDL_SetWindowSize(globalwindow, windowinfo.resolutionx, windowinfo.resolutiony);
+    (windowinfo.fullscreen) ? SDL_SetWindowFullscreen(globalwindow, SDL_WINDOW_FULLSCREEN) : SDL_SetWindowFullscreen(globalwindow, 0);
 
     for (count=0;count<2048;count++)
       if (texture[count].sizex!=0)
@@ -1347,12 +1348,12 @@ void optionsmenu2(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     for (count=0;count<KEYALIAS_LENGTH;count++)
     if (menuitem[count+1].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {
@@ -1379,7 +1380,7 @@ void optionsmenu2(void)
     for (count=0;count<8;count++)
     if (menuitem[count+9].active)
       {
-      for (count2=1;count2<323;count2++)
+      for (count2=1;count2<SDL_NUM_SCANCODES;count2++)
       if (keyboardlabel[count2][0]!=0)
       if (keyboard[count2] && !prevkeyboard[count2])
         {

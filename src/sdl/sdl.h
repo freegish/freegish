@@ -21,10 +21,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef WINDOWS
 #include <SDL.h>
-#else
-#include <SDL/SDL.h>
-#endif
 
 #endif /* GISH_SDL_VIDEO_H */

@@ -40,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../sdl/event.h"
 #include "../video/glfunc.h"
 #include "../video/text.h"
+#include "../sdl/video.h"
 
 _ropeedit ropeedit;
 
@@ -180,7 +181,7 @@ void editlevelrope(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
     vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;

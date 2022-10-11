@@ -4,54 +4,67 @@ Make sure CMake and the development libraries for SDL, OpenAL and Vorbis are ins
 
     cmake libsdl1.2-dev libopenal-dev libvorbis-dev
 
-Then simply issue
+Then simply issue:
 
     mkdir build && cd build
     cmake ..
     make
 
-# How to compile (Windows with VS2008)
+# How to compile (Windows with MSVC/VS)
 
-Download and install the required libraries:
+To develop on Windows the following tools need to be installed:
+- CMake
+- Visual Studio 2022
+- vcpkg
 
-- <http://www.libsdl.org/release/SDL-devel-1.2.14-VC8.zip>
-- <http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.11-VC.zip>
-- <http://downloads.xiph.org/releases/ogg/libogg-1.2.0.zip>
-    - compile using *win32\VS2008\libogg_static.vcproj*
-- <http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.1.zip>
-    - compile *win32\VS2008\libvorbis\libvorbis_static.vcproj*
-    - compile *win32\VS2008\libvorbisfile\libvorbisfile_static.vcproj*
-- <http://connect.creativelabs.com/openal/Downloads/OpenAL11CoreSDK.zip>
-    - install
-    - create *C:\Program Files\OpenAL 1.1 SDK\include\AL* and copy all files from *C:\Program Files\OpenAL 1.1 SDK\include*
 
-In Visual Studio add to your include-paths:
+Below is described how to install and set them up.
 
-- *...\libvorbis-1.3.1\include*
-- *...\libogg-1.2.0\include*
-- *C:\Program Files\OpenAL 1.1 SDK\include*
-- *...\SDL-1.2.14_VC8\include*
-- *...\SDL_mixer-1.2.11\include*
+## CMake
 
-In Visual Studio add to your library-paths:
+CMake is used for building Freegish and can be downloaded from [here](https://cmake.org/download/). Make sure to use the installer and select "Add CMake to system PATH" during installation.
 
-- *...\libvorbis-1.3.1\win32\VS2008\libvorbisfile\Win32\Debug*
-- *...\libogg-1.2.0\win32\VS2008\Win32\Debug*
-- *...\libvorbis-1.3.1\win32\VS2008\libvorbis\Win32\Debug*
-- *C:\Program Files\OpenAL 1.1 SDK\libs\Win32*
-- *...\SDL_mixer-1.2.11\lib*
-- *...\SDL-1.2.14_VC8\lib*
+## Visual Studio 2022
 
-Open *gish.sln* and compile.
+Installing Visual Studio installs the IDE, compiler and some other tools required to build Freegish. Get the community version installer from [here](https://visualstudio.microsoft.com/) and install the workload "Desktop development with C++" with it.
 
-You will need the following files to be present:
+## vcpkg
 
-- OpenAL32.dll
-- SDL.DLL
+vcpkg is a package manager for C and C++ which allows the libraries used to be installed. Installation instructions can be found [https://vcpkg.io/en/getting-started.html]. This README assumes that vcpkg is installed in `C:\vcpkg`.
+
+Then install the required package with the following command:
+
+    C:\vcpkg\vcpkg.exe install --triplet x64-windows openal-soft libogg libvorbis libpng sdl2 opengl
+
+## Compiling
+
+To build the game open powershell in the directory in which Freegish is cloned then simply issue:
+
+    mkdir build
+    cd build
+    cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows ..
+    cmake --build . --config Release
+
+After that copy the content of the Release directory to the freegish directory. To start the game run freegish.exe
+
+
+## Using Visual Studio
+
+To get Freegish developing going in Visual Studio, a project file needs to be generated. This can be done with the following commands in a terminal opened in the directory in which Freegish is cloned:
+
+     cmake -DCMAKE_TOOLCHAIN_FILE=E:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -G "Visual Studio 17 2022" .
+
+Then open FreeGish.sln with Visual Studio.
+
+Before being able to run from Visual Studio, the debug configuration has to be set. To do this, press the small arror down next to the run button with "Local Windows Debugger" next to it on the screen, then pick "All_BUILD Debug Properties". Set "Output Directory" to `$(SolutionDir)` and "Target Name" to `Debug/freegish.exe` like in this image:
+
+![](visualstudio.png)
+
+Now you just just start debugging like normal by pressing the run button or F5.
 
 # How to play
 
-Simply run `./gish` or `gish.exe`. There are some assets included (codenamed the *FreeGish* project), making Gish a completely free game! There is also one level available, `freegish.lvl`, you'll find it under "Custom Levels". Try it and replace what you don't like.
+Simply run `./gish` or `gish.exe`. There are some assets included (codenamed the *FreeGish* project), making Gish a completely free game!
 
 If you own the original assets, you may also copy those into this directory. You'll need:
 

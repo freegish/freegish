@@ -63,6 +63,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../video/glfunc.h"
 #include "../video/text.h"
 #include "../video/texture.h"
+#include "../sdl/video.h"
 
 _view view;
 _game game;
@@ -591,8 +592,8 @@ void gameloop(void)
       setuptextdisplay();
     
       drawtext(TXT_LOADINGEDITOR,(320|TEXT_CENTER),240,16,1.0f,1.0f,1.0f,1.0f);
-    
-      SDL_GL_SwapBuffers();
+
+      SDL_GL_SwapWindow(globalwindow);
 
       for (count=0;count<20;count++)
       if (animation[count].loaded==0)
@@ -607,7 +608,7 @@ void gameloop(void)
       simtimer=SDL_GetTicks();
       }
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     if ((SDL_GetTicks()-frametimer)!=0)
       fps=1000/(SDL_GetTicks()-frametimer);

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdarg.h>
+#include "../sdl/sdl.h"
 
 #define MAXMENUITEMS   256
 #define MO_HOTKEY        1
@@ -87,14 +88,14 @@ extern int menuinputkeyboard;
 extern int menuinputselectpos;
 extern int menuinputcursorpos;
 extern int menuinputinsert;
-extern char menuinput[256];
-extern char menuinputtemp[256];
+extern char menuinput[SDL_NUM_SCANCODES];
+extern char menuinputtemp[SDL_NUM_SCANCODES];
 
 extern int joymenunum;
 extern int joystickmenu;
 
 extern int currentmenuitem;
 
-extern char keyboardlabel[323][16];
+extern char keyboardlabel[SDL_NUM_SCANCODES][16];
 
 #endif /* GISH_MENU_MENU_H */

@@ -21,6 +21,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include "../sdl/sdl.h"
+#include "../sdl/video.h"
+
 void listvideomodes(void);
 
 typedef struct
@@ -32,5 +35,9 @@ typedef struct
 
 extern int numofsdlvideomodes;
 extern _sdlvideomode sdlvideomode[4096];
+
+extern SDL_Window *globalwindow;
+extern SDL_GLContext *glcontext;
+extern SDL_Surface *windowicon;
 
 #endif /* GISH_SDL_VIDEO_H */

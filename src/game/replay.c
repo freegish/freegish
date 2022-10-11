@@ -46,6 +46,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../sdl/event.h"
 #include "../sdl/file.h"
 #include "../video/text.h"
+#include "../sdl/video.h"
 
 int numofreplayframes;
 _replayframe replayframe[65536];
@@ -265,7 +266,7 @@ void replaymenu(void)
 
     drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(globalwindow);
 
     for (count=1;count<=24;count++)
     if (pagenum+count-1<numoffiles)

@@ -16,15 +16,27 @@ endif(NOT ${INSTALL_FHS})
 # but CMake does the extra quoting for us.
 #add_definitions(-DDATAPATH="/usr/share/games/gish")
 
-find_package(SDL REQUIRED)
-find_package(OpenAL REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(Vorbis REQUIRED)
-find_package(PNG REQUIRED)
-find_library(M_LIBRARIES m)
+if(MSVC)
+    find_package(Ogg CONFIG REQUIRED)
+    find_package(Vorbis CONFIG REQUIRED)
+    find_package(libpng CONFIG REQUIRED)
+    find_package(SDL2 CONFIG REQUIRED)
+    find_package(OpenAL CONFIG REQUIRED)
+    find_package(OpenGL REQUIRED)
+
+else()
+    find_package(SDL2 REQUIRED sdl2)
+    find_package(OpenAL REQUIRED)
+    find_package(OpenGL REQUIRED)
+    find_package(Vorbis REQUIRED)
+    find_package(PNG REQUIRED)
+    find_library(M_LIBRARIES m)
+endif()
+
+
 
 include_directories(
-    ${SDL_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${Vorbis_INCLUDE_DIR}

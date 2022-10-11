@@ -42,15 +42,15 @@ int menuinputkeyboard=0;
 int menuinputselectpos;
 int menuinputcursorpos;
 int menuinputinsert;
-char menuinput[256];
-char menuinputtemp[256];
+char menuinput[SDL_NUM_SCANCODES];
+char menuinputtemp[SDL_NUM_SCANCODES];
 
 int joymenunum;
 int joystickmenu=1;
 
 int currentmenuitem;
 
-char keyboardlabel[323][16];
+char keyboardlabel[SDL_NUM_SCANCODES][16];
 
 void checkmenuitems(void)
   {
@@ -505,17 +505,10 @@ void setupmenuitems(void)
   strcpy(keyboardlabel[SCAN_8],"8");
   strcpy(keyboardlabel[SCAN_9],"9");
   strcpy(keyboardlabel[SCAN_0],"0");
-#ifndef GERMAN
-  strcpy(keyboardlabel[SCAN_LEFT],"Ä");
-  strcpy(keyboardlabel[SCAN_RIGHT],"Å");
-  strcpy(keyboardlabel[SCAN_UP],"É");
-  strcpy(keyboardlabel[SCAN_DOWN],"Ç");
-#else
-  strcpy(keyboardlabel[SCAN_LEFT],"{");
-  strcpy(keyboardlabel[SCAN_RIGHT],"|");
-  strcpy(keyboardlabel[SCAN_UP],"~");
-  strcpy(keyboardlabel[SCAN_DOWN],"}");
-#endif
+  strcpy(keyboardlabel[SCAN_LEFT],"Left");
+  strcpy(keyboardlabel[SCAN_RIGHT],"Right");
+  strcpy(keyboardlabel[SCAN_UP],"Up");
+  strcpy(keyboardlabel[SCAN_DOWN],"Down");
   strcpy(keyboardlabel[SCAN_SPACE],"Space");
   strcpy(keyboardlabel[SCAN_ENTER],"Enter");
   strcpy(keyboardlabel[SCAN_CENTER],"Center");
@@ -929,7 +922,6 @@ int deleteselectedtext(void)
       count2++;
       }
     }
-  menuinputtemp[count2]=0;
   strcpy(menuinput,menuinputtemp);
 
   menuinputcursorpos=cursortemp;

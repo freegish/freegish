@@ -7,7 +7,21 @@ Thumbs.db
 gish.ncb
 gish.pdb
 gish.vcproj.*
+ALL_BUILD.*
+ZERO_CHECK.*
+freegish.*
+FreeGish.sln
+CMakeCache.txt
+cmake_install.cmake
+*.DLL
+*.dll
 
 build/
 freegish
-
+.vs/
+.vscode/
+CMakeFiles/
+Debug/
+freegish.dir/
+x64/
+x86/
