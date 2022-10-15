@@ -30,7 +30,7 @@ Installing Visual Studio installs the IDE, compiler and some other tools require
 
 ## vcpkg
 
-vcpkg is a package manager for C and C++ which allows the libraries used to be installed. Installation instructions can be found [https://vcpkg.io/en/getting-started.html]. This README assumes that vcpkg is installed in `C:\vcpkg`.
+vcpkg is a package manager for C and C++ which allows the libraries used to be installed. Installation instructions can be found [here](https://vcpkg.io/en/getting-started.html). This README assumes that vcpkg is installed in `C:\vcpkg`.
 
 Then install the required package with the following command:
 
@@ -38,7 +38,7 @@ Then install the required package with the following command:
 
 ## Compiling
 
-To build the game open powershell in the directory in which Freegish is cloned then simply issue:
+To build the game open PowerShell in the directory in which Freegish is cloned then simply issue:
 
     mkdir build
     cd build
@@ -56,11 +56,11 @@ To get Freegish developing going in Visual Studio, a project file needs to be ge
 
 Then open FreeGish.sln with Visual Studio.
 
-Before being able to run from Visual Studio, the debug configuration has to be set. To do this, press the small arror down next to the run button with "Local Windows Debugger" next to it on the screen, then pick "All_BUILD Debug Properties". Set "Output Directory" to `$(SolutionDir)` and "Target Name" to `Debug/freegish.exe` like in this image:
+Before being able to run from Visual Studio, the debug configuration has to be set. To do this, press the small arrow down next to the run button with "Local Windows Debugger" next to it on the screen, then pick "All_BUILD Debug Properties". Set "Output Directory" to `$(SolutionDir)` and "Target Name" to `Debug/freegish.exe` like in this image:
 
 ![](visualstudio.png)
 
-Now you just just start debugging like normal by pressing the run button or F5.
+Now you just start debugging like normal by pressing the run button or F5.
 
 # How to play
 
@@ -75,4 +75,4 @@ If you own the original assets, you may also copy those into this directory. You
 - texture
 - tile01 ... tile07
 
-Afterwards run `rename-levels.sh DIRECTORY_WITH_ASSETS` script to rename files so that they match Freegish naming convention (see https://github.com/freegish/freegish/issues/2#issuecomment-48749365).
+Afterwards, run `rename-levels.sh DIRECTORY_WITH_ASSETS` script to rename files so that they match the Freegish naming convention (see https://github.com/freegish/freegish/issues/2#issuecomment-48749365).
