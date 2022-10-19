@@ -128,9 +128,9 @@ if(APPLE)
 endif(APPLE)
 
 if(WIN32)
-    add_executable(freegish ${GISH_SRCS} ${GISH_H})
-else()
     add_executable(freegish WIN32 ${GISH_SRCS} ${GISH_H})
+else()
+    add_executable(freegish ${GISH_SRCS} ${GISH_H})
 endif()
 
 target_include_directories(freegish PRIVATE
