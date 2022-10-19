@@ -21,11 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../config.h"
 #include "../video/opengl.h"
-
-#ifdef WINDOWS
-  #include <SDL2/SDL.h>
-#endif
-
+#include "../sdl/sdl.h"
 #include <string.h>
 
 _glext glext;
