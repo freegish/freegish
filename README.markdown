@@ -9,14 +9,22 @@ Make sure the following dependencies are installed:
 * libvorbis
 * libpng
 
-Build using cmake:
+## Build for development
+
+```sh
+mkdir build
+(cd build && cmake .. make)
+./freegish
+```
+
+## Install
 
 ```sh
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_FHS=ON
 make
-./src/freegish
+make install
 ```
 
 # How to compile (Windows with MSVC/VS)
