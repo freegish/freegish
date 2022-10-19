@@ -3,7 +3,6 @@
 Make sure the following dependencies are installed:
 
 * cmake
-* pkg-config
 * SDL2
 * openal
 * libvorbis
