@@ -21,7 +21,9 @@ freegish
 .vs/
 .vscode/
 CMakeFiles/
+CMakeScripts/
 Debug/
 freegish.dir/
 x64/
 x86/
+.DS_Store
