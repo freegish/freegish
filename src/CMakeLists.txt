@@ -152,7 +152,7 @@ endif(LIBM)
 set_property(TARGET freegish PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 if(INSTALL_FHS)
-  target_compile_definitions(freegish PRIVATE DATAPATH=${FREEGISH_INSTALL_DATA_DIR})
+  target_compile_definitions(freegish PRIVATE DATAPATH="${CMAKE_INSTALL_FULL_DATADIR}/freegish")
 endif()
 
 install(TARGETS freegish)
