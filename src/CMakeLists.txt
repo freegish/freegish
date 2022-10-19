@@ -127,7 +127,11 @@ if(APPLE)
     list(APPEND GISH_H sdl/SDLMain.h)
 endif(APPLE)
 
-add_executable(freegish ${GISH_SRCS} ${GISH_H})
+if(WIN32)
+    add_executable(freegish ${GISH_SRCS} ${GISH_H})
+else()
+    add_executable(freegish WIN32 ${GISH_SRCS} ${GISH_H})
+endif()
 
 target_include_directories(freegish PRIVATE
     ${SDL2_INCLUDE_DIRS}
