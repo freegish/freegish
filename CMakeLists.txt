@@ -7,8 +7,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-extras)
 option(INSTALL_FHS "Install into Linux FHS" OFF)
 set(OpenGL_GL_PREFERENCE LEGACY)
 
-include(FindPkgConfig)
-
 find_package(SDL2 REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
