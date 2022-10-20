@@ -66,7 +66,7 @@ Now you just just start debugging like normal by pressing the run button or F5.
 
 Install development packages via homebrew:
 
-    brew install sdl2 vorbis-tools
+    brew install cmake sdl2 libvorbis openal-soft libpng
 
 Configure the project using CMake, and compile + run with your compiler/IDE of choice.
 
