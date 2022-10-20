@@ -78,6 +78,14 @@ Before being able to run from Visual Studio, the debug configuration has to be s
 
 Now you just just start debugging like normal by pressing the run button or F5.
 
+# How to compile (macOS)
+
+Install development packages via homebrew:
+
+    brew install cmake sdl2 libvorbis openal-soft libpng
+
+Configure the project using CMake, and compile + run with your compiler/IDE of choice.
+
 # How to play
 
 Simply run `./gish` or `gish.exe`. There are some assets included (codenamed the *FreeGish* project), making Gish a completely free game!
