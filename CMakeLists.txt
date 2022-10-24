@@ -25,7 +25,7 @@ if(MSVC)
     find_package(OpenGL REQUIRED)
 
 else()
-    find_package(SDL2 REQUIRED sdl2)
+    find_package(SDL2 REQUIRED)
     find_package(OpenAL REQUIRED)
     find_package(OpenGL REQUIRED)
     find_package(Vorbis REQUIRED)
