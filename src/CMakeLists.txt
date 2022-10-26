@@ -153,7 +153,7 @@ if(LIBM)
 endif(LIBM)
 
 if(INSTALL_FHS)
-  target_compile_definitions(freegish PRIVATE DATAPATH="${CMAKE_INSTALL_FULL_DATADIR}/freegish")
+  target_compile_definitions(freegish PRIVATE DATAPATH="${CMAKE_INSTALL_PREFIX}/share/freegish")
 endif()
 
 install(TARGETS freegish)
