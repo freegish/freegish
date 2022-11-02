@@ -132,29 +132,28 @@ else()
     add_executable(freegish ${GISH_SRCS} ${GISH_H})
 endif()
 
-if(MSVC)
-    target_link_libraries(freegish PRIVATE
-        ${OPENGL_LIBRARIES}
-        SDL2::SDL2
-        SDL2::SDL2main
-        Ogg::ogg
-        Vorbis::vorbis
-        Vorbis::vorbisenc
-        Vorbis::vorbisfile
-        png
-        OpenAL::OpenAL
-    )
-else()
-    target_link_libraries(freegish
-        ${SDL2_LIBRARIES}
-        ${OPENAL_LIBRARY}
-        ${OPENGL_LIBRARIES}
-        ${Vorbis_LIBRARIES}
-        ${PNG_LIBRARIES}
-        ${M_LIBRARIES}
-    )
+target_include_directories(freegish PRIVATE
+    ${SDL2_INCLUDE_DIRS}
+    ${OPENAL_INCLUDE_DIR}
+    ${OPENGL_INCLUDE_DIR}
+    ${Vorbis_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR}
+)
+
+target_link_libraries(freegish
+    ${SDL2_LIBRARIES}
+    ${OPENAL_LIBRARY}
+    ${OPENGL_LIBRARIES}
+    ${Vorbis_LIBRARIES}
+    ${PNG_LIBRARIES}
+)
+
+if(LIBM)
+  target_link_libraries(freegish m)
+endif(LIBM)
+
+if(INSTALL_FHS)
+  target_compile_definitions(freegish PRIVATE DATAPATH="${CMAKE_INSTALL_PREFIX}/share/freegish")
 endif()
 
-if(UNIX)
-    install(TARGETS freegish DESTINATION ${BIN_DIR})
-endif(UNIX)
+install(TARGETS freegish)
