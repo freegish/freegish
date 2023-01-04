@@ -1,14 +1,30 @@
 # How to compile (Linux)
 
-Make sure CMake and the development libraries for SDL, OpenAL and Vorbis are installed. In Debian-based systems, you need to install the following packages:
+Make sure the following dependencies are installed:
 
-    cmake libsdl2-dev libopenal-dev libvorbis-dev
+* cmake
+* SDL2
+* openal
+* libvorbis
+* libpng
 
-Then simply issue:
+## Build for development
 
-    mkdir build && cd build
-    cmake ..
-    make
+```sh
+mkdir build
+(cd build && cmake .. make)
+./freegish
+```
+
+## Install
+
+```sh
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_FHS=ON
+make
+make install
+```
 
 # How to compile (Windows with MSVC/VS)
 
