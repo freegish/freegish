@@ -1,23 +1,18 @@
 package gishleveltool;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeMap;
 
 @XmlRootElement(name = "MD5DB")
 public class MD5db {
 
     ArrayList<String> comments;
-    private TreeMap<String, String> md5Map;
+    private final TreeMap<String, String> md5Map;
 
     public MD5db() {
         md5Map = new TreeMap<String, String>();

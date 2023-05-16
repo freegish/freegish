@@ -21,16 +21,12 @@ public class ImagePanel extends JPanel {
 
     private static ArrayList<Color> colors;
     private static int colorindex = 0;
-    private JPanel parentpanel;
     public BufferedImage image;
-    private String filename;
-    private JTextField textField;
+    private final String filename;
+    private final JTextField textField;
     public String bottomtext;
 
-    private MD5dbmaker parentmaker;
-
-    public ImagePanel(final MD5dbmaker parentmaker, JPanel parentpanel, final String imagepath, int width, int height, final boolean clickable) throws IOException, NoSuchAlgorithmException {
-        this.parentmaker = parentmaker;
+    public ImagePanel(final MD5dbmaker parentmaker, JPanel parentpanel, final String imagepath, int width, int height, final boolean clickable) throws IOException {
 
         if (colors == null) {
             colors = new ArrayList<Color>();
@@ -44,16 +40,13 @@ public class ImagePanel extends JPanel {
 
         File f = new File(".");
         this.filename = imagepath;
-        //System.err.println("ARGH: " +f.getCanonicalPath() + md5db_maker.sep + imagepath);
         this.image = ImageIO.read(new File(f.getCanonicalPath() + "/" + imagepath));
-        this.parentpanel = parentpanel;
-        this.parentpanel.add(this);
+        parentpanel.add(this);
         setBackground(Color.MAGENTA);
         setSize(width, height + MD5dbmaker.TEXTFIELD_HEIGHT);
         this.setVisible(true);
         this.setLayout(null);
 
-        //bottomtext = Gishlevel.getMD5fromImage(image);
         bottomtext = imagepath;
         textField = new JTextField(bottomtext);
         textField.setLayout(null);
@@ -64,8 +57,6 @@ public class ImagePanel extends JPanel {
         textField.setAlignmentY(BOTTOM_ALIGNMENT);
 
         this.add(textField);
-
-
 
         this.addMouseListener(new MouseListener() {
 
@@ -79,9 +70,7 @@ public class ImagePanel extends JPanel {
                             try {
                                 bottomtext = imagepath + " - " + Gishlevel.getMD5fromImage(image);
                                 textField.setText(bottomtext);
-                            } catch (IOException ex) {
-                                Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (NoSuchAlgorithmException ex) {
+                            } catch (IOException | NoSuchAlgorithmException ex) {
                                 Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
