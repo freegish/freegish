@@ -248,12 +248,13 @@ void setuplevel(void)
       }
     }
 
-  for (count=0;count<level.numofobjects;count++)
+  for (count=0;count<numofobjects;count++)
     {
-    if ((level.object[count].type>=23 && level.object[count].type<=26) || level.object[count].type==29 || level.object[count].type==30)
+    if (object[count].type == OBJ_TYPE_BEAST_OR_BOBBLE)
+    if ((object[count].beasttype>=3 && object[count].beasttype<=6) || object[count].beasttype==9 || object[count].beasttype==10)
       {
-      vec[0]=level.object[count].position[0];
-      vec[1]=level.object[count].position[1]+1.4f;//+1.42f;
+      vec[0]=object[count].position[0];
+      vec[1]=object[count].position[1]+1.4f;//+1.42f;
       vec[2]=0.0f;
       createhead(vec,2.0f,1.6f,2.0f,0.5f);
 
