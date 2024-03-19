@@ -723,7 +723,7 @@ void simulation(void)
 
   for (count=0;count<numofobjects;count++)
     {
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       if (object[count].hitpoints<0)
         object[count].hitpoints=0;

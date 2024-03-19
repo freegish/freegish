@@ -53,13 +53,13 @@ void objectcycle(void)
     {
     updateogg();
 
-    if (rope[count].type>=5 && rope[count].type<9)
+    if (rope[count].type>=PUSHING_PISTON && rope[count].type<=HALF_PULLED_PULLING_PISTON)
       {
       bond[rope[count].bondnum].length=bond[rope[count].bondnum].maxlength+(rope[count].range-cos(rope[count].angle)*rope[count].range);
 
       if (rope[count].cyclelength==0.0f)
         {
-        if (rope[count].link==-1 || object[rope[count].link].idata[0]==1)
+        if (rope[count].link==-1 || object[rope[count].link].idata[IS_ACTIVATED]==1)
           {
           rope[count].angle+=2.0f*pi/(50.0f*rope[count].cycle);
           if (rope[count].angle>2.0f*pi)
@@ -81,13 +81,13 @@ void objectcycle(void)
         else
           {
           count2=0;
-          if (object[rope[count].link].idata[0]==1 && rope[count].cyclecount==0.0f)
+          if (object[rope[count].link].idata[IS_ACTIVATED]==1 && rope[count].cyclecount==0.0f)
             count2=1;
           if (rope[count].cyclecount>0.0f && rope[count].cyclecount<rope[count].cyclelength*2.0f*pi)
             count2=1;
           if (rope[count].cyclecount>rope[count].cyclelength*2.0f*pi+2.0f*pi/(50.0f*rope[count].cycle))
             count2=1;
-          if (object[rope[count].link].idata[0]==0 && rope[count].cyclecount>0.0f)
+          if (object[rope[count].link].idata[IS_ACTIVATED]==0 && rope[count].cyclecount>0.0f)
             count2=1;
 
           if (count2==1)
@@ -128,22 +128,22 @@ void objectcycle(void)
 
     if (object[count].link!=-1)
       {
-      if (object[count].lighttype==1 || object[count].lighttype==3)
+      if (object[count].lighttype==LIGHT_DEFAULT_ON || object[count].lighttype==FLICKERING_LIGHT)
         {
-        if (object[object[count].link].idata[0])
+        if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=0;
         else
           object[count].lighton=1;
         }
-      if (object[count].lighttype==2)
+      if (object[count].lighttype==LIGHT_DEFAULT_OFF)
         {
-        if (object[object[count].link].idata[0])
+        if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=1;
         else
           object[count].lighton=0;
         }
       }
-    if (object[count].lighttype==3)
+    if (object[count].lighttype==FLICKERING_LIGHT)
       {
       object[count].lightintensity+=((rand()&255)/255.0f-0.5f)*0.2f*object[count].lightintensitymax;
       if (object[count].lightintensity<object[count].lightintensitymax*0.5f)
@@ -152,8 +152,8 @@ void objectcycle(void)
         object[count].lightintensity=object[count].lightintensitymax*1.5f;
       }
 
-    if (object[count].type==9)
-    if (object[count].idata[0]==0 || object[count].idata[1]==0)
+    if (object[count].type==OBJ_TYPE_BUTTON)
+    if (object[count].idata[IS_ACTIVATED]==0 || object[count].idata[IS_ONE_TIME]==0)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-particle[object[count].particle[4]].position[1];
       vec[1]*=0.08f;
@@ -168,24 +168,24 @@ void objectcycle(void)
       if (particle[object[count].particle[4]].position[1]>particle[object[count].particle[6]].position[1]-0.1f)
       if (particle[object[count].particle[5]].position[1]>particle[object[count].particle[6]].position[1]-0.1f)
         {
-        if (object[count].idata[0]==1)
+        if (object[count].idata[IS_ACTIVATED]==1)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=0;
+        object[count].idata[IS_ACTIVATED]=0;
         }
       if (particle[object[count].particle[4]].position[1]<particle[object[count].particle[6]].position[1]-0.2f)
       if (particle[object[count].particle[5]].position[1]<particle[object[count].particle[6]].position[1]-0.2f)
         {
-        if (object[count].idata[0]==0)
+        if (object[count].idata[IS_ACTIVATED]==0)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=1;
+        object[count].idata[IS_ACTIVATED]=1;
         }
 
       if (object[count].link!=-1)
-        if (object[object[count].link].idata[0]==1)
-          object[count].idata[0]=1;
+        if (object[object[count].link].idata[IS_ACTIVATED]==1)
+          object[count].idata[IS_ACTIVATED]=1;
       }
-    if (object[count].type==9)
-    if (object[count].idata[0]==1 && object[count].idata[1]==1)
+    if (object[count].type==OBJ_TYPE_BUTTON)
+    if (object[count].idata[IS_ACTIVATED]==1 && object[count].idata[IS_ONE_TIME]==1)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-0.375f-particle[object[count].particle[4]].position[1];
       vec[1]*=0.08f;
@@ -197,15 +197,15 @@ void objectcycle(void)
       vec[1]-=particle[object[count].particle[5]].velocity[1];
       particle[object[count].particle[5]].velocity[1]+=vec[1];
       }
-    if (object[count].type==16)
-    if (object[count].idata[0]==0 || object[count].idata[1]==0)
+    if (object[count].type==OBJ_TYPE_AREASWITCH)
+    if (object[count].idata[IS_ACTIVATED]==0 || object[count].idata[IS_ONE_TIME]==0)
       {
-      object[count].idata[0]=0;
+      object[count].idata[IS_ACTIVATED]=0;
       if (fabs(object[0].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
       if (fabs(object[0].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
         {
-        object[count].idata[0]=1;
-        if (object[count].idata[1]==2)
+        object[count].idata[IS_ACTIVATED]=1;
+        if (object[count].idata[1]==IS_SECRET)
           {
           if ((rand()&3)==0)
             playsound(8,object[count].position,NULL,1.0f,0,1.0f,-1,0);
@@ -218,8 +218,8 @@ void objectcycle(void)
       if (fabs(object[1].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
       if (fabs(object[1].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
         {
-        object[count].idata[0]=1;
-        if (object[count].idata[1]==2)
+        object[count].idata[IS_ACTIVATED]=1;
+        if (object[count].idata[1]==IS_SECRET)
           {
           if ((rand()&3)==0)
             playsound(8,object[count].position,NULL,1.0f,0,1.0f,-1,0);
@@ -229,9 +229,9 @@ void objectcycle(void)
           }
         }
       }
-    if (object[count].type==15)
+    if (object[count].type==OBJ_TYPE_GENERATOR)
       {
-      if (object[count].link==-1 || object[object[count].link].idata[0]==1)
+      if (object[count].link==-1 || object[object[count].link].idata[IS_ACTIVATED]==1)
       if ((game.framenum&255)==128)
         {
         createwheel(object[count].position,object[count].size[0],object[count].size[1],object[count].mass,0.8f,0);
@@ -246,7 +246,7 @@ void objectcycle(void)
         }
       }
 
-    if (object[count].type==10)
+    if (object[count].type==OBJ_TYPE_SWITCH)
       {
       if (object[count].rotate==0 || object[count].rotate==2)
         count3=1;
@@ -291,22 +291,22 @@ void objectcycle(void)
 
       if (vec[0]<-0.2f)
         {
-        if (object[count].idata[0]==1)
+        if (object[count].idata[IS_ACTIVATED]==1)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=0;
+        object[count].idata[IS_ACTIVATED]=0;
         }
       if (vec[0]>0.2f)
         {
-        if (object[count].idata[0]==0)
+        if (object[count].idata[IS_ACTIVATED]==0)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=1;
+        object[count].idata[IS_ACTIVATED]=1;
         }
 
       if (object[count].link!=-1)
-        if (object[object[count].link].idata[0]==1)
-          object[count].idata[0]=1;
+        if (object[object[count].link].idata[IS_ACTIVATED]==1)
+          object[count].idata[IS_ACTIVATED]=1;
       }
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       if (count!=0)
       if (level.gametype==GAMETYPE_CAMPAIGN && game.levelnum==34)
@@ -522,7 +522,7 @@ void objectcycle(void)
           }
         }
       }
-    if (object[count].type==20)
+    if (object[count].type==OBJ_TYPE_CAR)
       {
       subtractvectors(object[count].orientation[1],particle[object[count].particle[0]].position,particle[object[count].particle[3]].position);
       normalizevector(object[count].orientation[1],object[count].orientation[1]);
@@ -586,7 +586,7 @@ void objectcycle(void)
         //scaleaddvectors(particle[object[count].particle[count2]].velocity,particle[object[count].particle[count2]].velocity,object[count].orientation[0],object[count].axis[1]*0.003f);
         }
       }
-    if (object[count].type==4)
+    if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
       {
       for (count2=0;count2<4;count2++)
         {
@@ -726,7 +726,7 @@ void objectsound(int objectnum)
         playsound(18,object[objectnum].position,NULL,scale,0,pitch,objectnum,3);
       }
     }
-  if (object[objectnum].type==2 || object[objectnum].type==3)
+  if (object[objectnum].type==OBJ_TYPE_BOX || object[objectnum].type==OBJ_TYPE_WHEEL)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);
@@ -787,7 +787,7 @@ void objectsound(int objectnum)
       }
     }
   */
-  if (object[objectnum].type==4)
+  if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);
@@ -806,7 +806,7 @@ void objectsound(int objectnum)
       playsound(2,object[objectnum].position,NULL,scale*5.0f,0,pitch,objectnum,0);
       }
     }
-  if (object[objectnum].type==1)
+  if (object[objectnum].type==OBJ_TYPE_GISH)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);

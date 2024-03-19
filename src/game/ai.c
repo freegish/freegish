@@ -41,7 +41,7 @@ void objectai(int objectnum)
   object[objectnum].axis[1]=0.0f;
   object[objectnum].button=0;
 
-  if (object[objectnum].type==1)
+  if (object[objectnum].type==OBJ_TYPE_GISH)
   if (game.levelnum==34)
     {
     /*
@@ -62,7 +62,7 @@ void objectai(int objectnum)
       object[objectnum].button=1;
     */
     }
-  if (object[objectnum].type==4)
+  if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
     {
     if (object[0].idata[0]==0)
     if (fabs(object[0].position[0]-object[objectnum].position[0])<12.0f)
