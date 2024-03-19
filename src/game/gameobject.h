@@ -40,6 +40,31 @@ void deleterope(int ropenum);
 void objecttimetolive(void);
 void createcar(float position[3],float sizex,float sizey,float mass,float friction);
 
+typedef enum
+{
+    OBJ_TYPE_GISH = 1,
+    OBJ_TYPE_BOX = 2,
+    //?? box bound with an existing particle
+    OBJ_TYPE_CAR = 4,
+    //?? box bound with a new particle
+    OBJ_TYPE_WHEEL = 6,
+    OBJ_TYPE_ANCHORED_WHEEL = 7,
+    OBJ_TYPE_ANCHOR = 8,
+    OBJ_TYPE_BUTTON = 9,
+    OBJ_TYPE_ONE_TIME_BUTTON = 10,
+    OBJ_TYPE_SWITCH_UP = 11,
+    OBJ_TYPE_SWITCH_RIGHT = 12,
+    OBJ_TYPE_SWITCH_DOWN = 13,
+    OBJ_TYPE_SWITCH_LEFT = 14,
+    OBJ_TYPE_AREASWITCH = 15,
+    OBJ_TYPE_ONE_TIME_AREASWITCH = 16,
+    OBJ_TYPE_GENERATOR = 17,
+    OBJ_TYPE_SECRET_AREASWITCH = 18,
+    OBJ_TYPE_MONSTER_BEGIN = 20,
+    OBJ_TYPE_MONSTER_END = 36,
+
+} object_types;
+
 typedef struct
   {
   int type;

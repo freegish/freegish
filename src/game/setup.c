@@ -81,12 +81,12 @@ void setuplevel(void)
     {
     numofobjectstemp=numofobjects;
 
-    if (level.object[count].type==1)
+    if (level.object[count].type==OBJ_TYPE_GISH)
       {
       createtarboy(level.object[count].position);
       object[numofobjects-1].texturenum=1;
       }
-    if (level.object[count].type==2)
+    if (level.object[count].type==OBJ_TYPE_BOX)
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
     if (level.object[count].type==3)
       {
@@ -97,7 +97,7 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==4)
+    if (level.object[count].type==OBJ_TYPE_CAR)
       {
       if (level.gametype!=GAMETYPE_2RACING)
         {
@@ -126,47 +126,47 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==6)
+    if (level.object[count].type==OBJ_TYPE_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,0);
       }
-    if (level.object[count].type==7)
+    if (level.object[count].type==OBJ_TYPE_ANCHORED_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,1);
       //createparticle(2,level.object[count].position,NULL,10000.0f,-1,10000);
       //for (count2=0;count2<16;count2++)
       //  createbond(numofparticles-17+count2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==8)
+    if (level.object[count].type==OBJ_TYPE_ANCHOR)
       createanchor(level.object[count].position);
-    if (level.object[count].type==9)
+    if (level.object[count].type==OBJ_TYPE_BUTTON)
       createbutton(level.object[count].position,level.object[count].mass);
-    if (level.object[count].type==10)
+    if (level.object[count].type==OBJ_TYPE_ONE_TIME_BUTTON)
       {
       createbutton(level.object[count].position,level.object[count].mass);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==11)
+    if (level.object[count].type== OBJ_TYPE_SWITCH_UP)
       createswitch(level.object[count].position,level.object[count].mass,0);
-    if (level.object[count].type==12)
+    if (level.object[count].type== OBJ_TYPE_SWITCH_RIGHT)
       createswitch(level.object[count].position,level.object[count].mass,1);
-    if (level.object[count].type==13)
+    if (level.object[count].type== OBJ_TYPE_SWITCH_DOWN)
       createswitch(level.object[count].position,level.object[count].mass,2);
-    if (level.object[count].type==14)
+    if (level.object[count].type== OBJ_TYPE_SWITCH_LEFT)
       createswitch(level.object[count].position,level.object[count].mass,3);
-    if (level.object[count].type==15)
+    if (level.object[count].type==OBJ_TYPE_AREASWITCH)
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-    if (level.object[count].type==16)
+    if (level.object[count].type== OBJ_TYPE_ONE_TIME_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==18)
+    if (level.object[count].type==OBJ_TYPE_SECRET_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
       object[numofobjects-1].idata[1]=2;
       }
-    if (level.object[count].type==17)
+    if (level.object[count].type==OBJ_TYPE_GENERATOR)
       creategenerator(level.object[count].position,level.object[count].mass);
 
     if (level.object[count].type==20)
@@ -206,7 +206,7 @@ void setuplevel(void)
 
     if (numofobjects!=numofobjectstemp)
       {
-      if (level.object[count].type>1 && level.object[count].type<20)
+      if (level.object[count].type>OBJ_TYPE_GISH && level.object[count].type< OBJ_TYPE_MONSTER_BEGIN)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
       object[numofobjects-1].link=level.object[count].link;
       object[numofobjects-1].lighttype=level.object[count].lighttype;
@@ -345,7 +345,7 @@ void setupgame(void)
     }
 
   for (count=0;count<numofobjects;count++)
-  if (object[count].type==16)
+  if (object[count].type==16) // secret -> tick the secret counter; but why one_time_areaswitch?
   if (object[count].idata[1]==2)
     game.numofbonus[8]++;
 
