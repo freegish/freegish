@@ -690,11 +690,13 @@ void videooptionsmenu(void)
     setmenuitem(MO_HOTKEY,SCAN_A);
 
     count2=64;
+    sprintf(restext,"%d videomodes found",numofsdlvideomodes);
+    drawtext(restext, 0, 32, 16, 1.0f, 1.0f, 1.0f, 1.0f);
     for (count=numofsdlvideomodes-1;count>=0;count--)
     if (sdlvideomode[count].resolutionx>=640)
     if (sdlvideomode[count].bitsperpixel==32)
       {
-      sprintf(restext,"%dx%d",sdlvideomode[count].resolutionx,sdlvideomode[count].resolutiony);
+      sprintf(restext,"%dx%d:%d",sdlvideomode[count].resolutionx,sdlvideomode[count].resolutiony,sdlvideomode[count].bitsperpixel);
       createmenuitem(restext,0,count2,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_SET,&videomodenum,count);
 
