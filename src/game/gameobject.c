@@ -366,15 +366,15 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
   float vec[3],vec2[3];
   float mass;
 
-  if (type<5)
+  if (type<PUSHING_PISTON)
     {
-    if (type==1)
+    if (type==WEAK_ROPE)
       mass=0.125f;
-    if (type==2)
+    if (type==STRONG_ROPE)
       mass=0.25f;
-    if (type==3)
+    if (type==WEAK_CHAIN)
       mass=1.0f;
-    if (type==4)
+    if (type==STRONG_CHAIN)
       mass=2.0f;
 
     subtractvectors(vec,particle[particlenum2].position,particle[particlenum].position);
@@ -391,7 +391,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].type=type;
     rope[numofropes].part1=particlenum;
     rope[numofropes].part2=numofparticles-1;
-    if (type<3)
+    if (type<WEAK_CHAIN)
       rope[numofropes].texturenum=360;
     else
       rope[numofropes].texturenum=361;
@@ -405,7 +405,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
       rope[numofropes].type=type;
       rope[numofropes].part1=numofparticles-2;
       rope[numofropes].part2=numofparticles-1;
-      if (type<3)
+      if (type<WEAK_CHAIN)
         rope[numofropes].texturenum=360;
       else
         rope[numofropes].texturenum=361;
@@ -415,7 +415,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].type=type;
     rope[numofropes].part1=numofparticles-1;
     rope[numofropes].part2=particlenum2;
-    if (type<3)
+    if (type<WEAK_CHAIN)
       rope[numofropes].texturenum=360;
     else
       rope[numofropes].texturenum=361;
@@ -428,9 +428,9 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     else
       createbond(particlenum,particlenum2,8,numofropes);
 
-    if (type<9)
+    if (type<BAR)
       {
-      if (level.object[objectnum2].type==6 || level.object[objectnum2].type==7)
+      if (level.object[objectnum2].type==LVL_OBJ_TYPE_WHEEL || level.object[objectnum2].type==LVL_OBJ_TYPE_ANCHORED_WHEEL)
         {
         subtractvectors(vec,level.object[objectnum2].position,particle[particlenum].position);
         subtractvectors(vec2,particle[particlenum2].position,object[objectnum2].position);
@@ -439,7 +439,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
         bond[numofbonds-1].length=vectorlength(vec)-rope[numofropes].range;
         bond[numofbonds-1].maxlength=vectorlength(vec)-rope[numofropes].range;
         }
-      if (level.object[objectnum2].type>=2 && level.object[objectnum2].type<6)
+      if (level.object[objectnum2].type>=LVL_OBJ_TYPE_BOX && level.object[objectnum2].type<LVL_OBJ_TYPE_WHEEL)
         {
         subtractvectors(vec2,level.object[objectnum2].position,object[objectnum].position);
         subtractvectors(vec,particle[particlenum2].position,particle[particlenum].position);
@@ -451,21 +451,21 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
   
         normalizevector(vec,vec);
   
-        if (type==5 || type==9)
+        if (type==PUSHING_PISTON || type==BAR)
           copyvector(vec2,particle[particlenum2].position);
-        if (type==6 || type==8)
+        if (type==HALF_PUSHED_PUSHING_PISTON || type==HALF_PULLED_PULLING_PISTON)
           scaleaddvectors(vec2,particle[particlenum2].position,vec,-level.object[objectnum].lightcolor[0]*0.5f);
-        if (type==7)
+        if (type==PULLING_PISTON)
           scaleaddvectors(vec2,particle[particlenum2].position,vec,-level.object[objectnum].lightcolor[0]);
         subtractvectors(vec2,particle[particlenum].position,vec2);
         bond[numofbonds-1].length=vectorlength(vec2);
         bond[numofbonds-1].maxlength=vectorlength(vec2);
   
-        if (type==5)
+        if (type==PUSHING_PISTON)
           scaleaddvectors(vec2,particle[particlenum2].position,vec,level.object[objectnum].lightcolor[0]);
-        if (type==6 || type==8)
+        if (type==HALF_PUSHED_PUSHING_PISTON || type==HALF_PULLED_PULLING_PISTON)
           scaleaddvectors(vec2,particle[particlenum2].position,vec,level.object[objectnum].lightcolor[0]*0.5f);
-        if (type==7 || type==9)
+        if (type==PULLING_PISTON || type==BAR)
           copyvector(vec2,particle[particlenum2].position);
         subtractvectors(vec2,particle[particlenum].position,vec2);
         rope[numofropes].range=(vectorlength(vec2)-bond[numofbonds-1].maxlength)*0.5f;

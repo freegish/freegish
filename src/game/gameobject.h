@@ -82,6 +82,20 @@ typedef enum
 
 } gameobject_types;
 
+typedef enum
+{
+    WEAK_ROPE = 1,
+    STRONG_ROPE = 2,
+    WEAK_CHAIN = 3,
+    STRONG_CHAIN = 4,
+    PUSHING_PISTON = 5,
+    HALF_PUSHED_PUSHING_PISTON = 6,
+    PULLING_PISTON = 7,
+    HALF_PULLED_PULLING_PISTON = 8,
+    BAR = 9,
+    // ??
+
+} rope_types;
 
 
 typedef struct
