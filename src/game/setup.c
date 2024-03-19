@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/game.h"
 #include "../game/level.h"
 #include "../game/gameobject.h"
+#include "../game/objfunc.h"
 #include "../game/physics.h"
 #include "../game/random.h"
 #include "../game/replay.h"
@@ -61,7 +62,7 @@ void setuplevel(void)
   numofbosses=0;
 
   for (count=0;count<level.numofobjects;count++)
-    if (level.object[count].type>=20 && level.object[count].type<40)
+    if (level.object[count].type>=LVL_OBJ_TYPE_MONSTER_BEGIN && level.object[count].type<40)
       {
       if (animation[level.object[count].type-20].loaded==0)
         animation[level.object[count].type-20].loaded=2;
@@ -81,7 +82,7 @@ void setuplevel(void)
     {
     numofobjectstemp=numofobjects;
 
-    if (level.object[count].type==1)
+    if (level.object[count].type==LVL_OBJ_TYPE_GISH)
       {
         if (level.gametype != GAMETYPE_CAMPAIGN || game.numofplayers == 1) {
             createtarboy(level.object[count].position);
@@ -102,7 +103,7 @@ void setuplevel(void)
             }
         }
       }
-    if (level.object[count].type==2)
+    if (level.object[count].type==LVL_OBJ_TYPE_BOX)
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
     if (level.object[count].type==3)
       {
@@ -113,7 +114,7 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==4)
+    if (level.object[count].type==LVL_OBJ_TYPE_CAR)
       {
       if (level.gametype!=GAMETYPE_2RACING)
         {
@@ -142,47 +143,47 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==6)
+    if (level.object[count].type==LVL_OBJ_TYPE_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,0);
       }
-    if (level.object[count].type==7)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANCHORED_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,1);
       //createparticle(2,level.object[count].position,NULL,10000.0f,-1,10000);
       //for (count2=0;count2<16;count2++)
       //  createbond(numofparticles-17+count2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==8)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
       createanchor(level.object[count].position);
-    if (level.object[count].type==9)
+    if (level.object[count].type==LVL_OBJ_TYPE_BUTTON)
       createbutton(level.object[count].position,level.object[count].mass);
-    if (level.object[count].type==10)
+    if (level.object[count].type==LVL_OBJ_TYPE_ONE_TIME_BUTTON)
       {
       createbutton(level.object[count].position,level.object[count].mass);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==11)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_UP)
       createswitch(level.object[count].position,level.object[count].mass,0);
-    if (level.object[count].type==12)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_RIGHT)
       createswitch(level.object[count].position,level.object[count].mass,1);
-    if (level.object[count].type==13)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_DOWN)
       createswitch(level.object[count].position,level.object[count].mass,2);
-    if (level.object[count].type==14)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_LEFT)
       createswitch(level.object[count].position,level.object[count].mass,3);
-    if (level.object[count].type==15)
+    if (level.object[count].type==LVL_OBJ_TYPE_AREASWITCH)
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-    if (level.object[count].type==16)
+    if (level.object[count].type== LVL_OBJ_TYPE_ONE_TIME_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==18)
+    if (level.object[count].type==LVL_OBJ_TYPE_SECRET_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-      object[numofobjects-1].idata[1]=2;
+      object[numofobjects-1].idata[1]=IS_SECRET;
       }
-    if (level.object[count].type==17)
+    if (level.object[count].type==LVL_OBJ_TYPE_GENERATOR)
       creategenerator(level.object[count].position,level.object[count].mass);
 
     if (level.object[count].type==20)
@@ -222,7 +223,7 @@ void setuplevel(void)
 
     if (numofobjects!=numofobjectstemp)
       {
-      if (level.object[count].type>1 && level.object[count].type<20)
+      if (level.object[count].type>LVL_OBJ_TYPE_GISH && level.object[count].type<LVL_OBJ_TYPE_MONSTER_BEGIN)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
       if (level.gametype == GAMETYPE_CAMPAIGN)
           if (level.object[count].link != -1)
@@ -231,9 +232,9 @@ void setuplevel(void)
           object[numofobjects - 1].link = level.object[count].link;
       
       object[numofobjects-1].lighttype=level.object[count].lighttype;
-      if (level.object[count].lighttype==1 || level.object[count].lighttype==3)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_ON || level.object[count].lighttype==FLICKERING_LIGHT)
         object[numofobjects-1].lighton=1;
-      if (level.object[count].lighttype==2)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_OFF)
         object[numofobjects-1].lighton=0;
   
       object[numofobjects-1].size[0]=level.object[count].size[0];
@@ -383,8 +384,8 @@ void setupgame(void)
     }
 
   for (count=0;count<numofobjects;count++)
-  if (object[count].type==16)
-  if (object[count].idata[1]==2)
+  if (object[count].type==OBJ_TYPE_AREASWITCH)
+  if (object[count].idata[1]==IS_SECRET)
     game.numofbonus[8]++;
 
   if (level.gametype==GAMETYPE_COLLECTION)
