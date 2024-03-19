@@ -68,14 +68,23 @@ void listvideomodes(void)
         }
         f = mode.format;
 
-        sdlvideomode[numofsdlvideomodes].resolutionx=mode.w;
-        sdlvideomode[numofsdlvideomodes].resolutiony=mode.h;
-        sdlvideomode[numofsdlvideomodes].bitsperpixel=32;
-        numofsdlvideomodes++;
+        int already_seen_this_resolution = 0;
+        if (numofsdlvideomodes > 0)
+        for (int j = 0; j < numofsdlvideomodes; j++)
+          if (sdlvideomode[j].resolutionx == mode.w)
+          if (sdlvideomode[j].resolutiony == mode.h)
+          already_seen_this_resolution = 1;
 
-        sdlvideomode[numofsdlvideomodes].resolutionx=mode.w;
-        sdlvideomode[numofsdlvideomodes].resolutiony=mode.h;
-        sdlvideomode[numofsdlvideomodes].bitsperpixel=16;
-        numofsdlvideomodes++;
+        if (!already_seen_this_resolution) {
+            sdlvideomode[numofsdlvideomodes].resolutionx = mode.w;
+            sdlvideomode[numofsdlvideomodes].resolutiony = mode.h;
+            sdlvideomode[numofsdlvideomodes].bitsperpixel = 32;
+            numofsdlvideomodes++;
+
+            sdlvideomode[numofsdlvideomodes].resolutionx = mode.w;
+            sdlvideomode[numofsdlvideomodes].resolutiony = mode.h;
+            sdlvideomode[numofsdlvideomodes].bitsperpixel = 16;
+            numofsdlvideomodes++;
+        }
     }
   }
