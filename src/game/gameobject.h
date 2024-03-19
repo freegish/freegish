@@ -42,28 +42,47 @@ void createcar(float position[3],float sizex,float sizey,float mass,float fricti
 
 typedef enum
 {
+    LVL_OBJ_TYPE_GISH = 1,
+    LVL_OBJ_TYPE_BOX = 2,
+    //?? box bound with an existing particle
+    LVL_OBJ_TYPE_CAR = 4,
+    //?? box bound with a new particle
+    LVL_OBJ_TYPE_WHEEL = 6,
+    LVL_OBJ_TYPE_ANCHORED_WHEEL = 7,
+    LVL_OBJ_TYPE_ANCHOR = 8,
+    LVL_OBJ_TYPE_BUTTON = 9,
+    LVL_OBJ_TYPE_ONE_TIME_BUTTON = 10,
+    LVL_OBJ_TYPE_SWITCH_UP = 11,
+    LVL_OBJ_TYPE_SWITCH_RIGHT = 12,
+    LVL_OBJ_TYPE_SWITCH_DOWN = 13,
+    LVL_OBJ_TYPE_SWITCH_LEFT = 14,
+    LVL_OBJ_TYPE_AREASWITCH = 15,
+    LVL_OBJ_TYPE_ONE_TIME_AREASWITCH = 16,
+    LVL_OBJ_TYPE_GENERATOR = 17,
+    LVL_OBJ_TYPE_SECRET_AREASWITCH = 18,
+    LVL_OBJ_TYPE_MONSTER_BEGIN = 20,
+    LVL_OBJ_TYPE_MONSTER_END = 36,
+
+} level_object_types;
+
+typedef enum
+{
     OBJ_TYPE_GISH = 1,
     OBJ_TYPE_BOX = 2,
-    //?? box bound with an existing particle
-    OBJ_TYPE_CAR = 4,
-    //?? box bound with a new particle
-    OBJ_TYPE_WHEEL = 6,
-    OBJ_TYPE_ANCHORED_WHEEL = 7,
+    OBJ_TYPE_WHEEL = 3,
+    OBJ_TYPE_BEAST_OR_BOBBLE = 4,
+    OBJ_TYPE_HEAD = 5,
+    OBJ_TYPE_AMBER = 6,
     OBJ_TYPE_ANCHOR = 8,
     OBJ_TYPE_BUTTON = 9,
-    OBJ_TYPE_ONE_TIME_BUTTON = 10,
-    OBJ_TYPE_SWITCH_UP = 11,
-    OBJ_TYPE_SWITCH_RIGHT = 12,
-    OBJ_TYPE_SWITCH_DOWN = 13,
-    OBJ_TYPE_SWITCH_LEFT = 14,
-    OBJ_TYPE_AREASWITCH = 15,
-    OBJ_TYPE_ONE_TIME_AREASWITCH = 16,
-    OBJ_TYPE_GENERATOR = 17,
-    OBJ_TYPE_SECRET_AREASWITCH = 18,
-    OBJ_TYPE_MONSTER_BEGIN = 20,
-    OBJ_TYPE_MONSTER_END = 36,
+    OBJ_TYPE_SWITCH = 10,
+    OBJ_TYPE_GENERATOR = 15,
+    OBJ_TYPE_AREASWITCH = 16,
+    OBJ_TYPE_CAR = 20,
 
-} object_types;
+} gameobject_types;
+
+
 
 typedef struct
   {
