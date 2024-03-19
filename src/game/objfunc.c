@@ -53,7 +53,7 @@ void objectcycle(void)
     {
     updateogg();
 
-    if (rope[count].type>=5 && rope[count].type<9)
+    if (rope[count].type>=PUSHING_PISTON && rope[count].type<=HALF_PULLED_PULLING_PISTON)
       {
       bond[rope[count].bondnum].length=bond[rope[count].bondnum].maxlength+(rope[count].range-cos(rope[count].angle)*rope[count].range);
 
@@ -152,7 +152,7 @@ void objectcycle(void)
         object[count].lightintensity=object[count].lightintensitymax*1.5f;
       }
 
-    if (object[count].type==9)
+    if (object[count].type==OBJ_TYPE_BUTTON)
     if (object[count].idata[0]==0 || object[count].idata[1]==0)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-particle[object[count].particle[4]].position[1];
@@ -184,7 +184,7 @@ void objectcycle(void)
         if (object[object[count].link].idata[0]==1)
           object[count].idata[0]=1;
       }
-    if (object[count].type==9)
+    if (object[count].type==OBJ_TYPE_BUTTON)
     if (object[count].idata[0]==1 && object[count].idata[1]==1)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-0.375f-particle[object[count].particle[4]].position[1];
@@ -197,7 +197,7 @@ void objectcycle(void)
       vec[1]-=particle[object[count].particle[5]].velocity[1];
       particle[object[count].particle[5]].velocity[1]+=vec[1];
       }
-    if (object[count].type==16)
+    if (object[count].type==OBJ_TYPE_AREASWITCH)
     if (object[count].idata[0]==0 || object[count].idata[1]==0)
       {
       object[count].idata[0]=0;
@@ -229,7 +229,7 @@ void objectcycle(void)
           }
         }
       }
-    if (object[count].type==15)
+    if (object[count].type==OBJ_TYPE_GENERATOR)
       {
       if (object[count].link==-1 || object[object[count].link].idata[0]==1)
       if ((game.framenum&255)==128)
@@ -246,7 +246,7 @@ void objectcycle(void)
         }
       }
 
-    if (object[count].type==10)
+    if (object[count].type==OBJ_TYPE_SWITCH)
       {
       if (object[count].rotate==0 || object[count].rotate==2)
         count3=1;
@@ -306,7 +306,7 @@ void objectcycle(void)
         if (object[object[count].link].idata[0]==1)
           object[count].idata[0]=1;
       }
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       if (count!=0)
       if (level.gametype==GAMETYPE_CAMPAIGN && game.levelnum==34)
@@ -522,7 +522,7 @@ void objectcycle(void)
           }
         }
       }
-    if (object[count].type==20)
+    if (object[count].type==OBJ_TYPE_CAR)
       {
       subtractvectors(object[count].orientation[1],particle[object[count].particle[0]].position,particle[object[count].particle[3]].position);
       normalizevector(object[count].orientation[1],object[count].orientation[1]);
@@ -586,7 +586,7 @@ void objectcycle(void)
         //scaleaddvectors(particle[object[count].particle[count2]].velocity,particle[object[count].particle[count2]].velocity,object[count].orientation[0],object[count].axis[1]*0.003f);
         }
       }
-    if (object[count].type==4)
+    if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
       {
       for (count2=0;count2<4;count2++)
         {
@@ -726,7 +726,7 @@ void objectsound(int objectnum)
         playsound(18,object[objectnum].position,NULL,scale,0,pitch,objectnum,3);
       }
     }
-  if (object[objectnum].type==2 || object[objectnum].type==3)
+  if (object[objectnum].type==OBJ_TYPE_BOX || object[objectnum].type==OBJ_TYPE_WHEEL)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);
@@ -787,7 +787,7 @@ void objectsound(int objectnum)
       }
     }
   */
-  if (object[objectnum].type==4)
+  if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);
@@ -806,7 +806,7 @@ void objectsound(int objectnum)
       playsound(2,object[objectnum].position,NULL,scale*5.0f,0,pitch,objectnum,0);
       }
     }
-  if (object[objectnum].type==1)
+  if (object[objectnum].type==OBJ_TYPE_GISH)
     {
     subtractvectors(vec,object[objectnum].velocity,object[objectnum].prevvelocity);
     scale=vectorlength(vec);
