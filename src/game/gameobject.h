@@ -40,6 +40,14 @@ void deleterope(int ropenum);
 void objecttimetolive(void);
 void createcar(float position[3],float sizex,float sizey,float mass,float friction);
 
+// what more to dehardcode:
+// bond types
+// physicstemp.bond types
+// particle types
+// menuitem types
+// beast types
+
+
 typedef enum
 {
     LVL_OBJ_TYPE_GISH = 1,

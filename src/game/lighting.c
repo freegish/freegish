@@ -322,7 +322,7 @@ void rendershadows(void)
     for (count=0;count<numofobjects;count++)
     if (object[count].timetolive>=50)
       {
-      if (object[count].type==2)
+      if (object[count].type==OBJ_TYPE_BOX)
         {
         for (count2=0;count2<4;count2++)
           {

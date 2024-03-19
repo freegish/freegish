@@ -122,23 +122,23 @@ int pointintersectobject(float *intersectpoint,float *normal,float *scale,float 
     normalizevector(normaltemp,normaltemp);
 
     scaleaddvectors(vec,point,normaltemp,0.5f);
-    if (object[objectnum].type==10)
+    if (object[objectnum].type==OBJ_TYPE_SWITCH)
       scaleaddvectors(vec,point,normaltemp,0.25f);
-    if (object[objectnum].type==2 && object[objectnum].size[0]<=0.5f)
+    if (object[objectnum].type==OBJ_TYPE_BOX && object[objectnum].size[0]<=0.5f)
       scaleaddvectors(vec,point,normaltemp,0.25f);
-    if (object[objectnum2].type==2 && object[objectnum2].size[0]<=0.5f)
+    if (object[objectnum2].type==OBJ_TYPE_BOX && object[objectnum2].size[0]<=0.5f)
       scaleaddvectors(vec,point,normaltemp,0.25f);
 
     if (lineintersectline2(intersectpointtemp,normaltemp,&scaletemp,vec,point,particle[object[objectnum].particle[particlelisttemp[0]]].position,particle[object[objectnum].particle[particlelisttemp[1]]].position))
       {
       subtractvectors(vec,intersectpointtemp,object[objectnum2].position);
       normalizevector(vec,vec);
-      if (object[objectnum2].type==1)
+      if (object[objectnum2].type==OBJ_TYPE_GISH)
         angle=0.707f;
       else
         angle=0.0f;
 
-      if (object[objectnum].type==2 && object[objectnum].size[0]<=0.5f)
+      if (object[objectnum].type==OBJ_TYPE_BOX && object[objectnum].size[0]<=0.5f)
         angle=0.0f;
 
       if (dotproduct(vec,normaltemp)<angle)

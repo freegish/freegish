@@ -228,7 +228,7 @@ void gamelogic(void)
       {
       game.over=2;
       for (count=0;count<numofobjects;count++)
-        if (object[count].type==4)
+        if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
           game.over=0;
       if (numofbosses>0)
         game.over=0;
@@ -266,7 +266,7 @@ void gamelogic(void)
         createamber(vec);
         }
       for (count=0;count<numofobjects;count++)
-      if (object[count].type==6)
+      if (object[count].type==OBJ_TYPE_AMBER)
       if (object[count].position[1]<122.0f)
       if (object[count].timetolive>25)
         object[count].timetolive=25;

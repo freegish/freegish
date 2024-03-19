@@ -62,7 +62,7 @@ void setuplevel(void)
   numofbosses=0;
 
   for (count=0;count<level.numofobjects;count++)
-    if (level.object[count].type>=20 && level.object[count].type<40)
+    if (level.object[count].type>=LVL_OBJ_TYPE_MONSTER_BEGIN && level.object[count].type<40)
       {
       if (animation[level.object[count].type-20].loaded==0)
         animation[level.object[count].type-20].loaded=2;

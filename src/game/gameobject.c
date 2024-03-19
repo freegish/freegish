@@ -476,13 +476,13 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].part1=particlenum;
     rope[numofropes].part2=particlenum2;
     rope[numofropes].bondnum=numofbonds-1;
-    if (type==5)
+    if (type==PUSHING_PISTON)
       rope[numofropes].angle=0.0f;
-    if (type==6)
+    if (type==HALF_PUSHED_PUSHING_PISTON)
       rope[numofropes].angle=pi/2.0f;
-    if (type==7)
+    if (type==PULLING_PISTON)
       rope[numofropes].angle=pi;
-    if (type==8)
+    if (type==HALF_PULLED_PULLING_PISTON)
       rope[numofropes].angle=3.0f*pi/2.0f;
 
     rope[numofropes].cycle=level.object[objectnum].lightcolor[1];
@@ -1169,13 +1169,13 @@ void deleterope(int ropenum)
   if (ropenum>=numofropes)
     return;
 
-  if (rope[ropenum].type==1)
+  if (rope[ropenum].type==WEAK_ROPE)
     playsound(3,particle[rope[ropenum].part1].position,NULL,1.0f,0,1.0f,-1,0);
-  if (rope[ropenum].type==2)
+  if (rope[ropenum].type==STRONG_ROPE)
     playsound(3,particle[rope[ropenum].part1].position,NULL,1.0f,0,0.75f,-1,0);
-  if (rope[ropenum].type==3)
+  if (rope[ropenum].type==WEAK_CHAIN)
     playsound(4,particle[rope[ropenum].part1].position,NULL,1.0f,0,1.0f,-1,0);
-  if (rope[ropenum].type==4)
+  if (rope[ropenum].type==STRONG_CHAIN)
     playsound(4,particle[rope[ropenum].part1].position,NULL,1.0f,0,0.75f,-1,0);
 
   numofropes--;
