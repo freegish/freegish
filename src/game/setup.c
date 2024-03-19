@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/game.h"
 #include "../game/level.h"
 #include "../game/gameobject.h"
+#include "../game/objfunc.h"
 #include "../game/physics.h"
 #include "../game/random.h"
 #include "../game/replay.h"
@@ -164,7 +165,7 @@ void setuplevel(void)
     if (level.object[count].type==LVL_OBJ_TYPE_SECRET_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-      object[numofobjects-1].idata[1]=2;
+      object[numofobjects-1].idata[1]=IS_SECRET;
       }
     if (level.object[count].type==LVL_OBJ_TYPE_GENERATOR)
       creategenerator(level.object[count].position,level.object[count].mass);
@@ -346,7 +347,7 @@ void setupgame(void)
 
   for (count=0;count<numofobjects;count++)
   if (object[count].type==OBJ_TYPE_AREASWITCH)
-  if (object[count].idata[1]==2) // secret -> tick the secret counter
+  if (object[count].idata[1]==IS_SECRET)
     game.numofbonus[8]++;
 
   if (level.gametype==GAMETYPE_COLLECTION)

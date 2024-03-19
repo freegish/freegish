@@ -59,7 +59,7 @@ void objectcycle(void)
 
       if (rope[count].cyclelength==0.0f)
         {
-        if (rope[count].link==-1 || object[rope[count].link].idata[0]==1)
+        if (rope[count].link==-1 || object[rope[count].link].idata[IS_ACTIVATED]==1)
           {
           rope[count].angle+=2.0f*pi/(50.0f*rope[count].cycle);
           if (rope[count].angle>2.0f*pi)
@@ -81,13 +81,13 @@ void objectcycle(void)
         else
           {
           count2=0;
-          if (object[rope[count].link].idata[0]==1 && rope[count].cyclecount==0.0f)
+          if (object[rope[count].link].idata[IS_ACTIVATED]==1 && rope[count].cyclecount==0.0f)
             count2=1;
           if (rope[count].cyclecount>0.0f && rope[count].cyclecount<rope[count].cyclelength*2.0f*pi)
             count2=1;
           if (rope[count].cyclecount>rope[count].cyclelength*2.0f*pi+2.0f*pi/(50.0f*rope[count].cycle))
             count2=1;
-          if (object[rope[count].link].idata[0]==0 && rope[count].cyclecount>0.0f)
+          if (object[rope[count].link].idata[IS_ACTIVATED]==0 && rope[count].cyclecount>0.0f)
             count2=1;
 
           if (count2==1)
@@ -130,14 +130,14 @@ void objectcycle(void)
       {
       if (object[count].lighttype==1 || object[count].lighttype==3)
         {
-        if (object[object[count].link].idata[0])
+        if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=0;
         else
           object[count].lighton=1;
         }
       if (object[count].lighttype==2)
         {
-        if (object[object[count].link].idata[0])
+        if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=1;
         else
           object[count].lighton=0;
@@ -153,7 +153,7 @@ void objectcycle(void)
       }
 
     if (object[count].type==OBJ_TYPE_BUTTON)
-    if (object[count].idata[0]==0 || object[count].idata[1]==0)
+    if (object[count].idata[IS_ACTIVATED]==0 || object[count].idata[IS_ONE_TIME]==0)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-particle[object[count].particle[4]].position[1];
       vec[1]*=0.08f;
@@ -168,24 +168,24 @@ void objectcycle(void)
       if (particle[object[count].particle[4]].position[1]>particle[object[count].particle[6]].position[1]-0.1f)
       if (particle[object[count].particle[5]].position[1]>particle[object[count].particle[6]].position[1]-0.1f)
         {
-        if (object[count].idata[0]==1)
+        if (object[count].idata[IS_ACTIVATED]==1)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=0;
+        object[count].idata[IS_ACTIVATED]=0;
         }
       if (particle[object[count].particle[4]].position[1]<particle[object[count].particle[6]].position[1]-0.2f)
       if (particle[object[count].particle[5]].position[1]<particle[object[count].particle[6]].position[1]-0.2f)
         {
-        if (object[count].idata[0]==0)
+        if (object[count].idata[IS_ACTIVATED]==0)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=1;
+        object[count].idata[IS_ACTIVATED]=1;
         }
 
       if (object[count].link!=-1)
-        if (object[object[count].link].idata[0]==1)
-          object[count].idata[0]=1;
+        if (object[object[count].link].idata[IS_ACTIVATED]==1)
+          object[count].idata[IS_ACTIVATED]=1;
       }
     if (object[count].type==OBJ_TYPE_BUTTON)
-    if (object[count].idata[0]==1 && object[count].idata[1]==1)
+    if (object[count].idata[IS_ACTIVATED]==1 && object[count].idata[IS_ONE_TIME]==1)
       {
       vec[1]=particle[object[count].particle[6]].position[1]-0.375f-particle[object[count].particle[4]].position[1];
       vec[1]*=0.08f;
@@ -198,14 +198,14 @@ void objectcycle(void)
       particle[object[count].particle[5]].velocity[1]+=vec[1];
       }
     if (object[count].type==OBJ_TYPE_AREASWITCH)
-    if (object[count].idata[0]==0 || object[count].idata[1]==0)
+    if (object[count].idata[IS_ACTIVATED]==0 || object[count].idata[IS_ONE_TIME]==0)
       {
-      object[count].idata[0]=0;
+      object[count].idata[IS_ACTIVATED]=0;
       if (fabs(object[0].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
       if (fabs(object[0].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
         {
-        object[count].idata[0]=1;
-        if (object[count].idata[1]==2)
+        object[count].idata[IS_ACTIVATED]=1;
+        if (object[count].idata[1]==IS_SECRET)
           {
           if ((rand()&3)==0)
             playsound(8,object[count].position,NULL,1.0f,0,1.0f,-1,0);
@@ -218,8 +218,8 @@ void objectcycle(void)
       if (fabs(object[1].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
       if (fabs(object[1].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
         {
-        object[count].idata[0]=1;
-        if (object[count].idata[1]==2)
+        object[count].idata[IS_ACTIVATED]=1;
+        if (object[count].idata[1]==IS_SECRET)
           {
           if ((rand()&3)==0)
             playsound(8,object[count].position,NULL,1.0f,0,1.0f,-1,0);
@@ -231,7 +231,7 @@ void objectcycle(void)
       }
     if (object[count].type==OBJ_TYPE_GENERATOR)
       {
-      if (object[count].link==-1 || object[object[count].link].idata[0]==1)
+      if (object[count].link==-1 || object[object[count].link].idata[IS_ACTIVATED]==1)
       if ((game.framenum&255)==128)
         {
         createwheel(object[count].position,object[count].size[0],object[count].size[1],object[count].mass,0.8f,0);
@@ -291,20 +291,20 @@ void objectcycle(void)
 
       if (vec[0]<-0.2f)
         {
-        if (object[count].idata[0]==1)
+        if (object[count].idata[IS_ACTIVATED]==1)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=0;
+        object[count].idata[IS_ACTIVATED]=0;
         }
       if (vec[0]>0.2f)
         {
-        if (object[count].idata[0]==0)
+        if (object[count].idata[IS_ACTIVATED]==0)
           playsound(14,object[count].position,NULL,0.2f,0,1.0f,-1,0);
-        object[count].idata[0]=1;
+        object[count].idata[IS_ACTIVATED]=1;
         }
 
       if (object[count].link!=-1)
-        if (object[object[count].link].idata[0]==1)
-          object[count].idata[0]=1;
+        if (object[object[count].link].idata[IS_ACTIVATED]==1)
+          object[count].idata[IS_ACTIVATED]=1;
       }
     if (object[count].type==OBJ_TYPE_GISH)
       {
