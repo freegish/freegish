@@ -201,8 +201,9 @@ void objectcycle(void)
     if (object[count].idata[0]==0 || object[count].idata[1]==0)
       {
       object[count].idata[0]=0;
-      if (fabs(object[0].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
-      if (fabs(object[0].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
+      for (int player = 0; player < game.numofplayers; player++)
+      if (fabs(object[player].position[0]-object[count].position[0])<object[count].size[0]*0.5f)
+      if (fabs(object[player].position[1]-object[count].position[1])<object[count].size[1]*0.5f)
         {
         object[count].idata[0]=1;
         if (object[count].idata[1]==2)

@@ -373,6 +373,23 @@ void gameloop(void)
       view.zoom=24.0f;
     if (level.gametype==GAMETYPE_4FOOTBALL || level.gametype==GAMETYPE_4SUMO)
       view.zoom=14.0f;
+    if (level.gametype == GAMETYPE_CAMPAIGN) {
+        float midpoint[3];
+        float sub_result[3];
+        float distance_to_midpoint = 0.0f;
+        zerovector(midpoint);
+
+        for(int i = 0; i < game.numofplayers; i++)
+            addvectors(midpoint, midpoint, object[i].position);
+        scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
+
+        for (int i = 0; i < game.numofplayers; i++) {
+            subtractvectors(sub_result, midpoint, object[i].position);
+            distance_to_midpoint += vectorlength(sub_result);
+        }
+
+        view.zoom = 10.f + distance_to_midpoint / game.numofplayers / 1.25;
+    }
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;

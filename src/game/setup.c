@@ -83,8 +83,24 @@ void setuplevel(void)
 
     if (level.object[count].type==1)
       {
-      createtarboy(level.object[count].position);
-      object[numofobjects-1].texturenum=1;
+        if (level.gametype != GAMETYPE_CAMPAIGN || game.numofplayers == 1) {
+            createtarboy(level.object[count].position);
+            object[numofobjects - 1].texturenum = 1;
+        }
+        if (level.gametype == GAMETYPE_CAMPAIGN) {
+            if (game.numofplayers > 1) {
+                for (int i = 0; i < game.numofplayers; i++)
+                {
+                    float angle = pi / 2 + (float)i * 2 * pi / game.numofplayers;
+                    float size = 0.9f;
+                    vec[0] = level.object[count].position[0] + cos(angle) * size;
+                    vec[1] = level.object[count].position[1] - sin(angle) * size;
+                    vec[2] = 0.0f;
+                    createtarboy(vec);
+                    object[numofobjects - 1].texturenum = 1;
+                }
+            }
+        }
       }
     if (level.object[count].type==2)
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
@@ -208,7 +224,12 @@ void setuplevel(void)
       {
       if (level.object[count].type>1 && level.object[count].type<20)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
-      object[numofobjects-1].link=level.object[count].link;
+      if (level.gametype == GAMETYPE_CAMPAIGN)
+          if (level.object[count].link != -1)
+          object[numofobjects - 1].link = level.object[count].link + game.numofplayers - 1;
+      else
+          object[numofobjects - 1].link = level.object[count].link;
+      
       object[numofobjects-1].lighttype=level.object[count].lighttype;
       if (level.object[count].lighttype==1 || level.object[count].lighttype==3)
         object[numofobjects-1].lighton=1;
@@ -248,7 +269,24 @@ void setuplevel(void)
 
   for (count=0;count<level.numofropes;count++)
     {
-    createrope(level.rope[count].type,object[level.rope[count].obj1].particle[level.rope[count].obj1part],object[level.rope[count].obj2].particle[level.rope[count].obj2part],level.rope[count].obj1,level.rope[count].obj2,level.rope[count].texturenum);
+
+      int obj1;
+      int obj2;
+      if (level.gametype == GAMETYPE_CAMPAIGN) {
+          obj1 = level.rope[count].obj1 + game.numofplayers - 1;
+          obj2 = level.rope[count].obj2 + game.numofplayers - 1;
+      }
+      else {
+          obj1 = level.rope[count].obj1;
+          obj2 = level.rope[count].obj2;
+      }
+    createrope(
+        level.rope[count].type,
+        object[obj1].particle[level.rope[count].obj1part],
+        object[obj2].particle[level.rope[count].obj2part],
+        obj1,
+        obj2,
+        level.rope[count].texturenum);
     }
   }
 

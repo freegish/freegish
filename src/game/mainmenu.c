@@ -266,6 +266,7 @@ void mainmenu(void)
 
   joymenunum=1;
   game.turbomode=1;
+  game.numofplayers = 1;
 
   while (!menuitem[0].active && !windowinfo.shutdown)
     {
@@ -300,6 +301,8 @@ void mainmenu(void)
 
     if (keyboard[SCAN_T] && !prevkeyboard[SCAN_T])
       game.turbomode^=1;
+    if (keyboard[SCAN_Y] && !prevkeyboard[SCAN_Y])
+      game.numofplayers = 1 + game.numofplayers % 4; // from 1 to 4
 
     updateogg();
     checkmusic();
@@ -313,6 +316,10 @@ void mainmenu(void)
 
     if (game.turbomode)
       drawtext(TXT_TURBO_EDITION,(640|TEXT_END),470,10,1.0f,1.0f,1.0f,1.0f);
+
+    char restext[64];
+    sprintf(restext, "%s %i", TXT_NUMOFPLAYERS, game.numofplayers);
+    drawtext(restext,(640|TEXT_END),470-16,10,1.0f,1.0f,1.0f,1.0f);
     drawtext("Version 1.53",0,470,10,1.0f,1.0f,1.0f,1.0f);
 
     drawtext(TXT_COPYRIGHT,(320|TEXT_CENTER),470,10,0.75f,0.75f,0.75f,1.0f);
