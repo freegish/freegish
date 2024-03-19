@@ -913,7 +913,7 @@ void renderobjects(void)
       glColor4f(level.ambient[1][0],level.ambient[1][1],level.ambient[1][2],objectrender[count].alpha);
 
       if (objectrender[count].type==8)
-      if (object[objectrender[count].objectnum].lighttype==1)
+      if (object[objectrender[count].objectnum].lighttype==LIGHT_DEFAULT_ON)
         glColor3fv(object[objectrender[count].objectnum].lightcolor);
 
       for (count2=0;count2<objectrender[count].numoftris;count2++)

@@ -128,14 +128,14 @@ void objectcycle(void)
 
     if (object[count].link!=-1)
       {
-      if (object[count].lighttype==1 || object[count].lighttype==3)
+      if (object[count].lighttype==LIGHT_DEFAULT_ON || object[count].lighttype==FLICKERING_LIGHT)
         {
         if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=0;
         else
           object[count].lighton=1;
         }
-      if (object[count].lighttype==2)
+      if (object[count].lighttype==LIGHT_DEFAULT_OFF)
         {
         if (object[object[count].link].idata[IS_ACTIVATED])
           object[count].lighton=1;
@@ -143,7 +143,7 @@ void objectcycle(void)
           object[count].lighton=0;
         }
       }
-    if (object[count].lighttype==3)
+    if (object[count].lighttype==FLICKERING_LIGHT)
       {
       object[count].lightintensity+=((rand()&255)/255.0f-0.5f)*0.2f*object[count].lightintensitymax;
       if (object[count].lightintensity<object[count].lightintensitymax*0.5f)

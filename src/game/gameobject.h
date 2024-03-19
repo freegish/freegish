@@ -97,6 +97,12 @@ typedef enum
 
 } rope_types;
 
+typedef enum
+{
+    LIGHT_DEFAULT_ON = 1,
+    LIGHT_DEFAULT_OFF = 2, // idk, maybe something else
+    FLICKERING_LIGHT = 3,
+} light_types;
 
 typedef struct
   {

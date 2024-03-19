@@ -211,9 +211,9 @@ void setuplevel(void)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
       object[numofobjects-1].link=level.object[count].link;
       object[numofobjects-1].lighttype=level.object[count].lighttype;
-      if (level.object[count].lighttype==1 || level.object[count].lighttype==3)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_ON || level.object[count].lighttype==FLICKERING_LIGHT)
         object[numofobjects-1].lighton=1;
-      if (level.object[count].lighttype==2)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_OFF)
         object[numofobjects-1].lighton=0;
   
       object[numofobjects-1].size[0]=level.object[count].size[0];

@@ -421,7 +421,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=0.0f;
             object[count].lightcolor[1]=1.0f;
@@ -435,7 +435,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=1.0f;
             object[count].lightcolor[1]=1.0f;
@@ -449,7 +449,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=1.0f;
             object[count].lightcolor[1]=0.0f;
