@@ -430,7 +430,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
 
     if (type<BAR)
       {
-      if (level.object[objectnum2].type==LVL_OBJ_TYPE_WHEEL || level.object[objectnum2].type==LVL_OBJ_TYPE_ANCHORED_WHEEL)
+      if (object[objectnum2].type==OBJ_TYPE_WHEEL)
         {
         subtractvectors(vec,object[objectnum2].position,particle[particlenum].position);
         subtractvectors(vec2,particle[particlenum2].position,object[objectnum2].position);
@@ -439,7 +439,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
         bond[numofbonds-1].length=vectorlength(vec)-rope[numofropes].range;
         bond[numofbonds-1].maxlength=vectorlength(vec)-rope[numofropes].range;
         }
-      if (object[objectnum2].type>=LVL_OBJ_TYPE_BOX && object[objectnum2].type<LVL_OBJ_TYPE_WHEEL)
+      if (object[objectnum2].type>=OBJ_TYPE_BOX && object[objectnum2].type<OBJ_TYPE_WHEEL)
         {
         subtractvectors(vec2,object[objectnum2].position,object[objectnum].position);
         subtractvectors(vec,particle[particlenum2].position,particle[particlenum].position);
