@@ -49,7 +49,7 @@ void objectai(int objectnum)
     object[objectnum].axis[1]=object[0].axis[0];
     object[objectnum].button=object[0].button;
     */
-    subtractvectors(vec,object[0].position,object[objectnum].position);
+    subtractvectors(vec,object[objectnum-game.numofplayers].position,object[objectnum].position);
     if (vec[0]<-0.5f)
       object[objectnum].axis[0]=-1.0f;
     if (vec[0]>0.5f)
