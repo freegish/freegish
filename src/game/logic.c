@@ -186,12 +186,12 @@ void gamelogic(void)
         game.over = 2;
 
         if (game.levelnum == 34)
-        if (object[2 + game.numofplayers - 1].position[0] >= level.area[1][0] && object[2 + game.numofplayers - 1].position[0] < level.area[1][2])
-        if (object[2 + game.numofplayers - 1].position[1] >= level.area[1][1] && object[2 + game.numofplayers - 1].position[1] < level.area[1][3])
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[1][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[1][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[1][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[1][3])
         game.over = 2;
         if (game.levelnum == 34)
-        if (object[2 + game.numofplayers - 1].position[0] >= level.area[2][0] && object[2 + game.numofplayers - 1].position[0] < level.area[2][2])
-        if (object[2 + game.numofplayers - 1].position[1] >= level.area[2][1] && object[2 + game.numofplayers - 1].position[1] < level.area[2][3])
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[2][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[2][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[2][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[2][3])
         game.over = 3;
 
         if (game.levelnum == 3)

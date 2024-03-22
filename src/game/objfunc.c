@@ -309,7 +309,7 @@ void objectcycle(void)
       }
     if (object[count].type==OBJ_TYPE_GISH)
       {
-      if (count!=0)
+      if (count>game.numofplayers-1)
       if (level.gametype==GAMETYPE_CAMPAIGN && game.levelnum==34)
         objectai(count);
 

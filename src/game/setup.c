@@ -226,8 +226,11 @@ void setuplevel(void)
       if (level.object[count].type>LVL_OBJ_TYPE_GISH && level.object[count].type<LVL_OBJ_TYPE_MONSTER_BEGIN)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
       if (level.gametype == GAMETYPE_CAMPAIGN)
-          if (level.object[count].link != -1)
+      if (level.object[count].link != -1){
           object[numofobjects - 1].link = level.object[count].link + game.numofplayers - 1;
+          if (game.levelnum == 34)
+              object[numofobjects - 1].link += game.numofplayers - 1;
+      }
       else
           object[numofobjects - 1].link = level.object[count].link;
       
@@ -277,6 +280,10 @@ void setuplevel(void)
       if (level.gametype == GAMETYPE_CAMPAIGN) {
           obj1 = level.rope[count].obj1 + game.numofplayers - 1;
           obj2 = level.rope[count].obj2 + game.numofplayers - 1;
+          if (game.levelnum == 34){
+              obj1 += game.numofplayers - 1;
+              obj2 += game.numofplayers - 1;
+          }
       }
       else {
           obj1 = level.rope[count].obj1;
