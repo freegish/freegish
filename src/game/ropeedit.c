@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/ropeedit.h"
 #include "../game/english.h"
 #include "../game/game.h"
+#include "../game/gameobject.h"
 #include "../game/level.h"
 #include "../game/lighting.h"
 #include "../game/mainmenu.h"
@@ -54,7 +55,7 @@ void editlevelrope(void)
   ropeedit.numofpoints=0;
   for (count=0;count<level.numofobjects;count++)
     {
-    if (level.object[count].type>=2 && level.object[count].type<=5)
+    if (level.object[count].type>=LVL_OBJ_TYPE_BOX && level.object[count].type<LVL_OBJ_TYPE_WHEEL)
       {
       for (count2=0;count2<4;count2++)
         {
@@ -75,7 +76,7 @@ void editlevelrope(void)
         copyvector(level.object[count].vertex[count2],vec);
         }
       }
-    if (level.object[count].type>=6 && level.object[count].type<=7)
+    if (level.object[count].type>=LVL_OBJ_TYPE_WHEEL && level.object[count].type<=LVL_OBJ_TYPE_ANCHORED_WHEEL)
       {
       for (count2=0;count2<4;count2++)
         {
@@ -110,7 +111,7 @@ void editlevelrope(void)
 
       copyvector(level.object[count].vertex[count2],vec);
       }
-    if (level.object[count].type==8)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
       {
       vec[0]=level.object[count].position[0];
       vec[1]=level.object[count].position[1];

@@ -72,6 +72,7 @@ typedef struct
   int oldschool;
   int oldschoolsound;
   int turbomode;
+  int numofplayers;
   int supersize;
   unsigned int simspeed;
   int playreplay;

@@ -54,7 +54,7 @@ void objectanimation(void)
 
   for (count=0;count<numofobjects;count++)
     {
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       /*
       for (count2=0;count2<object[count].numofparticles;count2++)
@@ -141,7 +141,7 @@ void objectanimation(void)
           }
         }
       }
-    if (object[count].type==4)
+    if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
       {
       if (object[count].animationtype==0 || object[count].animationtype==1)
       if ((object[count].button&1)==1)
@@ -380,7 +380,7 @@ void objectanimation(void)
       }
     }
   if (game.levelnum==34)
-  if (object[1].type==2)
+  if (object[1].type==OBJ_TYPE_BOX)
   if ((rnd()&255)==0)
     {
     object[1].texturenum=64+(rnd()&3);

@@ -209,7 +209,7 @@ void setupframelighting(void)
   if (frame.numoflights<8)
   if (object[count].lighton)
     {
-    if (object[count].lighttype>=1 && object[count].lighttype<=3)
+    if (object[count].lighttype>=LIGHT_DEFAULT_ON && object[count].lighttype<=FLICKERING_LIGHT)
       {
       subtractvectors(vec,view.position,object[count].position);
       vec[2]=0.0f;
@@ -217,7 +217,7 @@ void setupframelighting(void)
         {
         copyvector(frame.light[frame.numoflights].position,object[count].position);
         /*
-        if (object[count].lighttype==3)
+        if (object[count].lighttype==FLICKERING_LIGHT)
           {
           frame.light[frame.numoflights].position[0]+=((float)(rand()&255)/512.0f-0.25f);
           frame.light[frame.numoflights].position[1]+=((float)(rand()&255)/512.0f-0.25f);
@@ -322,7 +322,7 @@ void rendershadows(void)
     for (count=0;count<numofobjects;count++)
     if (object[count].timetolive>=50)
       {
-      if (object[count].type==2)
+      if (object[count].type==OBJ_TYPE_BOX)
         {
         for (count2=0;count2<4;count2++)
           {

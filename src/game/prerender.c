@@ -50,7 +50,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==8)
+    if (object[count].type==OBJ_TYPE_ANCHOR)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -147,7 +147,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==10)
+    if (object[count].type==OBJ_TYPE_SWITCH)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -236,7 +236,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -346,7 +346,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==2 || object[count].type==20)
+    if (object[count].type==OBJ_TYPE_BOX || object[count].type==OBJ_TYPE_CAR)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -435,7 +435,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==3)
+    if (object[count].type==OBJ_TYPE_WHEEL)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -479,7 +479,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==4)
+    if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -599,7 +599,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==5 || object[count].type==6)
+    if (object[count].type==OBJ_TYPE_HEAD || object[count].type==OBJ_TYPE_AMBER)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -653,7 +653,7 @@ void setuprenderobjects(void)
   for (count=0;count<numofobjects;count++)
   if (object[count].texturenum!=0)
     {
-    if (object[count].type==9)
+    if (object[count].type==OBJ_TYPE_BUTTON)
       {
       subtractvectors(vec,view.position,object[count].position);
       if (fabs(vec[0])-object[count].radius<view.zoom)
@@ -706,7 +706,7 @@ void setuprenderobjects(void)
   if (rope[count].texturenum!=0)
     {
     scale=1.0f;
-    if (rope[count].type>=5 && rope[count].type<10)
+    if (rope[count].type>=PUSHING_PISTON && rope[count].type<=BAR)
       scale=bond[rope[count].bondnum].length+1.0f;
 
     subtractvectors(vec,view.position,particle[rope[count].part1].position);
@@ -724,11 +724,11 @@ void setuprenderobjects(void)
       normal[1]=particle[rope[count].part2].position[0]-particle[rope[count].part1].position[0];
       normal[2]=0.0f;
       normalizevector(normal,normal);
-      if (rope[count].type==1 || rope[count].type==3)
+      if (rope[count].type==WEAK_ROPE || rope[count].type==WEAK_CHAIN)
         scalevector(normal,normal,0.35f);
-      if (rope[count].type==2 || rope[count].type==4)
+      if (rope[count].type==STRONG_ROPE || rope[count].type==STRONG_CHAIN)
         scalevector(normal,normal,0.5f);
-      if (rope[count].type>=5 && rope[count].type<=10)
+      if (rope[count].type>=PUSHING_PISTON && rope[count].type<=10)
         scalevector(normal,normal,0.5f);
 
       objectrender[numofobjectrenders].numofverts=4;
