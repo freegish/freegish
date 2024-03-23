@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Tile {
 
-    private HashMap<String, byte[]> hashmap;
+    private final HashMap<String, byte[]> hashmap;
     private static ArrayList<String> file_order;
 
     public Tile() {
@@ -45,21 +45,14 @@ public class Tile {
     }
 
     public byte[] getTileData(boolean showfoo) {
-        /*Set<String> temp = hashmap.keySet();
-        temp.removeAll(file_order);
-        for (String s : temp) {
-        System.err.println("!!!!!! YOU FORGOT: " + s);
-        }*/
-
 
         for (String s : file_order) {
             if (hashmap.get(s) != null) {
                 if (showfoo) {
                     System.err.println("getTileData() has " + s + "  with length: " + hashmap.get(s).length);
                 }
-            } else {
-                //System.err.println("getTileData() DOES NOT HAVE " + s);
             }
+
         }
         byte[] retb = new byte[0];
         for (String s : file_order) {
@@ -67,7 +60,6 @@ public class Tile {
                 retb = Gishlevel.cat(retb, hashmap.get(s));
             }
         }
-        //System.err.println("getTileData():  returned length:  " + retb.length);
         return retb;
 
     }
