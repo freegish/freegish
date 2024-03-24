@@ -186,7 +186,7 @@ void savelevel(char *filename)
 
   if ((fp=fopen(filename,"wb"))!=NULL)
     {
-    version=11;
+    version=10;
 
     fwrite2(&version,4,1,fp);
     fwrite2(level.background,1,32,fp);
@@ -234,12 +234,21 @@ void savelevel(char *filename)
       {
       if (textureused[count])
         {
-			if (debug_level_saveload) printf("Saving %i as ", count);
+          fwrite2(&texture[count].sizex,4,1,fp);
+          if (texture[count].sizex!=0)
+            {
+            fwrite2(&texture[count].sizey,4,1,fp);
+            fwrite2(&texture[count].magfilter,4,1,fp);
+            fwrite2(&texture[count].minfilter,4,1,fp);
+            fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
+            }
+			/* this is version 11, rework to migrate version easily
+            if (debug_level_saveload) printf("Saving %i as ", count);
 			if (texture[count].filename[0] != 0)
 			{
 				int filenameLength;
 				if (debug_level_saveload) printf("\"%s\"...\n", texture[count].filename);
-				filenameLength = -strlen(texture[count].filename);
+				filenameLength = -strlen(texture[count].filename); // save a negative number to indicate a texture from a file
 				//length = -1;
 				fwrite2(&filenameLength,4,1,fp);
 				filenameLength = abs(filenameLength);
@@ -262,7 +271,7 @@ void savelevel(char *filename)
 					fwrite2(&texture[count].minfilter,4,1,fp);
 					fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
 				}
-			}
+			}*/
         }
       else
         {
@@ -606,7 +615,7 @@ void loadlevel(char *filename)
 		  {
 			  if (debug_level_saveload) printf("Loading %i as ", count);
 			  fread2(&texture[count].sizex,4,1,fp);
-			  if (texture[count].sizex<0)
+			  if (texture[count].sizex<0) // check a negative number which indicates a texture from a file
 			  {
 				  int filenameLength = abs(texture[count].sizex);
 				  char filename[256];
