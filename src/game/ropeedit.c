@@ -111,7 +111,7 @@ void editlevelrope(void)
 
       copyvector(level.object[count].vertex[count2],vec);
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       {
       vec[0]=level.object[count].position[0];
       vec[1]=level.object[count].position[1];

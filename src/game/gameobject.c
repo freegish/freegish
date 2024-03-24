@@ -33,6 +33,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../physics/bond.h"
 #include "../physics/particle.h"
 
+const char* LVL_OBJ_NAMES[] = {
+    "NOTHING",
+    "GISH",
+    "BOX",
+    "MIDDLE_FIXED_BOX",
+    "LEFT_FIXED_BOX_OR_CAR",
+    "RIGHT_FIXED_BOX",
+    "WHEEL",
+    "ANCHORED_WHEEL",
+    "LIGHT_OR_ANCHOR",
+    "BUTTON",
+    "ONE_TIME_BUTTON",
+    "SWITCH_UP",
+    "SWITCH_RIGHT",
+    "SWITCH_DOWN",
+    "SWITCH_LEFT",
+    "AREASWITCH",
+    "ONE_TIME_AREASWITCH",
+    "GENERATOR",
+    "SECRET_AREASWITCH",
+};
+
 int numofobjects;
 _object object[512];
 _objecttype objecttype[128];

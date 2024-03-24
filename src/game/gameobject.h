@@ -52,12 +52,12 @@ typedef enum
 {
     LVL_OBJ_TYPE_GISH = 1,
     LVL_OBJ_TYPE_BOX = 2,
-    //?? box bound with an existing particle
-    LVL_OBJ_TYPE_CAR = 4,
-    //?? box bound with a new particle
+    LVL_OBJ_TYPE_MIDDLE_FIXED_BOX = 3,
+    LVL_OBJ_TYPE_LEFT_FIXED_BOX_OR_CAR = 4,
+    LVL_OBJ_TYPE_RIGHT_FIXED_BOX = 5,
     LVL_OBJ_TYPE_WHEEL = 6,
     LVL_OBJ_TYPE_ANCHORED_WHEEL = 7,
-    LVL_OBJ_TYPE_ANCHOR = 8,
+    LVL_OBJ_TYPE_LIGHT_OR_ANCHOR = 8,
     LVL_OBJ_TYPE_BUTTON = 9,
     LVL_OBJ_TYPE_ONE_TIME_BUTTON = 10,
     LVL_OBJ_TYPE_SWITCH_UP = 11,
@@ -72,6 +72,8 @@ typedef enum
     LVL_OBJ_TYPE_MONSTER_END = 36,
 
 } level_object_types;
+
+extern const char* LVL_OBJ_NAMES[]; // don't forget to rename things if changed enum
 
 typedef enum
 {

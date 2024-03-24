@@ -131,10 +131,21 @@ void editlevelobjects(void)
 
     setuptextdisplay();
 
-    drawtext(TXT_OBJECTSET":/i",0,352,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype);
+    if (editor.objecttype<19)
+        drawtext(TXT_OBJECTSET":/s",0,352,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
+    else if (editor.objecttype == 19)
+        drawtext(TXT_OBJECTSET":/s",0,352,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+    else
+        drawtext(TXT_OBJECTSET":enemy /i",0,352,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
     drawtext(TXT_OBJECTNUM":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
     if (editor.objectnum!=-1)
-      drawtext(TXT_OBJECTYPE":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type);
+      if (level.object[editor.objectnum].type<19)
+          drawtext(TXT_OBJECTSET":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
+      else if (level.object[editor.objectnum].type == 19)
+          drawtext(TXT_OBJECTSET":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+      else
+          drawtext(TXT_OBJECTSET":enemy /i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
+      //drawtext(TXT_OBJECTYPE":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[]);
     drawtext(TXT_OBJECTS":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
     drawtext(TXT_ROPES":/i",0,416,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
     if (editor.objectnum!=-1)
@@ -477,7 +488,7 @@ void renderlevelobjects(void)
         glEnd();
         }
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
