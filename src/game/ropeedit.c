@@ -270,16 +270,7 @@ void editlevelrope(void)
       simtimer=SDL_GetTicks()-count;
 
       if (!menuinputkeyboard)
-        {
-        if (keyboard[SCAN_W])
-          view.position[1]+=0.2f;
-        if (keyboard[SCAN_S])
-          view.position[1]-=0.2f;
-        if (keyboard[SCAN_A])
-          view.position[0]-=0.2f;
-        if (keyboard[SCAN_D])
-          view.position[0]+=0.2f;
-        }
+          pan_view();
       }
 
     if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])

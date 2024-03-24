@@ -68,6 +68,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 _view view;
 _game game;
 
+void pan_view(void){
+    float speed = 0.2f;
+    if (keyboard[SCAN_SHIFT]) speed *= 10;
+    if (keyboard[SCAN_W])
+        view.position[1]+=speed;
+    if (keyboard[SCAN_S])
+        view.position[1]-=speed;
+    if (keyboard[SCAN_A])
+        view.position[0]-=speed;
+    if (keyboard[SCAN_D])
+        view.position[0]+=speed;
+}
+
 void gameloop(void)
   {
   int count,count2;
