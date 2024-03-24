@@ -182,8 +182,9 @@ void savelevel(char *filename)
   if (!textureused[count])
     texture[count].sizex=0;
   */
+  changeddir=chdir("level");
 
-  if ((fp=fopen(userpath(path,"level",filename),"wb"))!=NULL)
+  if ((fp=fopen(filename,"wb"))!=NULL)
     {
     version=11;
 
@@ -284,6 +285,8 @@ void savelevel(char *filename)
 
     fclose(fp);
     }
+    if (changeddir==0)
+      chdir("..");
   }
 
 void loadlevel(char *filename)
