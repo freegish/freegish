@@ -131,27 +131,32 @@ void editlevelobjects(void)
 
     setuptextdisplay();
 
+    int INFO_Y = 352;
+    int OFFSET_Y = 16;
+
+    // draw level information
+    drawtext(TXT_OBJECTS":/i",0,INFO_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
+    drawtext(TXT_ROPES":/i",0,INFO_Y+OFFSET_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
+
+    // draw object type that will be created on lmb
     if (editor.objecttype<19)
-        drawtext(TXT_OBJECTSET":/s",0,352,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
     else if (editor.objecttype == 19)
-        drawtext(TXT_OBJECTSET":/s",0,352,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
     else
-        drawtext(TXT_OBJECTSET":enemy /i",0,352,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
-    drawtext(TXT_OBJECTNUM":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
-    if (editor.objectnum!=-1)
+        drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
+
+    // draw stuff related to the picked object
+    if (editor.objectnum!=-1){
+      drawtext(TXT_OBJECTNUM":/i",0,INFO_Y+OFFSET_Y*3,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
       if (level.object[editor.objectnum].type<19)
-          drawtext(TXT_OBJECTSET":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
       else if (level.object[editor.objectnum].type == 19)
-          drawtext(TXT_OBJECTSET":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
       else
-          drawtext(TXT_OBJECTSET":enemy /i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
-      //drawtext(TXT_OBJECTYPE":/s",0,384,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[]);
-    drawtext(TXT_OBJECTS":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
-    drawtext(TXT_ROPES":/i",0,416,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
-    if (editor.objectnum!=-1)
-      {
-      drawtext(TXT_LINK":/i",0,432,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
-      }
+          drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
+      drawtext(TXT_LINK":/i",0,INFO_Y+OFFSET_Y*5,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
+    }
 
     drawmenuitems();
 
