@@ -494,13 +494,13 @@ void playerstartmenu(void)
       if (player[playernum].levelnum==35)
         {
         if (player[playernum].difficulty==1 || player[playernum].difficulty==2)
-          player[playernum].unlock[0]=1;
+          player[playernum].unlock[WON_NORMAL]=1;
         if (player[playernum].difficulty==2)
-          player[playernum].unlock[1]=1;
+          player[playernum].unlock[WON_HARD]=1;
         if (player[playernum].difficulty==3)
-          player[playernum].unlock[2]=1;
+          player[playernum].unlock[WON_LUDICROUS]=1;
         if (player[playernum].difficulty==4)
-          player[playernum].unlock[3]=1;
+          player[playernum].unlock[WON_MINI_GISH]=1;
         player[playernum].levelnum=0;
         player[playernum].totalscore=0;
         player[playernum].numoflives=5;
@@ -555,13 +555,13 @@ void playerstartmenu(void)
       if (player[playernum].levelnum==35)
         {
         if (player[playernum].difficulty==1 || player[playernum].difficulty==2)
-          player[playernum].unlock[0]=1;
+          player[playernum].unlock[WON_NORMAL]=1;
         if (player[playernum].difficulty==2)
-          player[playernum].unlock[1]=1;
+          player[playernum].unlock[WON_HARD]=1;
         if (player[playernum].difficulty==3)
-          player[playernum].unlock[2]=1;
+          player[playernum].unlock[WON_LUDICROUS]=1;
         if (player[playernum].difficulty==4)
-          player[playernum].unlock[3]=1;
+          player[playernum].unlock[WON_MINI_GISH]=1;
         player[playernum].levelnum=0;
         player[playernum].totalscore=0;
         player[playernum].numoflives=5;
@@ -630,12 +630,12 @@ void playerdifficultymenu(void)
     createmenuitem(TXT_HARD,48,count,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY,SCAN_H);
     count+=16;
-    if (player[playernum].unlock[1])
+    if (player[playernum].unlock[WON_HARD])
       {
       createmenuitem(TXT_LUDICROUS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_L);
       count+=16;
-      if (player[playernum].unlock[2])
+      if (player[playernum].unlock[WON_LUDICROUS])
         {
         createmenuitem(TXT_MINI_GISH,48,count,16,1.0f,1.0f,1.0f,1.0f);
         setmenuitem(MO_HOTKEY,SCAN_M);
