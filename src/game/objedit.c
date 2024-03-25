@@ -103,11 +103,7 @@ void editlevelobjects(void)
     checkmouse();
     checkmenuitems();
 
-    view.zoom=10.0f;
-    if (keyboard[SCAN_EQUALS])
-      view.zoom=20.0f;
-    if (keyboard[SCAN_MINUS])
-      view.zoom=5.0f;
+    zoom_view();
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -166,8 +162,9 @@ void editlevelobjects(void)
 
     if (mouse.x<512 || mouse.y>224)
       {
-      x=view.position[0]+(float)(mouse.x-320)/32.0f;
-      y=view.position[1]+(float)(240-mouse.y)/32.0f;
+      get_mouse_coords(&vec[0], &vec[1]);
+      x = (int)vec[0];
+      y = (int)vec[1];
       if (!keyboard[SCAN_K])
         {
         if (mouse.lmb && !prevmouse.lmb)
@@ -222,8 +219,7 @@ void editlevelobjects(void)
         }
       if (keyboard[SCAN_K])
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
 
         if (mouse.lmb && !prevmouse.lmb)
@@ -241,8 +237,7 @@ void editlevelobjects(void)
         }
       if (mouse.rmb && !prevmouse.rmb)
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
   
         editor.objectnum=-1;

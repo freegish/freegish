@@ -22,6 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 void pan_view(void);
+void zoom_view(void);
+void get_mouse_coords(float *x, float *y);
 void gameloop(void);
 void renderlevel(void);
 void simulation(void);

@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../sdl/sdl.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -69,8 +70,8 @@ _view view;
 _game game;
 
 void pan_view(void){
-    float speed = 0.2f;
-    if (keyboard[SCAN_SHIFT]) speed *= 10;
+    float speed = 0.2f * view.zoom / 10.f; // base zoom is 10, so 0.2 is default speed at zoom 10
+    if (keyboard[SCAN_SHIFT]) speed *= 5;
     if (keyboard[SCAN_W])
         view.position[1]+=speed;
     if (keyboard[SCAN_S])
@@ -79,6 +80,20 @@ void pan_view(void){
         view.position[0]-=speed;
     if (keyboard[SCAN_D])
         view.position[0]+=speed;
+}
+
+void zoom_view(void){
+    if (keyboard[SCAN_EQUALS])
+      view.zoom/=1.189207115f; // 2^0.25
+    if (keyboard[SCAN_MINUS])
+      view.zoom*=1.189207115f;
+}
+
+void get_mouse_coords(float *x, float *y){
+    assert(x);
+    assert(y);
+    *x=view.position[0]+(float)(mouse.x-320)/32.0f * view.zoom / 10.f;
+    *y=view.position[1]+(float)(240-mouse.y)/32.0f * view.zoom / 10.f;
 }
 
 void gameloop(void)
@@ -671,8 +686,7 @@ void simulation(void)
   if (game.godmode)
   if (!game.playreplay)
     {
-    vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-    vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
     vec[2]=0.0f;
 
     if (mouse.lmb)

@@ -153,8 +153,10 @@ void editlevelrope(void)
     checkmouse();
     checkmenuitems();
 
+    zoom_view();
+
     //setupperspectiveviewport(0,0,640,480,1.0f,100.0f);
-    setuporthoviewport(0,0,640,480,10.0f,7.5f,20.0f);
+    setuporthoviewport(0,0,640,480,view.zoom,view.zoom*0.75f,20.0f);
     setupviewpoint(view.position,view.orientation);
 
     setupframelighting();
@@ -184,8 +186,7 @@ void editlevelrope(void)
 
     SDL_GL_SwapWindow(globalwindow);
 
-    vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-    vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
     vec[2]=0.0f;
 
     ropeedit.pointhighlight=-1;

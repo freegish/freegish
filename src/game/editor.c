@@ -82,6 +82,7 @@ void editlevel(void)
   joystickmenu=0;
 
   editor.active=1;
+  view.zoom=10.0f;
 
   while (!menuitem[0].active && !windowinfo.shutdown)
     {
@@ -146,11 +147,7 @@ void editlevel(void)
             }
     }
 
-    view.zoom=10.0f;
-    if (keyboard[SCAN_EQUALS])
-      view.zoom=20.0f;
-    if (keyboard[SCAN_MINUS])
-      view.zoom=5.0f;
+    zoom_view();
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -279,8 +276,9 @@ void editlevel(void)
       if (keyboard[SCAN_K] && !prevkeyboard[SCAN_K])
         editor.showgrid^=1;
 
-      x=view.position[0]+(float)(mouse.x-320)/32.0f;
-      y=view.position[1]+(float)(240-mouse.y)/32.0f;
+      get_mouse_coords(&vec[0], &vec[1]);
+      x = (int)vec[0];
+      y = (int)vec[1];
   
       if (!editor.paste)
         {
@@ -541,7 +539,7 @@ void rendereditblocks(void)
   int count,count2;
   int x,y;
   //int blocknum;
-  //float vec[3];
+  float vec[3];
 
   glDisable(GL_TEXTURE_2D);
 
@@ -569,8 +567,9 @@ void rendereditblocks(void)
     }
   else
     {
-    x=view.position[0]+(float)(mouse.x-320)/32.0f;
-    y=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
+    x = (int)vec[0];
+    y = (int)vec[1];
 
     for (count=0;count<=editor.copysize[1];count++)
     for (count2=0;count2<=editor.copysize[0];count2++)
