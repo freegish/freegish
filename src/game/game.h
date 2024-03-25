@@ -38,6 +38,15 @@ typedef enum {
 	GAMEXIT_WARPZONE = 5
 } gameexit;
 
+typedef enum
+{
+    DIFFICULTY_EASY = 0,
+	DIFFICULTY_NORMAL = 1,
+	DIFFICULTY_HARD = 2,
+	DIFFICULTY_LUDICROUS = 3,
+	DIFFICULTY_MINI_GISH = 4,
+} difficulty;
+
 typedef struct
   {
   float position[3];

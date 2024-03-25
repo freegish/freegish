@@ -191,7 +191,7 @@ void createtarboy(float position[3])
     size=0.9f;
     if (game.supersize)
       size=0.9f*1.25f;
-    if (game.difficulty==4)
+    if (game.difficulty==DIFFICULTY_MINI_GISH)
       size=0.9f*0.8f;
     vec[0]=position[0]+cos(angle)*size;
     vec[1]=position[1]-sin(angle)*size;
