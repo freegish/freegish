@@ -719,7 +719,7 @@ void renderlevelobjects(void)
       glColor4f(0.75f,0.75f,0.75f,1.0f);
     if (level.rope[count].type>=PUSHING_PISTON && level.rope[count].type<10)
       glColor4f(0.75f,0.0f,0.75f,1.0f);
-    if (level.rope[count].type==10)
+    if (level.rope[count].type==SPRING)
       glColor4f(0.0f,0.75f,0.75f,1.0f);
 
     objectnum=level.rope[count].obj1;

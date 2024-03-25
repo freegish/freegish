@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/prerender.h"
 #include "../game/render.h"
 #include "../game/ropeedit.h"
+#include "../game/gameobject.h"
 #include "../game/setup.h"
 #include "../game/gametexture.h"
 #include "../input/keyboard.h"
@@ -82,6 +83,7 @@ void editlevel(void)
   joystickmenu=0;
 
   editor.active=1;
+  ropeedit.ropetype=WEAK_ROPE;
   view.zoom=10.0f;
 
   while (!menuitem[0].active && !windowinfo.shutdown)

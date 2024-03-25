@@ -103,9 +103,10 @@ typedef enum
     PULLING_PISTON = 7,
     HALF_PULLED_PULLING_PISTON = 8,
     BAR = 9,
-    // ??
+    SPRING = 10,
 
 } rope_types;
+extern const char* ROPE_TYPE_NAMES[]; // don't forget to rename things if changed enum
 
 typedef enum
 {

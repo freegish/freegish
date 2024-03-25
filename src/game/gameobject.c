@@ -55,6 +55,20 @@ const char* LVL_OBJ_NAMES[] = {
     "SECRET_AREASWITCH",
 };
 
+extern const char* ROPE_TYPE_NAMES[] = {
+    "NOTHING",
+    "WEAK_ROPE",
+    "STRONG_ROPE",
+    "WEAK_CHAIN",
+    "STRONG_CHAIN",
+    "PUSHING_PISTON",
+    "HALF_PUSHED_PUSHING_PISTON",
+    "PULLING_PISTON",
+    "HALF_PULLED_PULLING_PISTON",
+    "BAR",
+    "SPRING",
+};
+
 int numofobjects;
 _object object[512];
 _objecttype objecttype[128];

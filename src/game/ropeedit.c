@@ -179,6 +179,7 @@ void editlevelrope(void)
 
     drawtext(TXT_NUMOFROPES":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
     drawtext(TXT_TEXTURENUM":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,ropeedit.texturenum);
+    drawtext(TXT_ROPESET":/s",0,400,16,1.0f,1.0f,1.0f,1.0f,ROPE_TYPE_NAMES[ropeedit.ropetype]);
 
     drawmenuitems();
 
@@ -210,25 +211,7 @@ void editlevelrope(void)
         if (ropeedit.pointhighlight!=-1)
         if (ropeedit.point[ropeedit.pointnum].objectnum!=ropeedit.point[ropeedit.pointhighlight].objectnum)
           {
-          level.rope[level.numofropes].type=1;
-          if (keyboard[SCAN_2])
-            level.rope[level.numofropes].type=2;
-          if (keyboard[SCAN_3])
-            level.rope[level.numofropes].type=3;
-          if (keyboard[SCAN_4])
-            level.rope[level.numofropes].type=4;
-          if (keyboard[SCAN_5])
-            level.rope[level.numofropes].type=5;
-          if (keyboard[SCAN_6])
-            level.rope[level.numofropes].type=6;
-          if (keyboard[SCAN_7])
-            level.rope[level.numofropes].type=7;
-          if (keyboard[SCAN_8])
-            level.rope[level.numofropes].type=8;
-          if (keyboard[SCAN_9])
-            level.rope[level.numofropes].type=9;
-          if (keyboard[SCAN_0])
-            level.rope[level.numofropes].type=10;
+          level.rope[level.numofropes].type=ropeedit.ropetype;
           level.rope[level.numofropes].obj1=ropeedit.point[ropeedit.pointnum].objectnum;
           level.rope[level.numofropes].obj1part=ropeedit.point[ropeedit.pointnum].particlenum;
   
@@ -281,6 +264,27 @@ void editlevelrope(void)
     if (keyboard[SCAN_Z] && !prevkeyboard[SCAN_Z])
     if (ropeedit.texturenum>0)
       ropeedit.texturenum--;
+
+    if (keyboard[SCAN_1])
+      ropeedit.ropetype=WEAK_ROPE;
+    if (keyboard[SCAN_2])
+      ropeedit.ropetype=STRONG_ROPE;
+    if (keyboard[SCAN_3])
+      ropeedit.ropetype=WEAK_CHAIN;
+    if (keyboard[SCAN_4])
+      ropeedit.ropetype=STRONG_CHAIN;
+    if (keyboard[SCAN_5])
+      ropeedit.ropetype=PUSHING_PISTON;
+    if (keyboard[SCAN_6])
+      ropeedit.ropetype=HALF_PUSHED_PUSHING_PISTON;
+    if (keyboard[SCAN_7])
+      ropeedit.ropetype=PULLING_PISTON;
+    if (keyboard[SCAN_8])
+      ropeedit.ropetype=HALF_PULLED_PULLING_PISTON;
+    if (keyboard[SCAN_9])
+      ropeedit.ropetype=BAR;
+    if (keyboard[SCAN_0])
+      ropeedit.ropetype=SPRING;
     }
 
   resetmenuitems();

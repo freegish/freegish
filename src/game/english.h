@@ -343,6 +343,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_OBJECTS											"OBJECTS"
 #define TXT_ROPES												"ROPES"
 #define TXT_LINK												"LINK"
+//ropeedit.c
+#define TXT_ROPESET                                         "ROPESET"
 //options.c
 #define TXT_VIDEOOPTIONS								"Video Options"
 #define TXT_NONE												"None"
