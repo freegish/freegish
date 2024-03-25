@@ -91,6 +91,7 @@ void gameloop(void)
   //char filename[13]="text000.png";
   int scorenum;
   //unsigned int x;
+  int need_to_open_editor = 0;
 
   game.godparticle=-1;
 
@@ -117,6 +118,9 @@ void gameloop(void)
   scorenum=-1;
 
   resetmenuitems();
+
+  if (game.levelnum==0 && game.editing)
+    need_to_open_editor = 1;
 
   while ((game.exit<GAMEEXIT_EXITGAME || game.exitdelay>0) && !windowinfo.shutdown)
     {
@@ -611,8 +615,9 @@ void gameloop(void)
       }
 
     if (game.levelnum==0 && game.editing)
-    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1])
+    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1] || need_to_open_editor)
       {
+      need_to_open_editor = 0;
       game.songnum=-1;
       checkmusic();
 
