@@ -455,6 +455,7 @@ void gameloop(void)
 
     renderlevel();
     renderlevelfore();
+    //renderbonds();
 
     if (game.oldschool==1)// || game.oldschool==3)
       {

@@ -548,6 +548,7 @@ void loadstorylevel(int levelnum)
     loadlevel("death.lvl");
   if (levelnum==68)
     loadlevel("death2.lvl");
+  game.levelnum=levelnum;
   }
 
 void loadcollectionlevel(int levelnum)
