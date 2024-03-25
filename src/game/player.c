@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/gameaudio.h"
 #include "../game/custom.h"
 #include "../game/english.h"
+#include "../game/debug.h"
 #include "../game/game.h"
 #include "../game/gamemenu.h"
 #include "../game/high.h"
@@ -405,6 +406,10 @@ void playerstartmenu(void)
     count3=(player[playernum].levelnum-1)%7+1;
     if (count3==0)
       count3=1;
+
+    if (debug_unlocks)
+    for (count = 0; count < 16; count++)
+      drawtext("/i",432+count/8*16,352+16*count%8,16,1.0f,1.0f,1.0f,1.0f, player[playernum].unlock[count]);
 
     if (!player[playernum].gamepassed)
       {
