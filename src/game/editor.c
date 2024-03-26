@@ -387,6 +387,8 @@ void editlevel(void)
           }
         if (keyboard[SCAN_V] && !prevkeyboard[SCAN_V])
           editor.paste=1;
+        if (keyboard[SCAN_E] && !prevkeyboard[SCAN_E])
+          editor.blocknum = getblock(x, y);
         }
       else
         {
