@@ -169,7 +169,7 @@ void savelevel(char *filename)
   char path[PATH_MAX];
 
   for (count=0;count<256;count++)
-    textureused[count]=1;
+    textureused[count]=0;
 
   for (count=0;count<256;count++)
   for (count2=0;count2<256;count2++)
@@ -680,6 +680,10 @@ void loadlevel(char *filename)
 					  texture[count].magfilter=GL_LINEAR;
 					  texture[count].minfilter=GL_LINEAR;
 
+                      if (game.editing) // see ver10 for explanation
+                      texture[count].filename[0] = 0; // still bad because the levelfile is still large, probably should find corresponding texture
+
+
 					  if (debug_level_saveload) printf("%ix%i...\n", texture[count].sizex, texture[count].sizey);
 
 					  if ((texture[count].sizex&(texture[count].sizex-1))==0)
@@ -971,9 +975,7 @@ void loadleveltextures(void)
   {
   int count;
   int changeddir;
-  char texfilename[32]="text000.png";
-
-  changeddir=changetilesetdir();
+  char texfilename[256];
 
   loadbackground(660,"bg.png");
 
@@ -981,17 +983,12 @@ void loadleveltextures(void)
     loadblock(count);
   for (count=0;count<251;count++)
     {
-    texfilename[4]=48+(count/100)%10;
-    texfilename[5]=48+(count/10)%10;
-    texfilename[6]=48+count%10;
+    sprintf(texfilename, "../tile%02i/texture/text%03i.png", level.tileset+1, count);
     if (game.levelnum!=6)
       loadtexture(count,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-    else
+    else // ???
       loadtexture(count,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_NEAREST,GL_NEAREST);
     }
-
-  if (changeddir==0)
-    chdir("..");
   }
 
 int lineintersectline3(float *intersectpoint,float *normal,float *scale,float *startpoint,float *endpoint,float *vertex1,float *vertex2)
