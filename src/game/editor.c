@@ -614,16 +614,16 @@ void editblock(void)
   filename[4]=48+(editor.blocknum/100)%10;
   filename[5]=48+(editor.blocknum/10)%10;
   filename[6]=48+editor.blocknum%10;
-  loadtexturetga(999,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
+  loadtexturetga(EDITBLOCK_TEXTURE,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
 
   if (changeddir==0)
     chdir("..");
   */
 
-  copytexture(999,editor.blocknum);
-  texture[999].magfilter=GL_NEAREST;
-  texture[999].minfilter=GL_NEAREST;
-  setuptexture(999);
+  copytexture(EDITBLOCK_TEXTURE,editor.blocknum);
+  texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
+  texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
+  setuptexture(EDITBLOCK_TEXTURE);
 
   simtimer=SDL_GetTicks();
 
@@ -763,7 +763,7 @@ void editblock(void)
     glEnable(GL_TEXTURE_2D);
 
 
-    glBindTexture(GL_TEXTURE_2D,texture[999].glname);
+    glBindTexture(GL_TEXTURE_2D,texture[EDITBLOCK_TEXTURE].glname);
 
     glBegin(GL_QUADS);
 
@@ -892,8 +892,8 @@ void editblock(void)
 
       setuptexture(editor.blocknum);
 
-      memcpy(texture[999].rgba[0],texture[editor.blocknum].rgba[0],texture[editor.blocknum].sizex*texture[editor.blocknum].sizey*4);
-      setuptexture(999);
+      memcpy(texture[EDITBLOCK_TEXTURE].rgba[0],texture[editor.blocknum].rgba[0],texture[editor.blocknum].sizex*texture[editor.blocknum].sizey*4);
+      setuptexture(EDITBLOCK_TEXTURE);
       }
 
     if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
@@ -905,17 +905,17 @@ void editblock(void)
       if (editor.blocknum>255)
         editor.blocknum=255;
 
-      copytexture(999,editor.blocknum);
-      texture[999].magfilter=GL_NEAREST;
-      texture[999].minfilter=GL_NEAREST;
-      setuptexture(999);
+      copytexture(EDITBLOCK_TEXTURE,editor.blocknum);
+      texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
+      texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
+      setuptexture(EDITBLOCK_TEXTURE);
       /*
       changeddir=changetilesetdir();
     
       filename[4]=48+(editor.blocknum/100)%10;
       filename[5]=48+(editor.blocknum/10)%10;
       filename[6]=48+editor.blocknum%10;
-      loadtexturetga(999,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
+      loadtexturetga(EDITBLOCK_TEXTURE,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
     
       if (changeddir==0)
         chdir("..");
@@ -930,10 +930,10 @@ void editblock(void)
       if (editor.blocknum<0)
         editor.blocknum=0;
 
-      copytexture(999,editor.blocknum);
-      texture[999].magfilter=GL_NEAREST;
-      texture[999].minfilter=GL_NEAREST;
-      setuptexture(999);
+      copytexture(EDITBLOCK_TEXTURE,editor.blocknum);
+      texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
+      texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
+      setuptexture(EDITBLOCK_TEXTURE);
 
       /*
       changeddir=changetilesetdir();
@@ -941,7 +941,7 @@ void editblock(void)
       filename[4]=48+(editor.blocknum/100)%10;
       filename[5]=48+(editor.blocknum/10)%10;
       filename[6]=48+editor.blocknum%10;
-      loadtexturetga(999,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
+      loadtexturetga(EDITBLOCK_TEXTURE,filename,0,GL_CLAMP,GL_CLAMP,GL_NEAREST,GL_NEAREST);
     
       if (changeddir==0)
         chdir("..");

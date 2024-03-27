@@ -30,6 +30,19 @@ void loadtexturepartial(int texturenum,const char *filename,int startx,int start
 void generatemipmap(int texturenum);
 void setuptexture(int texturenum);
 
+typedef enum {
+	EDITBLOCK_TEXTURE = 999,
+	// ??? = 330,  // these are lighting textures, they are set up in lighting.c
+	// ??? = 331,
+	// ??? = 332,
+	OLDSCHOOL2_TEXTURE = 333,
+	OLDSCHOOL1_TEXTURE = 334,
+	// ??? = 335,
+	TEXT_START_TEXTURE = 1000,
+	TEXTUREEDIT_START_TEXTURE = 1792,
+
+} used_textures;
+
 typedef struct
   {
   int sizex;

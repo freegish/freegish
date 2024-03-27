@@ -135,7 +135,7 @@ void edittextures(void)
       }
     for (count=0;count<16;count++)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[1792+count+textureedit.tilepagenum*16].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[TEXTUREEDIT_START_TEXTURE+count+textureedit.tilepagenum*16].glname);
 
       glBegin(GL_QUADS);
 
