@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/gameaudio.h"
 #include "../game/custom.h"
 #include "../game/english.h"
+#include "../game/debug.h"
 #include "../game/game.h"
 #include "../game/gamemenu.h"
 #include "../game/high.h"
@@ -293,7 +294,7 @@ void loadplayers(void)
         fread2(&player[count].levelnum,4,1,fp);
         fread2(&player[count].numoflives,4,1,fp);
         fread2(&player[count].totalscore,4,1,fp);
-        player[count].difficulty=1;
+        player[count].difficulty=DIFFICULTY_NORMAL;
         fread2(&player[count].gamepassed,4,1,fp);
         fread2(&player[count].highscore,4,1,fp);
         fread2(player[count].unlock,4,16,fp);
@@ -311,10 +312,6 @@ void loadplayers(void)
         fread2(&player[count].gamepassed,4,1,fp);
         fread2(&player[count].highscore,4,1,fp);
         fread2(player[count].unlock,4,16,fp);
-        player[count].unlock[0] = 1;
-        player[count].unlock[1] = 1;
-        player[count].unlock[2] = 1;
-        player[count].unlock[3] = 1;
         }
       }
     fclose(fp);
@@ -359,7 +356,9 @@ void playerstartmenu(void)
       createmenuitem(TXT_REPLAY,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_R);
       count+=16;
-      createmenuitemempty();
+      createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY,SCAN_S);
+      count+=16;
       createmenuitem(TXT_CUSTOM_LEVELS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_U);
       count+=16;
@@ -379,7 +378,9 @@ void playerstartmenu(void)
       createmenuitem(TXT_REPLAY,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_R);
       count+=16;
-      createmenuitemempty();
+      createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY,SCAN_S);
+      count+=16;
       createmenuitem(TXT_CUSTOM_LEVELS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_U);
       count+=16;
@@ -406,21 +407,25 @@ void playerstartmenu(void)
     if (count3==0)
       count3=1;
 
+    if (debug_unlocks)
+    for (count = 0; count < 16; count++)
+      drawtext("/i",432+count/8*16,352+16*count%8,16,1.0f,1.0f,1.0f,1.0f, player[playernum].unlock[count]);
+
     if (!player[playernum].gamepassed)
       {
       drawtext(player[playernum].name,(320|TEXT_CENTER),304,16,1.0f,1.0f,1.0f,1.0f);
       if (player[playernum].levelnum>0)
         {
         drawtext(TXT_PLAYER_INFO,(320|TEXT_CENTER),320,12,1.0f,1.0f,1.0f,1.0f,count2,count3,player[playernum].numoflives,player[playernum].totalscore,player[playernum].highscore);
-        if (player[playernum].difficulty==0)
+        if (player[playernum].difficulty==DIFFICULTY_EASY)
           drawtext(TXT_EASY,(320|TEXT_CENTER),332,12,1.0f,1.0f,1.0f,1.0f);
-        if (player[playernum].difficulty==1)
+        if (player[playernum].difficulty==DIFFICULTY_NORMAL)
           drawtext(TXT_NORMAL,(320|TEXT_CENTER),332,12,1.0f,1.0f,1.0f,1.0f);
-        if (player[playernum].difficulty==2)
+        if (player[playernum].difficulty==DIFFICULTY_HARD)
           drawtext(TXT_HARD,(320|TEXT_CENTER),332,12,1.0f,1.0f,1.0f,1.0f);
-        if (player[playernum].difficulty==3)
+        if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
           drawtext(TXT_LUDICROUS,(320|TEXT_CENTER),332,12,1.0f,1.0f,1.0f,1.0f);
-        if (player[playernum].difficulty==4)
+        if (player[playernum].difficulty==DIFFICULTY_MINI_GISH)
           drawtext(TXT_MINI_GISH,(320|TEXT_CENTER),332,12,1.0f,1.0f,1.0f,1.0f);
         }
       }
@@ -430,15 +435,15 @@ void playerstartmenu(void)
       if (player[playernum].levelnum>0)
         {
         drawtext(TXT_PLAYER_INFO,(320|TEXT_CENTER),320,12,1.0f,1.0f,0.0f,1.0f,count2,count3,player[playernum].numoflives,player[playernum].totalscore,player[playernum].highscore);
-        if (player[playernum].difficulty==0)
+        if (player[playernum].difficulty==DIFFICULTY_EASY)
           drawtext(TXT_EASY,(320|TEXT_CENTER),332,12,1.0f,1.0f,0.0f,1.0f);
-        if (player[playernum].difficulty==1)
+        if (player[playernum].difficulty==DIFFICULTY_NORMAL)
           drawtext(TXT_NORMAL,(320|TEXT_CENTER),332,12,1.0f,1.0f,0.0f,1.0f);
-        if (player[playernum].difficulty==2)
+        if (player[playernum].difficulty==DIFFICULTY_HARD)
           drawtext(TXT_HARD,(320|TEXT_CENTER),332,12,1.0f,1.0f,0.0f,1.0f);
-        if (player[playernum].difficulty==3)
+        if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
           drawtext(TXT_LUDICROUS,(320|TEXT_CENTER),332,12,1.0f,1.0f,0.0f,1.0f);
-        if (player[playernum].difficulty==4)
+        if (player[playernum].difficulty==DIFFICULTY_MINI_GISH)
           drawtext(TXT_MINI_GISH,(320|TEXT_CENTER),332,12,1.0f,1.0f,0.0f,1.0f);
         }
       }
@@ -462,7 +467,7 @@ void playerstartmenu(void)
         playerdifficultymenu();
         if (game.difficulty==-1)
           {
-          game.difficulty=0;
+          game.difficulty=DIFFICULTY_EASY;
           goto newgamebypass;
           }
 
@@ -471,7 +476,7 @@ void playerstartmenu(void)
         game.levelnum=1;
         game.totalscore=0;
         game.numoflives=5;
-        if (player[playernum].difficulty==3)
+        if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
           {
           game.numoflives=0;
           game.turbomode=1;
@@ -493,21 +498,21 @@ void playerstartmenu(void)
 
       if (player[playernum].levelnum==35)
         {
-        if (player[playernum].difficulty==1 || player[playernum].difficulty==2)
-          player[playernum].unlock[0]=1;
-        if (player[playernum].difficulty==2)
-          player[playernum].unlock[1]=1;
-        if (player[playernum].difficulty==3)
-          player[playernum].unlock[2]=1;
-        if (player[playernum].difficulty==4)
-          player[playernum].unlock[3]=1;
+        if (player[playernum].difficulty==DIFFICULTY_NORMAL || player[playernum].difficulty==DIFFICULTY_HARD)
+          player[playernum].unlock[WON_NORMAL]=1;
+        if (player[playernum].difficulty==DIFFICULTY_HARD)
+          player[playernum].unlock[WON_HARD]=1;
+        if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
+          player[playernum].unlock[WON_LUDICROUS]=1;
+        if (player[playernum].difficulty==DIFFICULTY_MINI_GISH)
+          player[playernum].unlock[WON_MINI_GISH]=1;
         player[playernum].levelnum=0;
         player[playernum].totalscore=0;
         player[playernum].numoflives=5;
         player[playernum].gamepassed=1;
         }
 
-      //game.difficulty=0;
+      //game.difficulty=DIFFICULTY_EASY;
 
       //menuitem[0].active=1;
 
@@ -524,7 +529,7 @@ void playerstartmenu(void)
       playerdifficultymenu();
       if (game.difficulty==-1)
         {
-        game.difficulty=0;
+        game.difficulty=DIFFICULTY_EASY;
         goto newgamebypass2;
         }
 
@@ -533,7 +538,7 @@ void playerstartmenu(void)
       game.levelnum=1;
       game.totalscore=0;
       game.numoflives=5;
-      if (player[playernum].difficulty==3)
+      if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
         {
         game.numoflives=0;
         game.turbomode=1;
@@ -554,21 +559,21 @@ void playerstartmenu(void)
 
       if (player[playernum].levelnum==35)
         {
-        if (player[playernum].difficulty==1 || player[playernum].difficulty==2)
-          player[playernum].unlock[0]=1;
-        if (player[playernum].difficulty==2)
-          player[playernum].unlock[1]=1;
-        if (player[playernum].difficulty==3)
-          player[playernum].unlock[2]=1;
-        if (player[playernum].difficulty==4)
-          player[playernum].unlock[3]=1;
+        if (player[playernum].difficulty==DIFFICULTY_NORMAL || player[playernum].difficulty==DIFFICULTY_HARD)
+          player[playernum].unlock[WON_NORMAL]=1;
+        if (player[playernum].difficulty==DIFFICULTY_HARD)
+          player[playernum].unlock[WON_HARD]=1;
+        if (player[playernum].difficulty==DIFFICULTY_LUDICROUS)
+          player[playernum].unlock[WON_LUDICROUS]=1;
+        if (player[playernum].difficulty==DIFFICULTY_MINI_GISH)
+          player[playernum].unlock[WON_MINI_GISH]=1;
         player[playernum].levelnum=0;
         player[playernum].totalscore=0;
         player[playernum].numoflives=5;
         player[playernum].gamepassed=1;
         }
 
-      //game.difficulty=0;
+      //game.difficulty=DIFFICULTY_EASY;
 
       //menuitem[0].active=1;
 
@@ -630,12 +635,12 @@ void playerdifficultymenu(void)
     createmenuitem(TXT_HARD,48,count,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY,SCAN_H);
     count+=16;
-    if (player[playernum].unlock[1])
+    if (player[playernum].unlock[WON_HARD])
       {
       createmenuitem(TXT_LUDICROUS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_L);
       count+=16;
-      if (player[playernum].unlock[2])
+      if (player[playernum].unlock[WON_LUDICROUS])
         {
         createmenuitem(TXT_MINI_GISH,48,count,16,1.0f,1.0f,1.0f,1.0f);
         setmenuitem(MO_HOTKEY,SCAN_M);
@@ -675,15 +680,15 @@ void playerdifficultymenu(void)
     if (menuitem[0].active)
       game.difficulty=-1;
     if (menuitem[1].active)
-      game.difficulty=0;
+      game.difficulty=DIFFICULTY_EASY;
     if (menuitem[2].active)
-      game.difficulty=1;
+      game.difficulty=DIFFICULTY_NORMAL;
     if (menuitem[3].active)
-      game.difficulty=2;
+      game.difficulty=DIFFICULTY_HARD;
     if (menuitem[4].active)
-      game.difficulty=3;
+      game.difficulty=DIFFICULTY_LUDICROUS;
     if (menuitem[5].active)
-      game.difficulty=4;
+      game.difficulty=DIFFICULTY_MINI_GISH;
     }
 
   resetmenuitems();

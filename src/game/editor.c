@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/prerender.h"
 #include "../game/render.h"
 #include "../game/ropeedit.h"
+#include "../game/gameobject.h"
 #include "../game/setup.h"
 #include "../game/gametexture.h"
 #include "../input/keyboard.h"
@@ -56,9 +57,24 @@ void editlevel(void)
   {
   int count,count2;
   int x,y;
+  int editing_level_gametype = 0;
   int simtimer;
   int simcount;
   float vec[3];
+
+  gametype gametypes[] = {
+    GAMETYPE_CAMPAIGN,
+    GAMETYPE_COLLECTION,
+    GAMETYPE_2FOOTBALL,
+    GAMETYPE_2SUMO,
+    GAMETYPE_2GREED,
+    GAMETYPE_2DUEL,
+    GAMETYPE_2DRAGSTER,
+    GAMETYPE_2COLLECTION,
+    GAMETYPE_2RACING,
+    GAMETYPE_4FOOTBALL,
+    GAMETYPE_4SUMO,
+  };
 
   simtimer=SDL_GetTicks();
 
@@ -67,6 +83,8 @@ void editlevel(void)
   joystickmenu=0;
 
   editor.active=1;
+  ropeedit.ropetype=WEAK_ROPE;
+  view.zoom=10.0f;
 
   while (!menuitem[0].active && !windowinfo.shutdown)
     {
@@ -83,35 +101,55 @@ void editlevel(void)
     if (level.background[0]!=0)
       displaybackground(660);
 
+
     numofmenuitems=0;
     createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY,SCAN_F1);
     createmenuitem(TXT_LEVELNAME"     ",(640|TEXT_END),448,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_STRINGINPUT,editor.filename);
     setmenuitem(MO_HOTKEY,SCAN_ENTER);
-    createmenuitem(TXT_GAMETYPE,(640|TEXT_END),0,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_INTINPUT,&level.gametype);
-    createmenuitem(TXT_GAMETIME,(640|TEXT_END),32,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_INTINPUT,&level.time);
-    createmenuitem(TXT_RED"  ",(640|TEXT_END),64,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][0]);
-    createmenuitem(TXT_GREEN,(640|TEXT_END),96,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][1]);
-    createmenuitem(TXT_BLUE" ",(640|TEXT_END),128,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][2]);
     createmenuitem(TXT_BACKGROUND"     ",(640|TEXT_END),416,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_STRINGINPUT,&level.background);
 
+    int y = 0;
+    int offset = 16;
+    createmenuitem(TXT_GAMETYPE,(640|TEXT_END),y,16,1.0f,1.0f,1.0f,1.0f);
+    if (!editing_level_gametype){
+      createmenuitem(GAMETYPE_NAMES[level.gametype],(640|TEXT_END),y+offset,16,1.0f,1.0f,1.0f,1.0f);
+      createmenuitem(TXT_GAMETIME,(640|TEXT_END),y+offset*2,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_INTINPUT,&level.time);
+      createmenuitem(TXT_RED"  ",(640|TEXT_END),y+offset*4,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][0]);
+      createmenuitem(TXT_GREEN,(640|TEXT_END),y+offset*6,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][1]);
+      createmenuitem(TXT_BLUE" ",(640|TEXT_END),y+offset*8,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_FLOATINPUT,&level.ambient[editor.mode][2]);
+    }
+    else{
+      for (count = 0; count < GAMETYPE_COUNT; count++){
+          createmenuitem(GAMETYPE_NAMES[gametypes[count]],(640|TEXT_END), offset + offset*count,16,1.0f,1.0f,1.0f,1.0f);
+      }
+    }
     checksystemmessages();
     checkkeyboard();
     checkmouse();
     checkmenuitems();
 
-    view.zoom=10.0f;
-    if (keyboard[SCAN_EQUALS])
-      view.zoom=20.0f;
-    if (keyboard[SCAN_MINUS])
-      view.zoom=5.0f;
+    if ((menuitem[3].active || menuitem[4].active) && !editing_level_gametype){
+        editing_level_gametype = 1;
+        menuitem[3].active = 0;
+        menuitem[4].active = 0;
+    }
+    if (editing_level_gametype){
+        for (count = 0; count < GAMETYPE_COUNT; count++)
+            if (menuitem[4+count].active){ // watchout for this 4 when creating new menu items
+                level.gametype = gametypes[count];
+                editing_level_gametype = 0;
+                menuitem[4+count].active = 0;
+            }
+    }
+
+    zoom_view();
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -240,8 +278,9 @@ void editlevel(void)
       if (keyboard[SCAN_K] && !prevkeyboard[SCAN_K])
         editor.showgrid^=1;
 
-      x=view.position[0]+(float)(mouse.x-320)/32.0f;
-      y=view.position[1]+(float)(240-mouse.y)/32.0f;
+      get_mouse_coords(&vec[0], &vec[1]);
+      x = (int)vec[0];
+      y = (int)vec[1];
   
       if (!editor.paste)
         {
@@ -348,6 +387,8 @@ void editlevel(void)
           }
         if (keyboard[SCAN_V] && !prevkeyboard[SCAN_V])
           editor.paste=1;
+        if (keyboard[SCAN_E] && !prevkeyboard[SCAN_E])
+          editor.blocknum = getblock(x, y);
         }
       else
         {
@@ -406,16 +447,7 @@ void editlevel(void)
       simtimer=SDL_GetTicks()-count;
 
       if (!menuinputkeyboard)
-        {
-        if (keyboard[SCAN_W])
-          view.position[1]+=0.2f;
-        if (keyboard[SCAN_S])
-          view.position[1]-=0.2f;
-        if (keyboard[SCAN_A])
-          view.position[0]-=0.2f;
-        if (keyboard[SCAN_D])
-          view.position[0]+=0.2f;
-        }
+          pan_view();
       }
     if (!menuinputkeyboard)
       {
@@ -511,7 +543,7 @@ void rendereditblocks(void)
   int count,count2;
   int x,y;
   //int blocknum;
-  //float vec[3];
+  float vec[3];
 
   glDisable(GL_TEXTURE_2D);
 
@@ -539,8 +571,9 @@ void rendereditblocks(void)
     }
   else
     {
-    x=view.position[0]+(float)(mouse.x-320)/32.0f;
-    y=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
+    x = (int)vec[0];
+    y = (int)vec[1];
 
     for (count=0;count<=editor.copysize[1];count++)
     for (count2=0;count2<=editor.copysize[0];count2++)

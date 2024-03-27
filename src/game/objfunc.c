@@ -342,7 +342,7 @@ void objectcycle(void)
 
               if (level.grid[y][x]==251 || (level.grid[y][x]==251-8 && level.gridmod[y][x]==2))
                 {
-                if (game.numoflives<99 && game.difficulty!=3)
+                if (game.numoflives<99 && game.difficulty!=DIFFICULTY_LUDICROUS)
                   {
                   game.numoflives++;
                   createsprite(0,vec);

@@ -728,7 +728,7 @@ void setuprenderobjects(void)
         scalevector(normal,normal,0.35f);
       if (rope[count].type==STRONG_ROPE || rope[count].type==STRONG_CHAIN)
         scalevector(normal,normal,0.5f);
-      if (rope[count].type>=PUSHING_PISTON && rope[count].type<=10)
+      if (rope[count].type>=PUSHING_PISTON && rope[count].type<=SPRING)
         scalevector(normal,normal,0.5f);
 
       objectrender[numofobjectrenders].numofverts=4;

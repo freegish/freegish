@@ -111,7 +111,7 @@ void editlevelrope(void)
 
       copyvector(level.object[count].vertex[count2],vec);
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       {
       vec[0]=level.object[count].position[0];
       vec[1]=level.object[count].position[1];
@@ -153,8 +153,10 @@ void editlevelrope(void)
     checkmouse();
     checkmenuitems();
 
+    zoom_view();
+
     //setupperspectiveviewport(0,0,640,480,1.0f,100.0f);
-    setuporthoviewport(0,0,640,480,10.0f,7.5f,20.0f);
+    setuporthoviewport(0,0,640,480,view.zoom,view.zoom*0.75f,20.0f);
     setupviewpoint(view.position,view.orientation);
 
     setupframelighting();
@@ -177,6 +179,7 @@ void editlevelrope(void)
 
     drawtext(TXT_NUMOFROPES":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
     drawtext(TXT_TEXTURENUM":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,ropeedit.texturenum);
+    drawtext(TXT_ROPESET":/s",0,400,16,1.0f,1.0f,1.0f,1.0f,ROPE_TYPE_NAMES[ropeedit.ropetype]);
 
     drawmenuitems();
 
@@ -184,8 +187,7 @@ void editlevelrope(void)
 
     SDL_GL_SwapWindow(globalwindow);
 
-    vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-    vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
     vec[2]=0.0f;
 
     ropeedit.pointhighlight=-1;
@@ -209,25 +211,7 @@ void editlevelrope(void)
         if (ropeedit.pointhighlight!=-1)
         if (ropeedit.point[ropeedit.pointnum].objectnum!=ropeedit.point[ropeedit.pointhighlight].objectnum)
           {
-          level.rope[level.numofropes].type=1;
-          if (keyboard[SCAN_2])
-            level.rope[level.numofropes].type=2;
-          if (keyboard[SCAN_3])
-            level.rope[level.numofropes].type=3;
-          if (keyboard[SCAN_4])
-            level.rope[level.numofropes].type=4;
-          if (keyboard[SCAN_5])
-            level.rope[level.numofropes].type=5;
-          if (keyboard[SCAN_6])
-            level.rope[level.numofropes].type=6;
-          if (keyboard[SCAN_7])
-            level.rope[level.numofropes].type=7;
-          if (keyboard[SCAN_8])
-            level.rope[level.numofropes].type=8;
-          if (keyboard[SCAN_9])
-            level.rope[level.numofropes].type=9;
-          if (keyboard[SCAN_0])
-            level.rope[level.numofropes].type=10;
+          level.rope[level.numofropes].type=ropeedit.ropetype;
           level.rope[level.numofropes].obj1=ropeedit.point[ropeedit.pointnum].objectnum;
           level.rope[level.numofropes].obj1part=ropeedit.point[ropeedit.pointnum].particlenum;
   
@@ -270,16 +254,7 @@ void editlevelrope(void)
       simtimer=SDL_GetTicks()-count;
 
       if (!menuinputkeyboard)
-        {
-        if (keyboard[SCAN_W])
-          view.position[1]+=0.2f;
-        if (keyboard[SCAN_S])
-          view.position[1]-=0.2f;
-        if (keyboard[SCAN_A])
-          view.position[0]-=0.2f;
-        if (keyboard[SCAN_D])
-          view.position[0]+=0.2f;
-        }
+          pan_view();
       }
 
     if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
@@ -289,6 +264,27 @@ void editlevelrope(void)
     if (keyboard[SCAN_Z] && !prevkeyboard[SCAN_Z])
     if (ropeedit.texturenum>0)
       ropeedit.texturenum--;
+
+    if (keyboard[SCAN_1])
+      ropeedit.ropetype=WEAK_ROPE;
+    if (keyboard[SCAN_2])
+      ropeedit.ropetype=STRONG_ROPE;
+    if (keyboard[SCAN_3])
+      ropeedit.ropetype=WEAK_CHAIN;
+    if (keyboard[SCAN_4])
+      ropeedit.ropetype=STRONG_CHAIN;
+    if (keyboard[SCAN_5])
+      ropeedit.ropetype=PUSHING_PISTON;
+    if (keyboard[SCAN_6])
+      ropeedit.ropetype=HALF_PUSHED_PUSHING_PISTON;
+    if (keyboard[SCAN_7])
+      ropeedit.ropetype=PULLING_PISTON;
+    if (keyboard[SCAN_8])
+      ropeedit.ropetype=HALF_PULLED_PULLING_PISTON;
+    if (keyboard[SCAN_9])
+      ropeedit.ropetype=BAR;
+    if (keyboard[SCAN_0])
+      ropeedit.ropetype=SPRING;
     }
 
   resetmenuitems();

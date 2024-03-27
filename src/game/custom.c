@@ -399,7 +399,7 @@ void campaignmenu(void)
         playerdifficultymenu();
         if (game.difficulty==-1)
           {
-          game.difficulty=0;
+          game.difficulty=DIFFICULTY_EASY;
           goto newgamebypass;
           }
 
@@ -408,7 +408,7 @@ void campaignmenu(void)
         playermappack[playernum].levelnum=1;
         playermappack[playernum].totalscore=0;
         playermappack[playernum].numoflives=5;
-        if (playermappack[playernum].difficulty==3)
+        if (playermappack[playernum].difficulty==DIFFICULTY_LUDICROUS)
           playermappack[playernum].numoflives=0;
         }
 

@@ -105,7 +105,7 @@ void setuplevel(void)
       }
     if (level.object[count].type==LVL_OBJ_TYPE_BOX)
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
-    if (level.object[count].type==3)
+    if (level.object[count].type==LVL_OBJ_TYPE_MIDDLE_FIXED_BOX)
       {
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       createparticle(2,level.object[count].position,NULL,10000.0f,-1,10000);
@@ -114,7 +114,7 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_CAR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LEFT_FIXED_BOX_OR_CAR)
       {
       if (level.gametype!=GAMETYPE_2RACING)
         {
@@ -131,7 +131,7 @@ void setuplevel(void)
       else
         createcar(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       }
-    if (level.object[count].type==5)
+    if (level.object[count].type==LVL_OBJ_TYPE_RIGHT_FIXED_BOX)
       {
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       vec[0]=level.object[count].position[0]+(level.object[count].size[0]-1.0f)*0.5f;
@@ -154,7 +154,7 @@ void setuplevel(void)
       //for (count2=0;count2<16;count2++)
       //  createbond(numofparticles-17+count2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       createanchor(level.object[count].position);
     if (level.object[count].type==LVL_OBJ_TYPE_BUTTON)
       createbutton(level.object[count].position,level.object[count].mass);
@@ -548,6 +548,7 @@ void loadstorylevel(int levelnum)
     loadlevel("death.lvl");
   if (levelnum==68)
     loadlevel("death2.lvl");
+  game.levelnum=levelnum;
   }
 
 void loadcollectionlevel(int levelnum)

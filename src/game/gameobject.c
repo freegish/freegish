@@ -33,6 +33,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../physics/bond.h"
 #include "../physics/particle.h"
 
+const char* LVL_OBJ_NAMES[] = {
+    "NOTHING",
+    "GISH",
+    "BOX",
+    "MIDDLE_FIXED_BOX",
+    "LEFT_FIXED_BOX_OR_CAR",
+    "RIGHT_FIXED_BOX",
+    "WHEEL",
+    "ANCHORED_WHEEL",
+    "LIGHT_OR_ANCHOR",
+    "BUTTON",
+    "ONE_TIME_BUTTON",
+    "SWITCH_UP",
+    "SWITCH_RIGHT",
+    "SWITCH_DOWN",
+    "SWITCH_LEFT",
+    "AREASWITCH",
+    "ONE_TIME_AREASWITCH",
+    "GENERATOR",
+    "SECRET_AREASWITCH",
+};
+
+extern const char* ROPE_TYPE_NAMES[] = {
+    "NOTHING",
+    "WEAK_ROPE",
+    "STRONG_ROPE",
+    "WEAK_CHAIN",
+    "STRONG_CHAIN",
+    "PUSHING_PISTON",
+    "HALF_PUSHED_PUSHING_PISTON",
+    "PULLING_PISTON",
+    "HALF_PULLED_PULLING_PISTON",
+    "BAR",
+    "SPRING",
+};
+
 int numofobjects;
 _object object[512];
 _objecttype objecttype[128];
@@ -155,7 +191,7 @@ void createtarboy(float position[3])
     size=0.9f;
     if (game.supersize)
       size=0.9f*1.25f;
-    if (game.difficulty==4)
+    if (game.difficulty==DIFFICULTY_MINI_GISH)
       size=0.9f*0.8f;
     vec[0]=position[0]+cos(angle)*size;
     vec[1]=position[1]-sin(angle)*size;

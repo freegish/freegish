@@ -48,6 +48,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../video/texture.h"
 #include "../game/debug.h"
 
+int GAMETYPE_COUNT = 11;
+const char* GAMETYPE_NAMES[] = {
+    "CAMPAIGN",
+    "COLLECTION",
+    "","","","","","","","", // skip missing gametypes
+    "2FOOTBALL",
+    "2SUMO",
+    "2GREED",
+    "2DUEL",
+    "2DRAGSTER",
+    "2COLLECTION",
+    "2RACING",
+    "4FOOTBALL",
+    "4SUMO",
+};
+
 unsigned int cryptdata[1048576];
 
 int textureused[512];

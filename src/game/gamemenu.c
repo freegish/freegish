@@ -275,7 +275,7 @@ void pregamemenu(void)
 
           game.totalscore=0;
           game.numoflives=5;
-          if (game.difficulty==1)
+          if (game.difficulty==DIFFICULTY_NORMAL)
             {
             count2=(game.levelnum-1)%7+1;
             if (count2!=7)
@@ -284,7 +284,7 @@ void pregamemenu(void)
               game.levelnum=count*7+1;
               }
             }
-          if (game.difficulty>=2)
+          if (game.difficulty>=DIFFICULTY_HARD)
             game.levelnum=0;
 
           gameovermenu();
@@ -450,7 +450,7 @@ void gameovermenu(void)
     numofmenuitems=0;
     createmenuitem(TXT_BACK,0,0,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY,SCAN_ESC);
-    if (game.difficulty<2)
+    if (game.difficulty<DIFFICULTY_HARD)
       {
       createmenuitem(TXT_CONTINUE,(320|TEXT_CENTER),256,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_C);
@@ -575,11 +575,11 @@ void endingmenu(void)
       }
 
     drawtext(TXT_TOTAL_POINTS":/i",64,400,16,1.0f,1.0f,1.0f,1.0f,game.totalscore);
-    if (player[playernum].difficulty==1 || player[playernum].difficulty==2)
+    if (player[playernum].difficulty==DIFFICULTY_EASY || player[playernum].difficulty==DIFFICULTY_NORMAL)
       drawtext(TXT_NEW_VS_MODE,64,416,16,1.0f,1.0f,1.0f,1.0f);
-    if (player[playernum].difficulty==2)
+    if (player[playernum].difficulty==DIFFICULTY_NORMAL)
       drawtext(TXT_NEW_VS_LEVEL,64,432,16,1.0f,1.0f,1.0f,1.0f);
-    if (player[playernum].difficulty==3)
+    if (player[playernum].difficulty==DIFFICULTY_HARD)
       drawtext(TXT_MINI_GISH_MODE,64,432,16,1.0f,1.0f,1.0f,1.0f);
     drawmenuitems();
 

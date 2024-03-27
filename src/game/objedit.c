@@ -103,11 +103,7 @@ void editlevelobjects(void)
     checkmouse();
     checkmenuitems();
 
-    view.zoom=10.0f;
-    if (keyboard[SCAN_EQUALS])
-      view.zoom=20.0f;
-    if (keyboard[SCAN_MINUS])
-      view.zoom=5.0f;
+    zoom_view();
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -131,16 +127,32 @@ void editlevelobjects(void)
 
     setuptextdisplay();
 
-    drawtext(TXT_OBJECTSET":/i",0,352,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype);
-    drawtext(TXT_OBJECTNUM":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
-    if (editor.objectnum!=-1)
-      drawtext(TXT_OBJECTYPE":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type);
-    drawtext(TXT_OBJECTS":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
-    drawtext(TXT_ROPES":/i",0,416,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
-    if (editor.objectnum!=-1)
-      {
-      drawtext(TXT_LINK":/i",0,432,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
-      }
+    int INFO_Y = 352;
+    int OFFSET_Y = 16;
+
+    // draw level information
+    drawtext(TXT_OBJECTS":/i",0,INFO_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
+    drawtext(TXT_ROPES":/i",0,INFO_Y+OFFSET_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
+
+    // draw object type that will be created on lmb
+    if (editor.objecttype<19)
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
+    else if (editor.objecttype == 19)
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+    else
+        drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
+
+    // draw stuff related to the picked object
+    if (editor.objectnum!=-1){
+      drawtext(TXT_OBJECTNUM":/i",0,INFO_Y+OFFSET_Y*3,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
+      if (level.object[editor.objectnum].type<19)
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
+      else if (level.object[editor.objectnum].type == 19)
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+      else
+          drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
+      drawtext(TXT_LINK":/i",0,INFO_Y+OFFSET_Y*5,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
+    }
 
     drawmenuitems();
 
@@ -150,8 +162,9 @@ void editlevelobjects(void)
 
     if (mouse.x<512 || mouse.y>224)
       {
-      x=view.position[0]+(float)(mouse.x-320)/32.0f;
-      y=view.position[1]+(float)(240-mouse.y)/32.0f;
+      get_mouse_coords(&vec[0], &vec[1]);
+      x = (int)vec[0];
+      y = (int)vec[1];
       if (!keyboard[SCAN_K])
         {
         if (mouse.lmb && !prevmouse.lmb)
@@ -206,8 +219,7 @@ void editlevelobjects(void)
         }
       if (keyboard[SCAN_K])
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
 
         if (mouse.lmb && !prevmouse.lmb)
@@ -225,8 +237,7 @@ void editlevelobjects(void)
         }
       if (mouse.rmb && !prevmouse.rmb)
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
   
         editor.objectnum=-1;
@@ -236,6 +247,21 @@ void editlevelobjects(void)
           subtractvectors(vec2,vec,level.object[count].position);
           if (vectorlength(vec2)<0.5f)
             editor.objectnum=count;
+          }
+        }
+      if (keyboard[SCAN_E] && prevkeyboard[SCAN_E])
+        {
+        get_mouse_coords(&vec[0], &vec[1]);
+        vec[2]=0.0f;
+
+        editor.objectnum=-1;
+
+        for (count=0;count<level.numofobjects;count++)
+          {
+          subtractvectors(vec2,vec,level.object[count].position);
+          if (vectorlength(vec2)<0.5f)
+            editor.objectnum=count;
+            editor.objecttype=object[count].type;
           }
         }
       }
@@ -380,16 +406,7 @@ void editlevelobjects(void)
       simtimer=SDL_GetTicks()-count;
 
       if (!menuinputkeyboard)
-        {
-        if (keyboard[SCAN_W])
-          view.position[1]+=0.2f;
-        if (keyboard[SCAN_S])
-          view.position[1]-=0.2f;
-        if (keyboard[SCAN_A])
-          view.position[0]-=0.2f;
-        if (keyboard[SCAN_D])
-          view.position[0]+=0.2f;
-        }
+          pan_view();
       }
     }
 
@@ -486,7 +503,7 @@ void renderlevelobjects(void)
         glEnd();
         }
       }
-    if (level.object[count].type==LVL_OBJ_TYPE_ANCHOR)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -717,7 +734,7 @@ void renderlevelobjects(void)
       glColor4f(0.75f,0.75f,0.75f,1.0f);
     if (level.rope[count].type>=PUSHING_PISTON && level.rope[count].type<10)
       glColor4f(0.75f,0.0f,0.75f,1.0f);
-    if (level.rope[count].type==10)
+    if (level.rope[count].type==SPRING)
       glColor4f(0.0f,0.75f,0.75f,1.0f);
 
     objectnum=level.rope[count].obj1;
