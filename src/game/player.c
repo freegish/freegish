@@ -356,9 +356,13 @@ void playerstartmenu(void)
       createmenuitem(TXT_REPLAY,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_R);
       count+=16;
-      createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
-      setmenuitem(MO_HOTKEY,SCAN_S);
-      count+=16;
+      if (player[playernum].gamepassed){
+        createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_HOTKEY,SCAN_S);
+        count+=16;
+      }
+      else
+        createmenuitemempty();
       createmenuitem(TXT_CUSTOM_LEVELS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_U);
       count+=16;
@@ -378,9 +382,13 @@ void playerstartmenu(void)
       createmenuitem(TXT_REPLAY,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_R);
       count+=16;
-      createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
-      setmenuitem(MO_HOTKEY,SCAN_S);
-      count+=16;
+      if (player[playernum].gamepassed){
+        createmenuitem(TXT_SINGLE_LEVEL,48,count,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_HOTKEY,SCAN_S);
+        count+=16;
+      }
+      else
+        createmenuitemempty();
       createmenuitem(TXT_CUSTOM_LEVELS,48,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_U);
       count+=16;
