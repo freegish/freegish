@@ -202,7 +202,7 @@ void savelevel(char *filename)
 
   if ((fp=fopen(filename,"wb"))!=NULL)
     {
-    version=10;
+    version=11;
 
     fwrite2(&version,4,1,fp);
     fwrite2(level.background,1,32,fp);
@@ -250,44 +250,35 @@ void savelevel(char *filename)
       {
       if (textureused[count])
         {
-          fwrite2(&texture[count].sizex,4,1,fp);
-          if (texture[count].sizex!=0)
-            {
-            fwrite2(&texture[count].sizey,4,1,fp);
-            fwrite2(&texture[count].magfilter,4,1,fp);
-            fwrite2(&texture[count].minfilter,4,1,fp);
-            fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
-            }
-			/* this is version 11, rework to migrate version easily
-            if (debug_level_saveload) printf("Saving %i as ", count);
-			if (texture[count].filename[0] != 0)
-			{
-				int filenameLength;
-				if (debug_level_saveload) printf("\"%s\"...\n", texture[count].filename);
-				filenameLength = -strlen(texture[count].filename); // save a negative number to indicate a texture from a file
-				//length = -1;
-				fwrite2(&filenameLength,4,1,fp);
-				filenameLength = abs(filenameLength);
-				fwrite2(texture[count].filename,1,filenameLength,fp);
-				fflush(fp);
-			}
-			else
-			{
-				if (debug_level_saveload) printf("blob: ");
-				fwrite2(&texture[count].sizex,4,1,fp);
-				if (texture[count].sizex == 0)
-				{
-					if (debug_level_saveload) printf("empty\n");
-				}
-				else
-				{
-					if (debug_level_saveload) printf("%ix%i\n", texture[count].sizex, texture[count].sizey);
-					fwrite2(&texture[count].sizey,4,1,fp);
-					fwrite2(&texture[count].magfilter,4,1,fp);
-					fwrite2(&texture[count].minfilter,4,1,fp);
-					fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
-				}
-			}*/
+          if (debug_level_saveload) printf("Saving %i as ", count);
+		  if (texture[count].filename[0] != 0)
+		  {
+		  	int filenameLength;
+		  	if (debug_level_saveload) printf("\"%s\"...\n", texture[count].filename);
+		  	filenameLength = -strlen(texture[count].filename); // save a negative number to indicate a texture from a file
+		  	//length = -1;
+		  	fwrite2(&filenameLength,4,1,fp);
+		  	filenameLength = abs(filenameLength);
+		  	fwrite2(texture[count].filename,1,filenameLength,fp);
+		  	fflush(fp);
+		  }
+		  else
+		  {
+		  	if (debug_level_saveload) printf("blob: ");
+		  	fwrite2(&texture[count].sizex,4,1,fp);
+		  	if (texture[count].sizex == 0)
+		  	{
+		  		if (debug_level_saveload) printf("empty\n");
+		  	}
+		  	else
+		  	{
+		  		if (debug_level_saveload) printf("%ix%i\n", texture[count].sizex, texture[count].sizey);
+		  		fwrite2(&texture[count].sizey,4,1,fp);
+		  		fwrite2(&texture[count].magfilter,4,1,fp);
+		  		fwrite2(&texture[count].minfilter,4,1,fp);
+		  		fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
+		  	}
+	      }
         }
       else
         {
@@ -542,6 +533,15 @@ void loadlevel(char *filename)
           texture[count].wrapt=GL_CLAMP_TO_EDGE;
           texture[count].magfilter=GL_LINEAR;
           texture[count].minfilter=GL_LINEAR;
+          // set string to 0 length because when saved and loaded again
+          // it will become corrupted
+          // explanation: 
+          // before load, filename is text002.tga
+          // loaded ver10, isn't set to 0, texture loaded from blob
+          // saved ver11, saved to file (still thinking that filename is text002.tga)
+          // loaded ver11, load from disk but text002.tga doesn't match the previous texture
+          if (game.editing)
+          texture[count].filename[0] = 0; // still bad because the levelfile is still large, probably should find corresponding texture
 
           if ((texture[count].sizex&(texture[count].sizex-1))==0)
           if ((texture[count].sizey&(texture[count].sizey-1))==0)
