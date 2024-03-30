@@ -29,6 +29,8 @@ int loadtexture(int texturenum,const char *filename,int mipmap,int wraps,int wra
 void loadtexturepartial(int texturenum,const char *filename,int startx,int starty,int sizex,int sizey);
 void generatemipmap(int texturenum);
 void setuptexture(int texturenum);
+int texturecmp(int texturenum1, int texturenum2);
+void look_for_texture_in_folders(int texturenum);
 
 typedef enum {
 	EDITBLOCK_TEXTURE = 999,

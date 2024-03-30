@@ -572,3 +572,61 @@ void setuptexture(int texturenum)
                    0,GL_ALPHA,GL_UNSIGNED_BYTE,texture[texturenum].gloss[count]);
     }
   }
+
+int texturecmp(int texturenum1, int texturenum2){
+	// 0 when identical, 1 when different
+    int same = 0;
+	int sx1 = texture[texturenum1].sizex;
+	int sy1 = texture[texturenum1].sizey;
+	int sx2 = texture[texturenum2].sizex;
+	int sy2 = texture[texturenum2].sizey;
+	same = sx1 == sx2 && sy1 == sy2;
+	if (!same) return 1;
+	for (int i=0;i<texture[texturenum1].sizex*texture[texturenum1].sizey;i++){
+		int r1 = texture[texturenum1].rgba[0][i]; // can only compare the largest mipmap level
+		int r2 = texture[texturenum2].rgba[0][i];
+	    same = r1 == r2;
+		if (!same)
+			return 1;
+	}
+    return 0;
+}
+
+void look_for_texture_in_folders(int texturenum){
+	int numoftextures = 0;
+	char texturelist[1024][32];
+
+	char* folders[] = {
+	  "texture",
+	  "tile01/texture",
+	  "tile02/texture",
+	  "tile03/texture",
+	  "tile04/texture",
+	  "tile05/texture",
+	  "tile06/texture",
+	  "tile07/texture",
+	};
+	char* extensions[] = {
+	  "*.png",
+	  "*.tga",
+	};
+	char current_folder[256];
+	char current_texture[256];
+
+	for (int foldercount = 0; foldercount < 8; foldercount++)
+	for (int extensioncount = 0; extensioncount < 2; extensioncount++){
+		strcpy(current_folder, folders[foldercount]);
+	    listfiles(current_folder, extensions[extensioncount], texturelist, 0); // should memset 0 texturelist or not??
+	    numoftextures = 0;
+        while (texturelist[numoftextures][0]!=0)
+            numoftextures++;
+        for (int count=0;count<numoftextures;count++){
+			sprintf(current_texture, "%s/%s", folders[foldercount], texturelist[count]);
+            loadtexture(EDITBLOCK_TEXTURE, texturelist[count],0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
+            if(texturecmp(texturenum, EDITBLOCK_TEXTURE) == 0){ // same texture
+                strcpy(texture[texturenum].filename, texturelist[count]);
+                texture[texturenum].filename[255] = '\0'; /* Safety first! */
+            }
+        }
+	}
+}

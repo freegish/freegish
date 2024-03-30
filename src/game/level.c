@@ -163,7 +163,6 @@ void savelevel(char *filename)
   {
   int count,count2,count3;
   int blocknum;
-  int changeddir;
   int version;
   FILE *fp;
   char path[PATH_MAX];
@@ -198,9 +197,9 @@ void savelevel(char *filename)
   if (!textureused[count])
     texture[count].sizex=0;
   */
-  changeddir=chdir("level");
+  sprintf(path, "level/%s", filename);
 
-  if ((fp=fopen(filename,"wb"))!=NULL)
+  if ((fp=fopen(path,"wb"))!=NULL)
     {
     version=11;
 
@@ -251,6 +250,12 @@ void savelevel(char *filename)
       if (textureused[count])
         {
           if (debug_level_saveload) printf("Saving %i as ", count);
+
+          /*if (texture[count].filename[0] == 0){
+              // look for the texture in some folders
+              look_for_texture_in_folders(count);
+          }*/
+
 		  if (texture[count].filename[0] != 0)
 		  {
 		  	int filenameLength;
@@ -301,8 +306,6 @@ void savelevel(char *filename)
 
     fclose(fp);
     }
-    if (changeddir==0)
-      chdir("..");
   }
 
 void loadlevel(char *filename)
