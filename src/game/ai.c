@@ -30,20 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/random.h"
 #include "../math/vector.h"
 
-void objectai(int objectnum)
-  {
-  float vec[3];
-  float intersectpoint[3];
-  float normal[3];
-  float scale;
-
-  object[objectnum].axis[0]=0.0f;
-  object[objectnum].axis[1]=0.0f;
-  object[objectnum].button=0;
-
-  if (object[objectnum].type==OBJ_TYPE_GISH)
-  if (game.levelnum==34)
-    {
+void enemygishai(int objectnum){
+    float vec[3];
     /*
     object[objectnum].axis[0]=-object[0].axis[0];
     object[objectnum].axis[1]=object[0].axis[0];
@@ -61,16 +49,36 @@ void objectai(int objectnum)
     if (vectorlength(vec)>3.0f)
       object[objectnum].button=1;
     */
+}
+
+void beastai(int objectnum){
+    float vec[3];
+    float intersectpoint[3];
+    float normal[3];
+    float scale;
+
+    float mindistance = INFINITY;
+    float distance;
+    int closest_player = 0;
+
+    // find closest player
+    for (int i = 0; i < game.numofplayers; i++){
+        subtractvectors(vec, object[objectnum].position, object[i].position);
+        distance = vectorlength(vec);
+        if (distance < mindistance){
+            closest_player = i;
+            mindistance = distance;
+        }
     }
-  if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
-    {
-    if (object[0].idata[0]==0)
-    if (fabs(object[0].position[0]-object[objectnum].position[0])<12.0f)
-    if (fabs(object[0].position[1]-object[objectnum].position[1])<8.0f)
+
+    // attack closest player
+    if (object[closest_player].idata[0]==0)
+    if (fabs(object[closest_player].position[0]-object[objectnum].position[0])<12.0f)
+    if (fabs(object[closest_player].position[1]-object[objectnum].position[1])<8.0f)
       {
       if (object[objectnum].beasttype!=7 && object[objectnum].beasttype!=13)
         {
-        subtractvectors(vec,object[0].position,object[objectnum].position);
+        subtractvectors(vec,object[closest_player].position,object[objectnum].position);
         if ((vec[0]>-2.5f && vec[0]<0.0f && object[objectnum].direction==0) || (vec[0]<2.5f && vec[0]>0.0f && object[objectnum].direction==1))
         if (fabs(vec[1])<1.0f)
           object[objectnum].button|=1;
@@ -81,7 +89,7 @@ void objectai(int objectnum)
 
         if ((rnd()&7)!=7)
           {
-          if (object[0].position[0]<object[objectnum].position[0])
+          if (object[closest_player].position[0]<object[objectnum].position[0])
             object[objectnum].axis[0]-=1.0f;
           else
             object[objectnum].axis[0]+=1.0f;
@@ -97,7 +105,7 @@ void objectai(int objectnum)
         }
       else
         {
-        subtractvectors(vec,object[0].position,object[objectnum].position);
+        subtractvectors(vec,object[closest_player].position,object[objectnum].position);
         if (vec[0]>-8.0f && vec[0]<8.0f)
         if (fabs(vec[1])<6.0f)
         if ((game.framenum&127)==0)
@@ -109,7 +117,7 @@ void objectai(int objectnum)
             object[objectnum].axis[0]+=1.0f;
         */
         //if (object[0].position[0]<object[objectnum].position[0])
-        if (object[0].position[0]<object[objectnum].position[0]-5.0f)
+        if (object[closest_player].position[0]<object[objectnum].position[0]-5.0f)
           {
           scaleaddvectors(vec,object[objectnum].position,object[objectnum].orientation[0],-3.0f);
           scaleaddvectors(vec,vec,object[objectnum].orientation[1],-2.0);
@@ -121,7 +129,7 @@ void objectai(int objectnum)
               object[objectnum].axis[0]+=1.0f;
             }
           }
-        if (object[0].position[0]>object[objectnum].position[0]+5.0f)
+        if (object[closest_player].position[0]>object[objectnum].position[0]+5.0f)
           {
           scaleaddvectors(vec,object[objectnum].position,object[objectnum].orientation[0],3.0f);
           scaleaddvectors(vec,vec,object[objectnum].orientation[1],-2.0f);
@@ -135,7 +143,19 @@ void objectai(int objectnum)
           }
         }
       }
-    }
+}
+
+void objectai(int objectnum)
+  {
+  object[objectnum].axis[0]=0.0f;
+  object[objectnum].axis[1]=0.0f;
+  object[objectnum].button=0;
+
+  if (object[objectnum].type==OBJ_TYPE_GISH)
+  if (game.levelnum==34)
+      enemygishai(objectnum);
+  if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
+      beastai(objectnum);
 
   if (object[objectnum].axis[0]<-1.0f)
     object[objectnum].axis[0]=-1.0f;

@@ -143,6 +143,20 @@ void objectanimation(void)
       }
     if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
       {
+      float mindistance = INFINITY;
+      float distance;
+      int closest_player = 0;
+
+      // find closest player
+      for (int i = 0; i < game.numofplayers; i++){
+          subtractvectors(vec, object[count].position, object[i].position);
+          distance = vectorlength(vec);
+          if (distance < mindistance){
+              closest_player = i;
+              mindistance = distance;
+          }
+      }
+
       if (object[count].animationtype==0 || object[count].animationtype==1)
       if ((object[count].button&1)==1)
         {
@@ -163,8 +177,8 @@ void objectanimation(void)
         if (object[count].link!=-1)
           {
           object[object[count].link].texturenum=animation[object[count].animationnum+32].stand[0];
-          if (fabs(object[0].position[0]-object[count].position[0])<1.5f)
-          if (object[0].position[1]>object[count].position[1])
+          if (fabs(object[closest_player].position[0]-object[count].position[0])<1.5f)
+          if (object[closest_player].position[1]>object[count].position[1])
             object[object[count].link].texturenum=animation[object[count].animationnum+32].stand[1];
           }
 
@@ -189,8 +203,8 @@ void objectanimation(void)
         if (object[count].link!=-1)
           {
           object[object[count].link].texturenum=animation[object[count].animationnum+32].walk[0];
-          if (fabs(object[0].position[0]-object[count].position[0])<1.5f)
-          if (object[0].position[1]>object[count].position[1])
+          if (fabs(object[closest_player].position[0]-object[count].position[0])<1.5f)
+          if (object[closest_player].position[1]>object[count].position[1])
             object[object[count].link].texturenum=animation[object[count].animationnum+32].stand[1];
           }
         if (object[count].beasttype!=12)
@@ -279,7 +293,7 @@ void objectanimation(void)
               scaleaddvectors(vec,object[count].position,object[count].orientation[0],-scale);
             if (object[count].direction==1)
               scaleaddvectors(vec,object[count].position,object[count].orientation[0],scale);
-            if (lineintersectobject(intersectpoint,normal,&scale,object[count].position,vec,0,particlelist))
+            if (lineintersectobject(intersectpoint,normal,&scale,object[count].position,vec,closest_player,particlelist))
               {
               scale=0.06f;
               if (object[count].beasttype<3)
@@ -298,11 +312,11 @@ void objectanimation(void)
                 scaleaddvectors(particle[particlelist[1]].velocity,particle[particlelist[1]].velocity,object[count].orientation[0],scale);
                 }
               if (object[count].beasttype<3 || object[count].beasttype==11)
-                object[0].hitpoints-=20;
+                object[closest_player].hitpoints-=20;
               else
-                object[0].hitpoints-=40;
+                object[closest_player].hitpoints-=40;
               if (object[count].beasttype==15)
-                object[0].hitpoints-=40;
+                object[closest_player].hitpoints-=40;
               }
             }
           if (object[count].beasttype==7 || object[count].beasttype==13)
