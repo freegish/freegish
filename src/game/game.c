@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../sdl/sdl.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -68,6 +69,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 _view view;
 _game game;
 
+void pan_view(void){
+    float speed = 0.2f * view.zoom / 10.f; // base zoom is 10, so 0.2 is default speed at zoom 10
+    if (keyboard[SCAN_SHIFT]) speed *= 5;
+    if (keyboard[SCAN_W])
+        view.position[1]+=speed;
+    if (keyboard[SCAN_S])
+        view.position[1]-=speed;
+    if (keyboard[SCAN_A])
+        view.position[0]-=speed;
+    if (keyboard[SCAN_D])
+        view.position[0]+=speed;
+}
+
+void zoom_view(void){
+    if (keyboard[SCAN_EQUALS])
+      view.zoom/=1.189207115f; // 2^0.25
+    if (keyboard[SCAN_MINUS])
+      view.zoom*=1.189207115f;
+}
+
+void get_mouse_coords(float *x, float *y){
+    assert(x);
+    assert(y);
+    *x=view.position[0]+(float)(mouse.x-320)/32.0f * view.zoom / 10.f;
+    *y=view.position[1]+(float)(240-mouse.y)/32.0f * view.zoom / 10.f;
+}
+
 void gameloop(void)
   {
   int count,count2;
@@ -78,6 +106,7 @@ void gameloop(void)
   //char filename[13]="text000.png";
   int scorenum;
   //unsigned int x;
+  int need_to_open_editor = 0;
 
   game.godparticle=-1;
 
@@ -104,6 +133,9 @@ void gameloop(void)
   scorenum=-1;
 
   resetmenuitems();
+
+  if (game.levelnum==0 && game.editing)
+    need_to_open_editor = 1;
 
   while ((game.exit<GAMEEXIT_EXITGAME || game.exitdelay>0) && !windowinfo.shutdown)
     {
@@ -423,15 +455,16 @@ void gameloop(void)
 
     renderlevel();
     renderlevelfore();
+    //renderbonds();
 
     if (game.oldschool==1)// || game.oldschool==3)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,256,256,0);
       }
     if (game.oldschool==2)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,128,128,0);
       }
 
@@ -440,9 +473,9 @@ void gameloop(void)
       setuptextdisplay();
   
       if (game.oldschool==1)// || game.oldschool==3)
-        glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       if (game.oldschool==2)
-        glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
   
       glBegin(GL_QUADS);
     
@@ -598,8 +631,9 @@ void gameloop(void)
       }
 
     if (game.levelnum==0 && game.editing)
-    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1])
+    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1] || need_to_open_editor)
       {
+      need_to_open_editor = 0;
       game.songnum=-1;
       checkmusic();
 
@@ -653,8 +687,7 @@ void simulation(void)
   if (game.godmode)
   if (!game.playreplay)
     {
-    vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-    vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
     vec[2]=0.0f;
 
     if (mouse.lmb)

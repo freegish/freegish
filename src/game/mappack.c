@@ -231,7 +231,7 @@ void mappackpregamemenu(void)
 
           playermappack[playernum].totalscore=0;
           playermappack[playernum].numoflives=5;
-          if (playermappack[playernum].difficulty>=2)
+          if (playermappack[playernum].difficulty>=DIFFICULTY_HARD)
             playermappack[playernum].levelnum=0;
 
           gameovermenu();

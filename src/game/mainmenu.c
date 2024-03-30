@@ -416,7 +416,7 @@ void versusmenu(void)
 
   unlocked=0;
   for (count=0;count<6;count++)
-  if (player[count].unlock[0])
+  if (player[count].unlock[WON_NORMAL])
     unlocked=1;
 
   resetmenuitems();

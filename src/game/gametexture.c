@@ -135,7 +135,7 @@ void edittextures(void)
       }
     for (count=0;count<16;count++)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[1792+count+textureedit.tilepagenum*16].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[TEXTUREEDIT_START_TEXTURE+count+textureedit.tilepagenum*16].glname);
 
       glBegin(GL_QUADS);
 
@@ -360,7 +360,8 @@ void copytexture(int texturenum,int oldtexturenum)
   texture[texturenum].wrapt=texture[oldtexturenum].wrapt;
   texture[texturenum].magfilter=texture[oldtexturenum].magfilter;
   texture[texturenum].minfilter=texture[oldtexturenum].minfilter;
-  texture[texturenum].filename[0] = '\0';
+  strcpy(texture[texturenum].filename, texture[oldtexturenum].filename);
+  texture[texturenum].filename[255] = '\0'; /* Safety first! */
 
   for (mipmaplevel=0;mipmaplevel<texture[texturenum].mipmaplevels;mipmaplevel++)
     {
@@ -379,40 +380,16 @@ void loadtilesettemp(void)
   {
   int count;
   int changeddir;
-  char texfilename[13]="text000.png";
-
-  changeddir=1;
-
-  if (textureedit.tileset==0)
-    changeddir=chdir("tile01");
-  if (textureedit.tileset==1)
-    changeddir=chdir("tile02");
-  if (textureedit.tileset==2)
-    changeddir=chdir("tile03");
-  if (textureedit.tileset==3)
-    changeddir=chdir("tile04");
-  if (textureedit.tileset==4)
-    changeddir=chdir("tile05");
-  if (textureedit.tileset==5)
-    changeddir=chdir("tile06");
-  if (textureedit.tileset==6)
-    changeddir=chdir("tile07");
-  if (textureedit.tileset==7)
-    changeddir=chdir("tile08");
+  char texfilename[]="../tile01/texture/text000.png";
 
   for (count=0;count<256;count++)
     {
-    texfilename[4]=48+(count/100)%10;
-    texfilename[5]=48+(count/10)%10;
-    texfilename[6]=48+count%10;
+    sprintf(texfilename, "../tile%02i/texture/text%03i.png", textureedit.tileset+1, count);
     if (game.levelnum!=6)
       loadtexture(count+1792,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
     else
       loadtexture(count+1792,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_NEAREST,GL_NEAREST);
     }
-
-  if (changeddir==0)
-    chdir("..");
   }
 
 void loadleveltiles(char *filename)

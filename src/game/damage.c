@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void applydamageobject(int objectnum,int hitpoints)
   {
-  if (level.gametype<10)
+  if (level.gametype<GAMETYPE_2FOOTBALL)
   if (object[objectnum].damagedelay<=0)
     {
     object[objectnum].hitpoints-=hitpoints;

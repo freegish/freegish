@@ -29,6 +29,14 @@ void playerdifficultymenu(void);
 void collectionmenu(void);
 void singlelevelmenu(void);
 
+typedef enum
+{
+	WON_NORMAL = 0,
+	WON_HARD = 1,
+	WON_LUDICROUS = 2,
+	WON_MINI_GISH = 3,
+} unlocks;
+
 typedef struct
   {
   char name[32];

@@ -326,7 +326,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_ENDING_BAD_LINE13						"who she was..."
 
 #define TXT_NEW_VS_MODE									"New Vs. Mode Unlocked"
-#define TXT_NEW_VS_LEVEL								"New Vs. Levels Unlocked"
+#define TXT_NEW_VS_LEVEL								"New Vs. Levels and difficulty Unlocked"
 #define TXT_MINI_GISH_MODE							"Mini Gish Mode Unlocked"
 
 //high.c
@@ -343,6 +343,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_OBJECTS											"OBJECTS"
 #define TXT_ROPES												"ROPES"
 #define TXT_LINK												"LINK"
+//ropeedit.c
+#define TXT_ROPESET                                         "ROPESET"
 //options.c
 #define TXT_VIDEOOPTIONS								"Video Options"
 #define TXT_NONE												"None"

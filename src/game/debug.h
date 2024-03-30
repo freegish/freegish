@@ -25,5 +25,6 @@ extern int debugit;
 extern int debug_level_saveload;
 extern int debug_texture_load;
 extern int debug_character_positions;
+extern int debug_unlocks;
 
 #endif /* GISH_GAME_DEBUG_H */
