@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <assert.h>
 
 #include "../video/texture.h"
+#include "../game/animation.h"
 #include "../game/debug.h"
 #include "../sdl/endian.h"
 #include "../sdl/file.h"
@@ -592,7 +593,7 @@ int texturecmp(int texturenum1, int texturenum2){
     return 0;
 }
 
-void look_for_texture_in_folders(int texturenum){
+int load_all_textures(void){
 	int numoftextures = 0;
 	char texturelist[1024][32];
 
@@ -607,12 +608,20 @@ void look_for_texture_in_folders(int texturenum){
 	  "tile07/texture",
 	};
 	char* extensions[] = {
-	  "*.png",
-	  "*.tga",
+	  "text*.png",
+	  "text*.tga",
 	};
 	char current_folder[256];
 	char current_texture[256];
+	int current_texture_count = ANIMATIONS_START_TEXTURE;
 
+	// unload all the animations
+	for (int count=0; count<=16; count++){
+	    animation[count].loaded = 2;
+	}
+	numofanimations = ANIMATIONS_START_TEXTURE;
+
+	// load all existing textures
 	for (int foldercount = 0; foldercount < 8; foldercount++)
 	for (int extensioncount = 0; extensioncount < 2; extensioncount++){
 		strcpy(current_folder, folders[foldercount]);
@@ -622,11 +631,19 @@ void look_for_texture_in_folders(int texturenum){
             numoftextures++;
         for (int count=0;count<numoftextures;count++){
 			sprintf(current_texture, "%s/%s", folders[foldercount], texturelist[count]);
-            loadtexture(EDITBLOCK_TEXTURE, texturelist[count],0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-            if(texturecmp(texturenum, EDITBLOCK_TEXTURE) == 0){ // same texture
-                strcpy(texture[texturenum].filename, texturelist[count]);
-                texture[texturenum].filename[255] = '\0'; /* Safety first! */
-            }
+			assert(current_texture_count < 2048);
+            loadtexture(current_texture_count, texturelist[count],0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
+			current_texture_count++;
         }
+	}
+	return current_texture_count - ANIMATIONS_START_TEXTURE;
+}
+
+void look_for_texture_in_folders(int texturenum, int numofloadedtextures){
+	for (int count = 0; count<numofloadedtextures; count++)
+	if(texturecmp(texturenum, ANIMATIONS_START_TEXTURE+count) == 0){ // same texture
+        strcpy(texture[texturenum].filename, texture[ANIMATIONS_START_TEXTURE+count].filename);
+        texture[texturenum].filename[255] = '\0'; /* Safety first! */
+		return;
 	}
 }

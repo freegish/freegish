@@ -166,6 +166,7 @@ void savelevel(char *filename)
   int version;
   FILE *fp;
   char path[PATH_MAX];
+  int numofloadedtextures = 0;
 
   for (count=0;count<256;count++)
     textureused[count]=0;
@@ -251,10 +252,12 @@ void savelevel(char *filename)
         {
           if (debug_level_saveload) printf("Saving %i as ", count);
 
-          /*if (texture[count].filename[0] == 0){
+          if (texture[count].filename[0] == 0){
               // look for the texture in some folders
-              look_for_texture_in_folders(count);
-          }*/
+              if (numofloadedtextures == 0) // didn't load textures yet
+                  numofloadedtextures = load_all_textures();
+              look_for_texture_in_folders(count, numofloadedtextures);
+          }
 
 		  if (texture[count].filename[0] != 0)
 		  {
