@@ -387,68 +387,41 @@ void objectanimation(void)
     }
   }
 
+loadanimationpart(char* animationpartfilename, int animationpart[2], int animationlength){
+    char filename[32] = "bibatk01.png";
+    animationpart[0]=numofanimations;
+    animationpart[1]=animationlength;
+    strcpy(filename,animationpartfilename);
+    for (int count=1;count<=animationpart[1];count++){
+        filename[6]=48+(count/10)%10;
+        filename[7]=48+count%10;
+        loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
+        numofanimations++;
+    }
+}
+
 void loadanimation(int animationnum, char* standname, char* walkname, char* attackname, char* diename, int head_needed, char* headname){
-    int count;
     char filename[32]="bibatk01.png";
     if (animation[animationnum].loaded==2)
         {
         animation[animationnum].loaded=1;
 
-        animation[animationnum].stand[0]=numofanimations;
-        animation[animationnum].stand[1]=6;
-        strcpy(filename,standname);
-        for (count=1;count<=animation[animationnum].stand[1];count++)
-          {
-          filename[6]=48+(count/10)%10;
-          filename[7]=48+count%10;
-          loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-          numofanimations++;
-          }
-
-        animation[animationnum].walk[0]=numofanimations;
-        animation[animationnum].walk[1]=9;
-        strcpy(filename,walkname);
-        for (count=1;count<=animation[animationnum].walk[1];count++)
-          {
-          filename[6]=48+(count/10)%10;
-          filename[7]=48+count%10;
-          loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-          numofanimations++;
-          }
-
-        animation[animationnum].attack[0]=numofanimations;
-        animation[animationnum].attack[1]=9;
-        strcpy(filename,attackname);
-        for (count=1;count<=animation[animationnum].attack[1];count++)
-          {
-          filename[6]=48+(count/10)%10;
-          filename[7]=48+count%10;
-          loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-          numofanimations++;
-          }
-
-        animation[animationnum].die[0]=numofanimations;
-        animation[animationnum].die[1]=9;
-        strcpy(filename,diename);
-        for (count=1;count<=animation[animationnum].die[1];count++)
-          {
-          filename[6]=48+(count/10)%10;
-          filename[7]=48+count%10;
-          loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-          numofanimations++;
-          }
+        loadanimationpart(standname, animation[animationnum].stand, 6);
+        loadanimationpart(walkname, animation[animationnum].walk, 9);
+        loadanimationpart(attackname, animation[animationnum].attack, 9);
+        loadanimationpart(diename, animation[animationnum].die, 9);
 
         if (head_needed){
             animationnum+=32;
 
             strcpy(filename, headname);
 
-            filename[7] = 48 + 1;
+            filename[7] = 48 + 1; // "mumhed00.png" -> "mumhed01.png"
             animation[animationnum].stand[0]=numofanimations;
             loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
             numofanimations++;
 
-            filename[7] = 48 + 2;
+            filename[7] = 48 + 2; // "mumhed00.png" -> "mumhed02.png"
             animation[animationnum].walk[0]=numofanimations;
             loadtexture(numofanimations,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
             numofanimations++;
