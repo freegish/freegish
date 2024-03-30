@@ -459,12 +459,12 @@ void gameloop(void)
 
     if (game.oldschool==1)// || game.oldschool==3)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,256,256,0);
       }
     if (game.oldschool==2)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,128,128,0);
       }
 
@@ -473,9 +473,9 @@ void gameloop(void)
       setuptextdisplay();
   
       if (game.oldschool==1)// || game.oldschool==3)
-        glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       if (game.oldschool==2)
-        glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
   
       glBegin(GL_QUADS);
     
