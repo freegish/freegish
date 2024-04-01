@@ -41,6 +41,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../menu/menu.h"
 #include "../physics/particle.h"
 #include "../video/text.h"
+#include "../math/vector.h"
+
+#include "../game/debug.h"
 
 void gamelogic(void)
   {
@@ -53,14 +56,22 @@ void gamelogic(void)
 
   if (level.gametype<GAMETYPE_2FOOTBALL)
     {
-    if (view.position[0]<object[0].position[0]-2.0f)
-      view.position[0]=object[0].position[0]-2.0f;
-    if (view.position[0]>object[0].position[0]+2.0f)
-      view.position[0]=object[0].position[0]+2.0f;
-    if (view.position[1]<object[0].position[1]-1.5f)
-      view.position[1]=object[0].position[1]-1.5f;
-    if (view.position[1]>object[0].position[1]+1.5f)
-      view.position[1]=object[0].position[1]+1.5f;
+      float midpoint[3];
+      float sub_result[3];
+      float distance_to_midpoint = 0.0f;
+      zerovector(midpoint);
+
+      for (int i = 0; i < game.numofplayers; i++)
+          addvectors(midpoint, midpoint, object[i].position);
+      scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
+    if (view.position[0]< midpoint[0]-2.0f)
+      view.position[0]= midpoint[0]-2.0f;
+    if (view.position[0]> midpoint[0]+2.0f)
+      view.position[0]= midpoint[0]+2.0f;
+    if (view.position[1]< midpoint[1]-1.5f)
+      view.position[1]= midpoint[1]-1.5f;
+    if (view.position[1]> midpoint[1]+1.5f)
+      view.position[1]= midpoint[1]+1.5f;
 
     if (game.oldschool==1)
       view.position[1]=131.5f;
@@ -161,66 +172,68 @@ void gamelogic(void)
       game.combodelay=0;
       }
 
-    if (object[0].hitpoints<=0)
-      {
-      object[0].hitpoints=0;
-      game.over=1;
-      if (game.levelnum==65)
-        playsound(24,object[0].position,NULL,1.0f,0,1.0f,-1,0);
-      }
+    for (int player = 0; player < game.numofplayers; player++) {
+        if (object[player].hitpoints <= 0)
+        {
+            object[player].hitpoints = 0;
+            game.over = 1;
+            if (game.levelnum == 65)
+                playsound(24, object[player].position, NULL, 1.0f, 0, 1.0f, -1, 0);
+        }
 
-    if (object[0].position[0]>=level.area[0][0] && object[0].position[0]<level.area[0][2])
-    if (object[0].position[1]>=level.area[0][1] && object[0].position[1]<level.area[0][3])
-      game.over=2;
+        if (object[player].position[0] >= level.area[0][0] && object[player].position[0] < level.area[0][2])
+        if (object[player].position[1] >= level.area[0][1] && object[player].position[1] < level.area[0][3])
+        game.over = 2;
 
-    if (game.levelnum==34)
-    if (object[2].position[0]>=level.area[1][0] && object[2].position[0]<level.area[1][2])
-    if (object[2].position[1]>=level.area[1][1] && object[2].position[1]<level.area[1][3])
-      game.over=2;
-    if (game.levelnum==34)
-    if (object[2].position[0]>=level.area[2][0] && object[2].position[0]<level.area[2][2])
-    if (object[2].position[1]>=level.area[2][1] && object[2].position[1]<level.area[2][3])
-      game.over=3;
+        if (game.levelnum == 34)
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[1][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[1][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[1][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[1][3])
+        game.over = 2;
+        if (game.levelnum == 34)
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[2][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[2][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[2][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[2][3])
+        game.over = 3;
 
-    if (game.levelnum==3)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 3)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==4)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 4)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==8)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 8)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==18)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 18)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==25)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 25)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==64)
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
-      game.over=3;
+        if (game.levelnum == 64)
+        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
+        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        game.over = 3;
 
-    if (game.levelnum==64)
-    if (object[0].position[0]>=level.area[2][0] && object[0].position[0]<level.area[2][2])
-    if (object[0].position[1]>=level.area[2][1] && object[0].position[1]<level.area[2][3])
-      game.over=4;
+        if (game.levelnum == 64)
+        if (object[player].position[0] >= level.area[2][0] && object[player].position[0] < level.area[2][2])
+        if (object[player].position[1] >= level.area[2][1] && object[player].position[1] < level.area[2][3])
+        game.over = 4;
 
-    if (game.levelnum==64)
-    if (object[0].position[0]>=level.area[3][0] && object[0].position[0]<level.area[3][2])
-    if (object[0].position[1]>=level.area[3][1] && object[0].position[1]<level.area[3][3])
-      game.over=5;
+        if (game.levelnum == 64)
+        if (object[player].position[0] >= level.area[3][0] && object[player].position[0] < level.area[3][2])
+        if (object[player].position[1] >= level.area[3][1] && object[player].position[1] < level.area[3][3])
+        game.over = 5;
+    }
 
     if (game.over==0)
     if (game.bosslevel)
@@ -228,7 +241,7 @@ void gamelogic(void)
       {
       game.over=2;
       for (count=0;count<numofobjects;count++)
-        if (object[count].type==4)
+        if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
           game.over=0;
       if (numofbosses>0)
         game.over=0;
@@ -239,9 +252,10 @@ void gamelogic(void)
   if (level.gametype==GAMETYPE_COLLECTION)
   if (game.startdelay==0)
     {
-    if (object[0].hitpoints<=0)
+    for (int player = 0; player < game.numofplayers; player++)
+    if (object[player].hitpoints<=0)
       {
-      object[0].hitpoints=0;
+      object[player].hitpoints=0;
       game.over=1;
       }
     game.time--;
@@ -266,7 +280,7 @@ void gamelogic(void)
         createamber(vec);
         }
       for (count=0;count<numofobjects;count++)
-      if (object[count].type==6)
+      if (object[count].type==OBJ_TYPE_AMBER)
       if (object[count].position[1]<122.0f)
       if (object[count].timetolive>25)
         object[count].timetolive=25;
@@ -421,7 +435,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=0.0f;
             object[count].lightcolor[1]=1.0f;
@@ -435,7 +449,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=1.0f;
             object[count].lightcolor[1]=1.0f;
@@ -449,7 +463,7 @@ void gamelogic(void)
         {
         for (count=0;count<numofobjects;count++)
           {
-          if (object[count].lighttype==2)
+          if (object[count].lighttype==LIGHT_DEFAULT_OFF)
             {
             object[count].lightcolor[0]=1.0f;
             object[count].lightcolor[1]=0.0f;
@@ -634,21 +648,55 @@ void gamedisplay(void)
         }
       }
     }
-  if (level.gametype==GAMETYPE_CAMPAIGN || level.gametype==GAMETYPE_COLLECTION)
-    {
-    drawbackground(720,16,0,48,48,640,480);
+  if (level.gametype == GAMETYPE_CAMPAIGN || level.gametype == GAMETYPE_COLLECTION)
+  {
+      drawbackground(720, 16, 0, 48, 48, 640, 480);
 
-    red=1.0f;
-    green=(float)(object[0].hitpoints)/500.0f;
-    if (green>1.0f)
-      green=1.0f;
-    blue=(float)(object[0].hitpoints-500)/500.0f;
-    if (blue<0.0f)
-      blue=0.0f;
-    if (blue>1.0f)
-      blue=1.0f;
-    drawtext("/i",0,0,0,red,green,blue,1.0f,object[0].hitpoints/10);
-    drawtextbitmap(64,12,24,24);
+      for (int player = 0; player < game.numofplayers; player++) {
+          red = 1.0f;
+          green = (float)(object[player].hitpoints) / 500.0f;
+          if (green > 1.0f)
+              green = 1.0f;
+          blue = (float)(object[player].hitpoints - 500) / 500.0f;
+          if (blue < 0.0f)
+              blue = 0.0f;
+          if (blue > 1.0f)
+              blue = 1.0f;
+          drawtext("/i", 0, 0, 0, red, green, blue, 1.0f, object[player].hitpoints / 10);
+          drawtextbitmap(64, 12 + 16 * player, 24, 24);
+      }
+
+    if (debug_character_positions) {
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, object[0].position[0]);
+        drawtextbitmap(64, 12 + 16, 24, 24);
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, object[0].position[1]);
+        drawtextbitmap(64, 12 + 16 * 2, 24, 24);
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, object[1].position[0]);
+        drawtextbitmap(64, 12 + 16 * 3, 24, 24);
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, object[1].position[1]);
+        drawtextbitmap(64, 12 + 16 * 4, 24, 24);
+
+        float midpoint[3];
+        float sub_result[3];
+        float distance_to_midpoint = 0.0f;
+        zerovector(midpoint);
+
+        for (int i = 0; i < game.numofplayers; i++)
+            addvectors(midpoint, midpoint, object[i].position);
+        scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
+
+        for (int i = 0; i < game.numofplayers; i++) {
+            subtractvectors(sub_result, midpoint, object[i].position);
+            distance_to_midpoint += vectorlength(sub_result);
+        }
+
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, midpoint[0]);
+        drawtextbitmap(355, 12 + 16 * 1, 24, 24);
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, midpoint[1]);
+        drawtextbitmap(355, 12 + 16 * 2, 24, 24);
+        drawtext("/f", 0, 0, 0, red, green, blue, 1.0f, distance_to_midpoint);
+        drawtextbitmap(355, 12 + 16 * 3, 24, 24);
+    }
     glColor3f(1.0f,1.0f,1.0f);
 
     //drawtext("/i",(40|TEXT_CENTER),24,16,1.0f,1.0f,1.0f,1.0f,object[0].hitpoints/10);

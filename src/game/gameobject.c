@@ -33,6 +33,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../physics/bond.h"
 #include "../physics/particle.h"
 
+const char* LVL_OBJ_NAMES[] = {
+    "NOTHING",
+    "GISH",
+    "BOX",
+    "MIDDLE_FIXED_BOX",
+    "LEFT_FIXED_BOX_OR_CAR",
+    "RIGHT_FIXED_BOX",
+    "WHEEL",
+    "ANCHORED_WHEEL",
+    "LIGHT_OR_ANCHOR",
+    "BUTTON",
+    "ONE_TIME_BUTTON",
+    "SWITCH_UP",
+    "SWITCH_RIGHT",
+    "SWITCH_DOWN",
+    "SWITCH_LEFT",
+    "AREASWITCH",
+    "ONE_TIME_AREASWITCH",
+    "GENERATOR",
+    "SECRET_AREASWITCH",
+};
+
+extern const char* ROPE_TYPE_NAMES[] = {
+    "NOTHING",
+    "WEAK_ROPE",
+    "STRONG_ROPE",
+    "WEAK_CHAIN",
+    "STRONG_CHAIN",
+    "PUSHING_PISTON",
+    "HALF_PUSHED_PUSHING_PISTON",
+    "PULLING_PISTON",
+    "HALF_PULLED_PULLING_PISTON",
+    "BAR",
+    "SPRING",
+};
+
 int numofobjects;
 _object object[512];
 _objecttype objecttype[128];
@@ -47,7 +83,7 @@ void createbox(float position[3],float sizex,float sizey,float mass,float fricti
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=2;
+  object[numofobjects].type=OBJ_TYPE_BOX;
   object[numofobjects].timetolive=10000;
   object[numofobjects].mass=mass;
 
@@ -135,7 +171,7 @@ void createtarboy(float position[3])
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=1;
+  object[numofobjects].type=OBJ_TYPE_GISH;
   object[numofobjects].timetolive=10000;
   object[numofobjects].radius=1.5f;
 
@@ -155,7 +191,7 @@ void createtarboy(float position[3])
     size=0.9f;
     if (game.supersize)
       size=0.9f*1.25f;
-    if (game.difficulty==4)
+    if (game.difficulty==DIFFICULTY_MINI_GISH)
       size=0.9f*0.8f;
     vec[0]=position[0]+cos(angle)*size;
     vec[1]=position[1]-sin(angle)*size;
@@ -196,7 +232,7 @@ void createwheel(float position[3],float sizex,float sizey,float mass,float fric
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=3;
+  object[numofobjects].type=OBJ_TYPE_WHEEL;
   object[numofobjects].timetolive=10000;
   if (sizex>=sizey)
     object[numofobjects].radius=sizex*1.25f;
@@ -256,6 +292,7 @@ void createwheel(float position[3],float sizex,float sizey,float mass,float fric
 
 void setupobjecttypes(void)
   {
+    // TODO: change these hardcoded types to gameobject_types
   int count;
 
   count=1;
@@ -365,15 +402,15 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
   float vec[3],vec2[3];
   float mass;
 
-  if (type<5)
+  if (type<PUSHING_PISTON)
     {
-    if (type==1)
+    if (type==WEAK_ROPE)
       mass=0.125f;
-    if (type==2)
+    if (type==STRONG_ROPE)
       mass=0.25f;
-    if (type==3)
+    if (type==WEAK_CHAIN)
       mass=1.0f;
-    if (type==4)
+    if (type==STRONG_CHAIN)
       mass=2.0f;
 
     subtractvectors(vec,particle[particlenum2].position,particle[particlenum].position);
@@ -390,7 +427,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].type=type;
     rope[numofropes].part1=particlenum;
     rope[numofropes].part2=numofparticles-1;
-    if (type<3)
+    if (type<WEAK_CHAIN)
       rope[numofropes].texturenum=360;
     else
       rope[numofropes].texturenum=361;
@@ -404,7 +441,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
       rope[numofropes].type=type;
       rope[numofropes].part1=numofparticles-2;
       rope[numofropes].part2=numofparticles-1;
-      if (type<3)
+      if (type<WEAK_CHAIN)
         rope[numofropes].texturenum=360;
       else
         rope[numofropes].texturenum=361;
@@ -414,7 +451,7 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].type=type;
     rope[numofropes].part1=numofparticles-1;
     rope[numofropes].part2=particlenum2;
-    if (type<3)
+    if (type<WEAK_CHAIN)
       rope[numofropes].texturenum=360;
     else
       rope[numofropes].texturenum=361;
@@ -427,20 +464,20 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     else
       createbond(particlenum,particlenum2,8,numofropes);
 
-    if (type<9)
+    if (type<BAR)
       {
-      if (level.object[objectnum2].type==6 || level.object[objectnum2].type==7)
+      if (object[objectnum2].type==OBJ_TYPE_WHEEL)
         {
-        subtractvectors(vec,level.object[objectnum2].position,particle[particlenum].position);
+        subtractvectors(vec,object[objectnum2].position,particle[particlenum].position);
         subtractvectors(vec2,particle[particlenum2].position,object[objectnum2].position);
         rope[numofropes].range=vectorlength(vec2);
   
         bond[numofbonds-1].length=vectorlength(vec)-rope[numofropes].range;
         bond[numofbonds-1].maxlength=vectorlength(vec)-rope[numofropes].range;
         }
-      if (level.object[objectnum2].type>=2 && level.object[objectnum2].type<6)
+      if (object[objectnum2].type>=OBJ_TYPE_BOX && object[objectnum2].type<OBJ_TYPE_WHEEL)
         {
-        subtractvectors(vec2,level.object[objectnum2].position,object[objectnum].position);
+        subtractvectors(vec2,object[objectnum2].position,object[objectnum].position);
         subtractvectors(vec,particle[particlenum2].position,particle[particlenum].position);
   
         if (fabs(vec2[0])>fabs(vec2[1]))
@@ -450,21 +487,21 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
   
         normalizevector(vec,vec);
   
-        if (type==5 || type==9)
+        if (type==PUSHING_PISTON || type==BAR)
           copyvector(vec2,particle[particlenum2].position);
-        if (type==6 || type==8)
-          scaleaddvectors(vec2,particle[particlenum2].position,vec,-level.object[objectnum].lightcolor[0]*0.5f);
-        if (type==7)
-          scaleaddvectors(vec2,particle[particlenum2].position,vec,-level.object[objectnum].lightcolor[0]);
+        if (type==HALF_PUSHED_PUSHING_PISTON || type==HALF_PULLED_PULLING_PISTON)
+          scaleaddvectors(vec2,particle[particlenum2].position,vec,-object[objectnum].lightcolor[0]*0.5f);
+        if (type==PULLING_PISTON)
+          scaleaddvectors(vec2,particle[particlenum2].position,vec,-object[objectnum].lightcolor[0]);
         subtractvectors(vec2,particle[particlenum].position,vec2);
         bond[numofbonds-1].length=vectorlength(vec2);
         bond[numofbonds-1].maxlength=vectorlength(vec2);
   
-        if (type==5)
-          scaleaddvectors(vec2,particle[particlenum2].position,vec,level.object[objectnum].lightcolor[0]);
-        if (type==6 || type==8)
-          scaleaddvectors(vec2,particle[particlenum2].position,vec,level.object[objectnum].lightcolor[0]*0.5f);
-        if (type==7 || type==9)
+        if (type==PUSHING_PISTON)
+          scaleaddvectors(vec2,particle[particlenum2].position,vec,object[objectnum].lightcolor[0]);
+        if (type==HALF_PUSHED_PUSHING_PISTON || type==HALF_PULLED_PULLING_PISTON)
+          scaleaddvectors(vec2,particle[particlenum2].position,vec,object[objectnum].lightcolor[0]*0.5f);
+        if (type==PULLING_PISTON || type==BAR)
           copyvector(vec2,particle[particlenum2].position);
         subtractvectors(vec2,particle[particlenum].position,vec2);
         rope[numofropes].range=(vectorlength(vec2)-bond[numofbonds-1].maxlength)*0.5f;
@@ -475,19 +512,19 @@ void createrope(int type,int particlenum,int particlenum2,int objectnum,int obje
     rope[numofropes].part1=particlenum;
     rope[numofropes].part2=particlenum2;
     rope[numofropes].bondnum=numofbonds-1;
-    if (type==5)
+    if (type==PUSHING_PISTON)
       rope[numofropes].angle=0.0f;
-    if (type==6)
+    if (type==HALF_PUSHED_PUSHING_PISTON)
       rope[numofropes].angle=pi/2.0f;
-    if (type==7)
+    if (type==PULLING_PISTON)
       rope[numofropes].angle=pi;
-    if (type==8)
+    if (type==HALF_PULLED_PULLING_PISTON)
       rope[numofropes].angle=3.0f*pi/2.0f;
 
-    rope[numofropes].cycle=level.object[objectnum].lightcolor[1];
-    rope[numofropes].cyclelength=level.object[objectnum].lightcolor[2];
+    rope[numofropes].cycle=object[objectnum].lightcolor[1];
+    rope[numofropes].cyclelength=object[objectnum].lightcolor[2];
     rope[numofropes].cyclecount=0.0f;
-    rope[numofropes].link=level.object[objectnum].link;
+    rope[numofropes].link=object[objectnum].link;
     if (texturenum==0)
       rope[numofropes].texturenum=0;
     if (texturenum==1)
@@ -508,7 +545,7 @@ void createanchor(float position[3])
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=8;
+  object[numofobjects].type=OBJ_TYPE_ANCHOR;
   object[numofobjects].timetolive=10000;
 
   object[numofobjects].radius=1.0f;
@@ -540,7 +577,7 @@ void createbutton(float position[3],float mass)
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=9;
+  object[numofobjects].type=OBJ_TYPE_BUTTON;
   object[numofobjects].timetolive=10000;
 
   object[numofobjects].friction=0.3f;
@@ -657,7 +694,7 @@ void createswitch(float position[3],float mass,int rotate)
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=10;
+  object[numofobjects].type=OBJ_TYPE_SWITCH;
   object[numofobjects].timetolive=10000;
 
   object[numofobjects].radius=1.5f;
@@ -758,7 +795,7 @@ void createbeast(int beasttype,float position[3],float sizex,float sizey,float m
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=4;
+  object[numofobjects].type=OBJ_TYPE_BEAST_OR_BOBBLE;
   object[numofobjects].timetolive=10000;
 
   object[numofobjects].beasttype=beasttype;
@@ -851,7 +888,7 @@ void createbobble(int beasttype,float position[3],float sizex,float sizey,float 
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=4;
+  object[numofobjects].type=OBJ_TYPE_BEAST_OR_BOBBLE;
   object[numofobjects].timetolive=10000;
   object[numofobjects].mass=mass;
 
@@ -961,7 +998,7 @@ void createhead(float position[3],float sizex,float sizey,float mass,float frict
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=5;
+  object[numofobjects].type=OBJ_TYPE_HEAD;
   object[numofobjects].timetolive=10000;
   if (sizex>=sizey)
     object[numofobjects].radius=sizex*1.25f;
@@ -1018,7 +1055,7 @@ void createamber(float position[3])
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=6;
+  object[numofobjects].type=OBJ_TYPE_AMBER;
   object[numofobjects].timetolive=10000;
   object[numofobjects].radius=1.0f;
   object[numofobjects].texturenum=369;
@@ -1065,7 +1102,7 @@ void createareaswitch(float position[3],float sizex,float sizey)
   {
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=16;
+  object[numofobjects].type=OBJ_TYPE_AREASWITCH;
   object[numofobjects].timetolive=10000;
   copyvector(object[numofobjects].position,position);
   object[numofobjects].size[0]=sizex;
@@ -1083,7 +1120,7 @@ void creategenerator(float position[3],float mass)
   {
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=15;
+  object[numofobjects].type=OBJ_TYPE_GENERATOR;
   object[numofobjects].timetolive=10000;
   object[numofobjects].mass=mass;
   copyvector(object[numofobjects].position,position);
@@ -1168,13 +1205,13 @@ void deleterope(int ropenum)
   if (ropenum>=numofropes)
     return;
 
-  if (rope[ropenum].type==1)
+  if (rope[ropenum].type==WEAK_ROPE)
     playsound(3,particle[rope[ropenum].part1].position,NULL,1.0f,0,1.0f,-1,0);
-  if (rope[ropenum].type==2)
+  if (rope[ropenum].type==STRONG_ROPE)
     playsound(3,particle[rope[ropenum].part1].position,NULL,1.0f,0,0.75f,-1,0);
-  if (rope[ropenum].type==3)
+  if (rope[ropenum].type==WEAK_CHAIN)
     playsound(4,particle[rope[ropenum].part1].position,NULL,1.0f,0,1.0f,-1,0);
-  if (rope[ropenum].type==4)
+  if (rope[ropenum].type==STRONG_CHAIN)
     playsound(4,particle[rope[ropenum].part1].position,NULL,1.0f,0,0.75f,-1,0);
 
   numofropes--;
@@ -1217,7 +1254,7 @@ void createcar(float position[3],float sizex,float sizey,float mass,float fricti
 
   memset(&object[numofobjects],0,sizeof(object[numofobjects]));
 
-  object[numofobjects].type=20;
+  object[numofobjects].type=OBJ_TYPE_CAR;
   object[numofobjects].timetolive=10000;
   object[numofobjects].mass=mass;
 

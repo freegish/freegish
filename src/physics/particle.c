@@ -137,7 +137,7 @@ void particlesimulation(void)
       scale=scale*0.5f*block[blocknum].density/particle[count].mass;
       if (scale>6.0f)
         scale=6.0f;
-      if (level.gametype!=16)
+      if (level.gametype!=GAMETYPE_2RACING)
         particle[count].velocity[1]+=particle[count].gravity*scale;
       }
     else

@@ -210,10 +210,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //mainmenu.c
 #define TXT_LOADING											"Loading..."
-#define TXT_TURBO_EDITION								"Turbo Edition"
-#define TXT_COPYRIGHT                   "Gish (c) 2007 Cryptic Sea"
-#define TXT_EXIT												"Exit"
-#define TXT_START												"Start"
+#define TXT_TURBO_EDITION								    "Turbo Edition"
+#define TXT_NUMOFPLAYERS                                    "Number of campaign players:"
+#define TXT_COPYRIGHT                                       "Gish (c) 2007 Cryptic Sea"
+#define TXT_EXIT											"Exit"
+#define TXT_START											"Start"
 #define TXT_VERSUS											"Versus"
 #define TXT_OPTIONS											"Options"
 #define TXT_CREDITS											"Credits"
@@ -325,7 +326,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_ENDING_BAD_LINE13						"who she was..."
 
 #define TXT_NEW_VS_MODE									"New Vs. Mode Unlocked"
-#define TXT_NEW_VS_LEVEL								"New Vs. Levels Unlocked"
+#define TXT_NEW_VS_LEVEL								"New Vs. Levels and difficulty Unlocked"
 #define TXT_MINI_GISH_MODE							"Mini Gish Mode Unlocked"
 
 //high.c
@@ -342,6 +343,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_OBJECTS											"OBJECTS"
 #define TXT_ROPES												"ROPES"
 #define TXT_LINK												"LINK"
+//ropeedit.c
+#define TXT_ROPESET                                         "ROPESET"
 //options.c
 #define TXT_VIDEOOPTIONS								"Video Options"
 #define TXT_NONE												"None"

@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/objedit.h"
 #include "../game/animation.h"
 #include "../game/editor.h"
+#include "../game/gameobject.h"
 #include "../game/english.h"
 #include "../game/game.h"
 #include "../game/level.h"
@@ -102,11 +103,7 @@ void editlevelobjects(void)
     checkmouse();
     checkmenuitems();
 
-    view.zoom=10.0f;
-    if (keyboard[SCAN_EQUALS])
-      view.zoom=20.0f;
-    if (keyboard[SCAN_MINUS])
-      view.zoom=5.0f;
+    zoom_view();
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -130,16 +127,32 @@ void editlevelobjects(void)
 
     setuptextdisplay();
 
-    drawtext(TXT_OBJECTSET":/i",0,352,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype);
-    drawtext(TXT_OBJECTNUM":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
-    if (editor.objectnum!=-1)
-      drawtext(TXT_OBJECTYPE":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type);
-    drawtext(TXT_OBJECTS":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
-    drawtext(TXT_ROPES":/i",0,416,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
-    if (editor.objectnum!=-1)
-      {
-      drawtext(TXT_LINK":/i",0,432,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
-      }
+    int INFO_Y = 352;
+    int OFFSET_Y = 16;
+
+    // draw level information
+    drawtext(TXT_OBJECTS":/i",0,INFO_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofobjects);
+    drawtext(TXT_ROPES":/i",0,INFO_Y+OFFSET_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
+
+    // draw object type that will be created on lmb
+    if (editor.objecttype<19)
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
+    else if (editor.objecttype == 19)
+        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+    else
+        drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
+
+    // draw stuff related to the picked object
+    if (editor.objectnum!=-1){
+      drawtext(TXT_OBJECTNUM":/i",0,INFO_Y+OFFSET_Y*3,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
+      if (level.object[editor.objectnum].type<19)
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
+      else if (level.object[editor.objectnum].type == 19)
+          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
+      else
+          drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
+      drawtext(TXT_LINK":/i",0,INFO_Y+OFFSET_Y*5,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
+    }
 
     drawmenuitems();
 
@@ -149,8 +162,9 @@ void editlevelobjects(void)
 
     if (mouse.x<512 || mouse.y>224)
       {
-      x=view.position[0]+(float)(mouse.x-320)/32.0f;
-      y=view.position[1]+(float)(240-mouse.y)/32.0f;
+      get_mouse_coords(&vec[0], &vec[1]);
+      x = (int)vec[0];
+      y = (int)vec[1];
       if (!keyboard[SCAN_K])
         {
         if (mouse.lmb && !prevmouse.lmb)
@@ -205,8 +219,7 @@ void editlevelobjects(void)
         }
       if (keyboard[SCAN_K])
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
 
         if (mouse.lmb && !prevmouse.lmb)
@@ -224,8 +237,7 @@ void editlevelobjects(void)
         }
       if (mouse.rmb && !prevmouse.rmb)
         {
-        vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-        vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+        get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
   
         editor.objectnum=-1;
@@ -237,13 +249,28 @@ void editlevelobjects(void)
             editor.objectnum=count;
           }
         }
+      if (keyboard[SCAN_E] && prevkeyboard[SCAN_E])
+        {
+        get_mouse_coords(&vec[0], &vec[1]);
+        vec[2]=0.0f;
+
+        editor.objectnum=-1;
+
+        for (count=0;count<level.numofobjects;count++)
+          {
+          subtractvectors(vec2,vec,level.object[count].position);
+          if (vectorlength(vec2)<0.5f)
+            editor.objectnum=count;
+            editor.objecttype=object[count].type;
+          }
+        }
       }
     if (!menuinputkeyboard)
       {
       if (editor.objectnum!=-1)
         {
         vec[0]=1.0f;
-        if (level.object[editor.objectnum].type==6 || level.object[editor.objectnum].type==7 || level.object[editor.objectnum].type==17)
+        if (level.object[editor.objectnum].type==LVL_OBJ_TYPE_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_ANCHORED_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_GENERATOR)
           vec[0]=0.2f;
 
         if (keyboard[SCAN_HOME] && !prevkeyboard[SCAN_HOME])
@@ -379,16 +406,7 @@ void editlevelobjects(void)
       simtimer=SDL_GetTicks()-count;
 
       if (!menuinputkeyboard)
-        {
-        if (keyboard[SCAN_W])
-          view.position[1]+=0.2f;
-        if (keyboard[SCAN_S])
-          view.position[1]-=0.2f;
-        if (keyboard[SCAN_A])
-          view.position[0]-=0.2f;
-        if (keyboard[SCAN_D])
-          view.position[0]+=0.2f;
-        }
+          pan_view();
       }
     }
 
@@ -404,7 +422,7 @@ void renderlevelobjects(void)
 
   for (count=0;count<level.numofobjects;count++)
     {
-    if (level.object[count].type==1)
+    if (level.object[count].type==LVL_OBJ_TYPE_GISH)
       {
       glDisable(GL_TEXTURE_2D);
 
@@ -433,7 +451,7 @@ void renderlevelobjects(void)
 
       glEnable(GL_TEXTURE_2D);
       }
-    if (level.object[count].type>=2 && level.object[count].type<=5)
+    if (level.object[count].type>=LVL_OBJ_TYPE_BOX && level.object[count].type<LVL_OBJ_TYPE_WHEEL)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -455,7 +473,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==6 || level.object[count].type==7 || level.object[count].type==17)
+    if (level.object[count].type==LVL_OBJ_TYPE_WHEEL || level.object[count].type==LVL_OBJ_TYPE_ANCHORED_WHEEL || level.object[count].type==LVL_OBJ_TYPE_GENERATOR)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
 
@@ -485,7 +503,7 @@ void renderlevelobjects(void)
         glEnd();
         }
       }
-    if (level.object[count].type==8)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -507,7 +525,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==9 || level.object[count].type==10)
+    if (level.object[count].type==LVL_OBJ_TYPE_BUTTON || level.object[count].type==LVL_OBJ_TYPE_ONE_TIME_BUTTON)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -529,7 +547,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type>=20 && level.object[count].type<40)
+    if (level.object[count].type>=LVL_OBJ_TYPE_MONSTER_BEGIN && level.object[count].type<40) // why 40 when monsters end at 36?
       {
       glBindTexture(GL_TEXTURE_2D,texture[animation[level.object[count].type-20].stand[0]].glname);
   
@@ -551,7 +569,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==11)
+    if (level.object[count].type==LVL_OBJ_TYPE_SWITCH_UP)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -573,7 +591,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==12)
+    if (level.object[count].type==LVL_OBJ_TYPE_SWITCH_RIGHT)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -595,7 +613,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==13)
+    if (level.object[count].type==LVL_OBJ_TYPE_SWITCH_DOWN)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -617,7 +635,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==14)
+    if (level.object[count].type==LVL_OBJ_TYPE_SWITCH_LEFT)
       {
       glBindTexture(GL_TEXTURE_2D,texture[level.object[count].texturenum+256].glname);
   
@@ -639,7 +657,7 @@ void renderlevelobjects(void)
 
       glEnd();
       }
-    if (level.object[count].type==15 || level.object[count].type==16 || level.object[count].type==18)
+    if (level.object[count].type==LVL_OBJ_TYPE_AREASWITCH || level.object[count].type==LVL_OBJ_TYPE_ONE_TIME_AREASWITCH || level.object[count].type==LVL_OBJ_TYPE_SECRET_AREASWITCH)
       {
       glDisable(GL_TEXTURE_2D);
   
@@ -706,22 +724,22 @@ void renderlevelobjects(void)
   for (count=0;count<level.numofropes;count++)
   if (level.rope[count].obj1!=-1 && level.rope[count].obj2!=-1)
     {
-    if (level.rope[count].type==1)
+    if (level.rope[count].type==WEAK_ROPE)
       glColor4f(0.75f,0.75f,0.0f,1.0f);
-    if (level.rope[count].type==2)
+    if (level.rope[count].type==STRONG_ROPE)
       glColor4f(1.0f,1.0f,0.0f,1.0f);
-    if (level.rope[count].type==3)
+    if (level.rope[count].type==WEAK_CHAIN)
       glColor4f(0.5f,0.5f,0.5f,1.0f);
-    if (level.rope[count].type==4)
+    if (level.rope[count].type==STRONG_CHAIN)
       glColor4f(0.75f,0.75f,0.75f,1.0f);
-    if (level.rope[count].type>=5 && level.rope[count].type<10)
+    if (level.rope[count].type>=PUSHING_PISTON && level.rope[count].type<10)
       glColor4f(0.75f,0.0f,0.75f,1.0f);
-    if (level.rope[count].type==10)
+    if (level.rope[count].type==SPRING)
       glColor4f(0.0f,0.75f,0.75f,1.0f);
 
     objectnum=level.rope[count].obj1;
     copyvector(vec,level.object[objectnum].position);
-    if (level.object[objectnum].type>=2 && level.object[objectnum].type<=5)
+    if (level.object[objectnum].type>=LVL_OBJ_TYPE_BOX && level.object[objectnum].type<LVL_OBJ_TYPE_WHEEL)
       {
       if (level.rope[count].obj1part==0)
         {
@@ -744,7 +762,7 @@ void renderlevelobjects(void)
         vec[1]-=level.object[objectnum].size[1]*0.5f;
         }
       }
-    if (level.object[objectnum].type>=6 && level.object[objectnum].type<=7)
+    if (level.object[objectnum].type>=LVL_OBJ_TYPE_WHEEL && level.object[objectnum].type<=LVL_OBJ_TYPE_ANCHORED_WHEEL)
       {
       if (level.rope[count].obj1part==0)
         vec[0]+=level.object[objectnum].size[0]*0.5f;
@@ -759,7 +777,7 @@ void renderlevelobjects(void)
 
     objectnum=level.rope[count].obj2;
     copyvector(vec,level.object[objectnum].position);
-    if (level.object[objectnum].type>=2 && level.object[objectnum].type<=5)
+    if (level.object[objectnum].type>=LVL_OBJ_TYPE_BOX && level.object[objectnum].type<LVL_OBJ_TYPE_WHEEL)
       {
       if (level.rope[count].obj2part==0)
         {
@@ -782,7 +800,7 @@ void renderlevelobjects(void)
         vec[1]-=level.object[objectnum].size[1]*0.5f;
         }
       }
-    if (level.object[objectnum].type>=6 && level.object[objectnum].type<=7)
+    if (level.object[objectnum].type>=LVL_OBJ_TYPE_WHEEL && level.object[objectnum].type<=LVL_OBJ_TYPE_ANCHORED_WHEEL)
       {
       if (level.rope[count].obj2part==0)
         vec[0]+=level.object[objectnum].size[0]*0.5f;

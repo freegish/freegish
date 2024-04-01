@@ -46,8 +46,11 @@ typedef enum {
         GAMETYPE_2COLLECTION = 15,
         GAMETYPE_2RACING = 16,
         GAMETYPE_4FOOTBALL = 17,
-        GAMETYPE_4SUMO = 18
+        GAMETYPE_4SUMO = 18,
 } gametype;
+
+extern int GAMETYPE_COUNT;
+extern const char* GAMETYPE_NAMES[];
 
 typedef struct
   {
