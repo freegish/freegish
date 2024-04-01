@@ -434,11 +434,14 @@ void loadanimation(int animationnum, char* standname, char* walkname, char* atta
     if (head_needed){
         animationnum+=32;
 
-        loadheadpart(&animation[animationnum].stand[0], headname, 1);
-        loadheadpart(&animation[animationnum].walk[0], headname, 2);
-        loadheadpart(&animation[animationnum].attack[0], headname, 3);
-        loadheadpart(&animation[animationnum].stand[1], headname, 4);
-        loadheadpart(&animation[animationnum].die[0], headname, 5);
+        char filename[32]="bibatk01.png";
+        strcpy(filename, headname);
+
+        loadheadpart(&animation[animationnum].stand[0], filename, 1);
+        loadheadpart(&animation[animationnum].walk[0], filename, 2);
+        loadheadpart(&animation[animationnum].attack[0], filename, 3);
+        loadheadpart(&animation[animationnum].stand[1], filename, 4);
+        loadheadpart(&animation[animationnum].die[0], filename, 5);
     }
 }
 
