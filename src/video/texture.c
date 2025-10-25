@@ -157,7 +157,7 @@ int loadtexturepng(const char *filename, unsigned int **rgba, int *width, int *h
 
 int loadtexturetga(const char *filename, unsigned int **rgba, int *width, int *height)
   {
-	bool isAlpha = FALSE;
+	bool isAlpha = false;
   int count,count2;
   int red,green,blue,alpha;
   unsigned char origin;
@@ -185,7 +185,7 @@ int loadtexturetga(const char *filename, unsigned int **rgba, int *width, int *h
   fread2(&origin,1,1,fp);
   origin=(origin>>4)&3;
 
-  isAlpha = FALSE;
+  isAlpha = false;
 
   for (count=0;count<tgaheader.imageheight;count++)
   for (count2=0;count2<tgaheader.imagewidth;count2++)
@@ -199,7 +199,7 @@ int loadtexturetga(const char *filename, unsigned int **rgba, int *width, int *h
       alpha=255;
 
     if (alpha!=255)
-      isAlpha = TRUE;
+      isAlpha = true;
 
     if (!bigendian)
       {
@@ -256,7 +256,7 @@ char * getextension(char *filename)
 bool hasextension(char *filename, const char *desiredextension)
 {
 	char * extension = getextension(filename);
-	return (extension != NULL && strcmp(extension, desiredextension) == 0) ? TRUE : FALSE;
+	return extension != NULL && strcmp(extension, desiredextension) == 0;
 }
 
 void changeextension(char *filename, const char *newextension)
