@@ -46,11 +46,13 @@ Installing Visual Studio installs the IDE, compiler and some other tools require
 
 ## vcpkg
 
-vcpkg is a package manager for C and C++ which allows the libraries used to be installed. Installation instructions can be found [https://vcpkg.io/en/getting-started.html]. This README assumes that vcpkg is installed in `C:\vcpkg`.
+vcpkg is a package manager for C and C++ which allows the libraries used to be installed. Installation instructions can be found [https://vcpkg.io/en/getting-started.html]. This README assumes that vcpkg is available on the PATH and is installed at C:\vcpkg.
 
-Then install the required package with the following command:
+Add the required packages with the following command:
 
-    C:\vcpkg\vcpkg.exe install --triplet x64-windows openal-soft libogg libvorbis libpng sdl2 opengl
+    vcpkg new --application
+    vcpkg add port --triplet x64-windows openal-soft libogg libvorbis libpng sdl2 opengl
+
 
 ## Compiling
 
