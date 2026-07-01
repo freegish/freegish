@@ -182,57 +182,57 @@ void gamelogic(void)
                 playsound(24, object[player].position, NULL, 1.0f, 0, 1.0f, -1, 0);
         }
 
-        if (object[player].position[0] >= level.area[0][0] && object[player].position[0] < level.area[0][2])
-        if (object[player].position[1] >= level.area[0][1] && object[player].position[1] < level.area[0][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WIN][0] && object[player].position[0] < level.area[LEVELAREA_WIN][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WIN][1] && object[player].position[1] < level.area[LEVELAREA_WIN][3])
         game.over = GAMEOVER_WON;
 
         if (game.levelnum == 34)
-        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[1][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[1][2])
-        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[1][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[1][3])
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[LEVELAREA_WIN_GOOD][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[LEVELAREA_WIN_GOOD][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[LEVELAREA_WIN_GOOD][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[LEVELAREA_WIN_GOOD][3])
         game.over = GAMEOVER_WON;
         if (game.levelnum == 34)
-        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[2][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[2][2])
-        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[2][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[2][3])
+        if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[LEVELAREA_WIN_BAD][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[LEVELAREA_WIN_BAD][2])
+        if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[LEVELAREA_WIN_BAD][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[LEVELAREA_WIN_BAD][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 3)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 4)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 8)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 18)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 25)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 64)
-        if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
-        if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE][3])
         game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 64)
-        if (object[player].position[0] >= level.area[2][0] && object[player].position[0] < level.area[2][2])
-        if (object[player].position[1] >= level.area[2][1] && object[player].position[1] < level.area[2][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE2][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE2][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE2][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE2][3])
         game.over = GAMEOVER_WARPZONE2;
 
         if (game.levelnum == 64)
-        if (object[player].position[0] >= level.area[3][0] && object[player].position[0] < level.area[3][2])
-        if (object[player].position[1] >= level.area[3][1] && object[player].position[1] < level.area[3][3])
+        if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE3][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE3][2])
+        if (object[player].position[1] >= level.area[LEVELAREA_WARPZONE3][1] && object[player].position[1] < level.area[LEVELAREA_WARPZONE3][3])
         game.over = GAMEOVER_WARPZONE3;
     }
 
@@ -277,7 +277,7 @@ void gamelogic(void)
         vec[0]=126.5f+(float)((rand()%15)-7);
         vec[1]=136.5f;
         vec[2]=10.0f;
-    
+
         createamber(vec);
         }
       for (count=0;count<numofobjects;count++)
@@ -302,8 +302,8 @@ void gamelogic(void)
         if (game.time<=0)
           game.over=GAMEOVER_DIED;
         }
-      if (object[2].position[0]>=level.area[0][0] && object[2].position[0]<level.area[0][2])
-      if (object[2].position[1]>=level.area[0][1] && object[2].position[1]<level.area[0][3])
+      if (object[2].position[0]>=level.area[LEVELAREA_TOUCHDOWN_GRAY][0] && object[2].position[0]<level.area[LEVELAREA_TOUCHDOWN_GRAY][2])
+      if (object[2].position[1]>=level.area[LEVELAREA_TOUCHDOWN_GRAY][1] && object[2].position[1]<level.area[LEVELAREA_TOUCHDOWN_GRAY][3])
         {
         game.score[1]+=7;
         game.scoredelay++;
@@ -311,8 +311,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[2].position[0]>=level.area[1][0] && object[2].position[0]<level.area[1][2])
-      if (object[2].position[1]>=level.area[1][1] && object[2].position[1]<level.area[1][3])
+      if (object[2].position[0]>=level.area[LEVELAREA_FIELDGOAL_GRAY][0] && object[2].position[0]<level.area[LEVELAREA_FIELDGOAL_GRAY][2])
+      if (object[2].position[1]>=level.area[LEVELAREA_FIELDGOAL_GRAY][1] && object[2].position[1]<level.area[LEVELAREA_FIELDGOAL_GRAY][3])
         {
         game.score[1]+=3;
         game.scoredelay++;
@@ -320,8 +320,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.4f,0,1.0f);
         }
-      if (object[2].position[0]>=level.area[2][0] && object[2].position[0]<level.area[2][2])
-      if (object[2].position[1]>=level.area[2][1] && object[2].position[1]<level.area[2][3])
+      if (object[2].position[0]>=level.area[LEVELAREA_TOUCHDOWN_GISH][0] && object[2].position[0]<level.area[LEVELAREA_TOUCHDOWN_GISH][2])
+      if (object[2].position[1]>=level.area[LEVELAREA_TOUCHDOWN_GISH][1] && object[2].position[1]<level.area[LEVELAREA_TOUCHDOWN_GISH][3])
         {
         game.score[0]+=7;
         game.scoredelay++;
@@ -329,8 +329,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[2].position[0]>=level.area[3][0] && object[2].position[0]<level.area[3][2])
-      if (object[2].position[1]>=level.area[3][1] && object[2].position[1]<level.area[3][3])
+      if (object[2].position[0]>=level.area[LEVELAREA_FIELDGOAL_GISH][0] && object[2].position[0]<level.area[LEVELAREA_FIELDGOAL_GISH][2])
+      if (object[2].position[1]>=level.area[LEVELAREA_FIELDGOAL_GISH][1] && object[2].position[1]<level.area[LEVELAREA_FIELDGOAL_GISH][3])
         {
         game.score[0]+=3;
         game.scoredelay++;
@@ -354,8 +354,8 @@ void gamelogic(void)
     {
     if (game.scoredelay==0)
       {
-      if (object[0].position[0]>=level.area[0][0] && object[0].position[0]<level.area[0][2])
-      if (object[0].position[1]>=level.area[0][1] && object[0].position[1]<level.area[0][3])
+      if (object[0].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[0].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[0].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[0].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
         {
         game.score[1]++;
         if (game.score[1]>=4)
@@ -365,8 +365,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[1].position[0]>=level.area[0][0] && object[1].position[0]<level.area[0][2])
-      if (object[1].position[1]>=level.area[0][1] && object[1].position[1]<level.area[0][3])
+      if (object[1].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[1].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[1].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[1].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
         {
         game.score[0]++;
         if (game.score[0]>=4)
@@ -431,8 +431,8 @@ void gamelogic(void)
     {
     if (game.scoredelay==0)
       {
-      if (object[6].position[0]>=level.area[2][0] && object[6].position[0]<level.area[2][2])
-      if (object[6].position[1]>=level.area[2][1] && object[6].position[1]<level.area[2][3])
+      if (object[6].position[0]>=level.area[LEVELAREA_DRAGSTER_GREEN][0] && object[6].position[0]<level.area[LEVELAREA_DRAGSTER_GREEN][2])
+      if (object[6].position[1]>=level.area[LEVELAREA_DRAGSTER_GREEN][1] && object[6].position[1]<level.area[LEVELAREA_DRAGSTER_GREEN][3])
         {
         for (count=0;count<numofobjects;count++)
           {
@@ -445,8 +445,8 @@ void gamelogic(void)
             }
           }
         }
-      if (object[6].position[0]>=level.area[3][0] && object[6].position[0]<level.area[3][2])
-      if (object[6].position[1]>=level.area[3][1] && object[6].position[1]<level.area[3][3])
+      if (object[6].position[0]>=level.area[LEVELAREA_DRAGSTER_YELLOW][0] && object[6].position[0]<level.area[LEVELAREA_DRAGSTER_YELLOW][2])
+      if (object[6].position[1]>=level.area[LEVELAREA_DRAGSTER_YELLOW][1] && object[6].position[1]<level.area[LEVELAREA_DRAGSTER_YELLOW][3])
         {
         for (count=0;count<numofobjects;count++)
           {
@@ -459,8 +459,8 @@ void gamelogic(void)
             }
           }
         }
-      if (object[6].position[0]>=level.area[4][0] && object[6].position[0]<level.area[4][2])
-      if (object[6].position[1]>=level.area[4][1] && object[6].position[1]<level.area[4][3])
+      if (object[6].position[0]>=level.area[LEVELAREA_DRAGSTER_RED][0] && object[6].position[0]<level.area[LEVELAREA_DRAGSTER_RED][2])
+      if (object[6].position[1]>=level.area[LEVELAREA_DRAGSTER_RED][1] && object[6].position[1]<level.area[LEVELAREA_DRAGSTER_RED][3])
         {
         for (count=0;count<numofobjects;count++)
           {
@@ -474,8 +474,8 @@ void gamelogic(void)
           }
         }
 
-      if (object[0].position[0]>=level.area[0][0] && object[0].position[0]<level.area[0][2])
-      if (object[0].position[1]>=level.area[0][1] && object[0].position[1]<level.area[0][3])
+      if (object[0].position[0]>=level.area[LEVELAREA_DRAGSTER_GISH][0] && object[0].position[0]<level.area[LEVELAREA_DRAGSTER_GISH][2])
+      if (object[0].position[1]>=level.area[LEVELAREA_DRAGSTER_GISH][1] && object[0].position[1]<level.area[LEVELAREA_DRAGSTER_GISH][3])
         {
         game.score[0]++;
         if (game.score[0]>=4)
@@ -483,8 +483,8 @@ void gamelogic(void)
         game.scoredelay++;
         strcpy(game.text,TXT_GISHWINS_ROUND);
         }
-      if (object[1].position[0]>=level.area[1][0] && object[1].position[0]<level.area[1][2])
-      if (object[1].position[1]>=level.area[1][1] && object[1].position[1]<level.area[1][3])
+      if (object[1].position[0]>=level.area[LEVELAREA_DRAGSTER_GRAY][0] && object[1].position[0]<level.area[LEVELAREA_DRAGSTER_GRAY][2])
+      if (object[1].position[1]>=level.area[LEVELAREA_DRAGSTER_GRAY][1] && object[1].position[1]<level.area[LEVELAREA_DRAGSTER_GRAY][3])
         {
         game.score[1]++;
         if (game.score[1]>=4)
@@ -525,8 +525,8 @@ void gamelogic(void)
         if (game.time<=0)
           game.over=GAMEOVER_DIED;
         }
-      if (object[4].position[0]>=level.area[0][0] && object[4].position[0]<level.area[0][2])
-      if (object[4].position[1]>=level.area[0][1] && object[4].position[1]<level.area[0][3])
+      if (object[4].position[0]>=level.area[LEVELAREA_TOUCHDOWN_GRAY][0] && object[4].position[0]<level.area[LEVELAREA_TOUCHDOWN_GRAY][2])
+      if (object[4].position[1]>=level.area[LEVELAREA_TOUCHDOWN_GRAY][1] && object[4].position[1]<level.area[LEVELAREA_TOUCHDOWN_GRAY][3])
         {
         game.score[1]+=7;
         game.scoredelay++;
@@ -534,8 +534,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[4].position[0]>=level.area[1][0] && object[4].position[0]<level.area[1][2])
-      if (object[4].position[1]>=level.area[1][1] && object[4].position[1]<level.area[1][3])
+      if (object[4].position[0]>=level.area[LEVELAREA_FIELDGOAL_GRAY][0] && object[4].position[0]<level.area[LEVELAREA_FIELDGOAL_GRAY][2])
+      if (object[4].position[1]>=level.area[LEVELAREA_FIELDGOAL_GRAY][1] && object[4].position[1]<level.area[LEVELAREA_FIELDGOAL_GRAY][3])
         {
         game.score[1]+=3;
         game.scoredelay++;
@@ -543,8 +543,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.4f,0,1.0f);
         }
-      if (object[4].position[0]>=level.area[2][0] && object[4].position[0]<level.area[2][2])
-      if (object[4].position[1]>=level.area[2][1] && object[4].position[1]<level.area[2][3])
+      if (object[4].position[0]>=level.area[LEVELAREA_TOUCHDOWN_GISH][0] && object[4].position[0]<level.area[LEVELAREA_TOUCHDOWN_GISH][2])
+      if (object[4].position[1]>=level.area[LEVELAREA_TOUCHDOWN_GISH][1] && object[4].position[1]<level.area[LEVELAREA_TOUCHDOWN_GISH][3])
         {
         game.score[0]+=7;
         game.scoredelay++;
@@ -552,8 +552,8 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[4].position[0]>=level.area[3][0] && object[4].position[0]<level.area[3][2])
-      if (object[4].position[1]>=level.area[3][1] && object[4].position[1]<level.area[3][3])
+      if (object[4].position[0]>=level.area[LEVELAREA_FIELDGOAL_GISH][0] && object[4].position[0]<level.area[LEVELAREA_FIELDGOAL_GISH][2])
+      if (object[4].position[1]>=level.area[LEVELAREA_FIELDGOAL_GISH][1] && object[4].position[1]<level.area[LEVELAREA_FIELDGOAL_GISH][3])
         {
         game.score[0]+=3;
         game.scoredelay++;
@@ -577,10 +577,10 @@ void gamelogic(void)
     {
     if (game.scoredelay==0)
       {
-      if (object[0].position[0]>=level.area[0][0] && object[0].position[0]<level.area[0][2])
-      if (object[0].position[1]>=level.area[0][1] && object[0].position[1]<level.area[0][3])
-      if (object[2].position[0]>=level.area[0][0] && object[2].position[0]<level.area[0][2])
-      if (object[2].position[1]>=level.area[0][1] && object[2].position[1]<level.area[0][3])
+      if (object[0].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[0].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[0].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[0].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
+      if (object[2].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[2].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[2].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[2].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
         {
         game.score[1]++;
         if (game.score[1]>=4)
@@ -590,10 +590,10 @@ void gamelogic(void)
 
         //playsound(6+(rand()&1),object[2].position,NULL,0.6f,0,1.0f);
         }
-      if (object[1].position[0]>=level.area[0][0] && object[1].position[0]<level.area[0][2])
-      if (object[1].position[1]>=level.area[0][1] && object[1].position[1]<level.area[0][3])
-      if (object[3].position[0]>=level.area[0][0] && object[3].position[0]<level.area[0][2])
-      if (object[3].position[1]>=level.area[0][1] && object[3].position[1]<level.area[0][3])
+      if (object[1].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[1].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[1].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[1].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
+      if (object[3].position[0]>=level.area[LEVELAREA_SUMO_DEATH][0] && object[3].position[0]<level.area[LEVELAREA_SUMO_DEATH][2])
+      if (object[3].position[1]>=level.area[LEVELAREA_SUMO_DEATH][1] && object[3].position[1]<level.area[LEVELAREA_SUMO_DEATH][3])
         {
         game.score[0]++;
         if (game.score[0]>=4)
@@ -620,7 +620,7 @@ void gamelogic(void)
     {
     //if (level.gametype==GAMETYPE_2SUMO && game.startdelay==100)
     //  playsound(8,vec,NULL,0.8f,0,1.0f);
-      
+
     game.startdelay--;
     }
   }
@@ -1365,8 +1365,8 @@ void gamedisplay(void)
     {
     keyhighlight=-1;
     keyhighlight2=-1;
-    if (object[0].position[0]>=level.area[1][0] && object[0].position[0]<level.area[1][2])
-    if (object[0].position[1]>=level.area[1][1] && object[0].position[1]<level.area[1][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_1_TO_2][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_1_TO_2][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_1_TO_2][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_1_TO_2][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE1,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_SLIDE]]);
@@ -1376,8 +1376,8 @@ void gamedisplay(void)
 
       keyhighlight=control[0].key[KEYALIAS_SLIDE];
       }
-    if (object[0].position[0]>=level.area[2][0] && object[0].position[0]<level.area[2][2])
-    if (object[0].position[1]>=level.area[2][1] && object[0].position[1]<level.area[2][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_3_TO_4][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_3_TO_4][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_3_TO_4][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_3_TO_4][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE3,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_SLIDE]]);
@@ -1385,8 +1385,8 @@ void gamedisplay(void)
       drawtext(TXT_TUTORIAL_LINE4,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
       }
-    if (object[0].position[0]>=level.area[3][0] && object[0].position[0]<level.area[3][2])
-    if (object[0].position[1]>=level.area[3][1] && object[0].position[1]<level.area[3][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_5_TO_7][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_5_TO_7][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_5_TO_7][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_5_TO_7][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE5,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_STICK]]);
@@ -1399,8 +1399,8 @@ void gamedisplay(void)
       keyhighlight=control[0].key[KEYALIAS_STICK];
       keyhighlight2=control[0].key[KEYALIAS_UP];
       }
-    if (object[0].position[0]>=level.area[4][0] && object[0].position[0]<level.area[4][2])
-    if (object[0].position[1]>=level.area[4][1] && object[0].position[1]<level.area[4][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE8,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_JUMP]]);
@@ -1424,15 +1424,15 @@ void gamedisplay(void)
           maxy=particle[object[0].particle[count]].position[1];
         }
 
-      if (maxy-miny<1.6f && maxy-level.area[4][1]<2.0f)
+      if (maxy-miny<1.6f && maxy-level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][1]<2.0f)
         keyhighlight=control[0].key[KEYALIAS_JUMP];
       if (object[0].velocity[1]>0.02f)
         keyhighlight2=control[0].key[KEYALIAS_UP];
       if (object[0].velocity[1]<-0.02f)
         keyhighlight2=control[0].key[KEYALIAS_DOWN];
       }
-    if (object[0].position[0]>=level.area[5][0] && object[0].position[0]<level.area[5][2])
-    if (object[0].position[1]>=level.area[5][1] && object[0].position[1]<level.area[5][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_13_TO_14][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_13_TO_14][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_13_TO_14][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_13_TO_14][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE13,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_HEAVY]]);
@@ -1442,8 +1442,8 @@ void gamedisplay(void)
 
       keyhighlight=control[0].key[KEYALIAS_HEAVY];
       }
-    if (object[0].position[0]>=level.area[6][0] && object[0].position[0]<level.area[6][2])
-    if (object[0].position[1]>=level.area[6][1] && object[0].position[1]<level.area[6][3])
+    if (object[0].position[0]>=level.area[LEVELAREA_TUTORIAL_LINE_15_TO_19][0] && object[0].position[0]<level.area[LEVELAREA_TUTORIAL_LINE_15_TO_19][2])
+    if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_15_TO_19][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_15_TO_19][3])
       {
       count=68;
       drawtext(TXT_TUTORIAL_LINE15,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_STICK]]);

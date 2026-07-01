@@ -343,6 +343,8 @@ void editlevel(void)
         if (editor.editstart[0]!=0 || editor.editstart[1]!=0)
           {
           count=-1;
+          // level.area reference is at game/level.h
+          // basically, 0 is win, 1 is warpzone, the rest is for tutorial text or vs gamemodes
           if (keyboard[SCAN_5])
             count=0;
           if (keyboard[SCAN_6])
