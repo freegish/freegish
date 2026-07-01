@@ -169,20 +169,20 @@ void gameloop(void)
     if (level.background[0]!=0)
       displaybackground(660);
 
-    if (game.over!=0 && level.gametype<GAMETYPE_2FOOTBALL)
+    if (game.over!=GAMEOVER_NONE && level.gametype<GAMETYPE_2FOOTBALL)
     if (game.exit==GAMEEXIT_NONE)
       {
-      if (game.over>=3 && game.over<=5)
+      if (game.over==GAMEOVER_WARPZONE || game.over == GAMEOVER_WARPZONE2 || game.over==GAMEOVER_WARPZONE3)
         {
         game.exit=GAMEEXIT_WARPZONE;
         game.exitdelay=100;
         }
-      if (game.over==2)
+      if (game.over==GAMEOVER_WON)
         {
         game.exit=GAMEEXIT_WON;
         game.exitdelay=100;
         }
-      if (game.over==1)
+      if (game.over==GAMEOVER_DIED)
         {
         game.exit=GAMEEXIT_DIED;
         game.exitdelay=100;
@@ -204,7 +204,7 @@ void gameloop(void)
       {
       count=240;
 
-      if (game.over==0)
+      if (game.over==GAMEEXIT_NONE)
         {
         createmenuitem(TXT_RETURN_TO_GAME,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
         setmenuitem(MO_HOTKEY,SCAN_ESC);
@@ -228,7 +228,7 @@ void gameloop(void)
       else
         createmenuitemempty();
 
-      if (game.over==0 && game.levelnum<64 && level.gametype==GAMETYPE_CAMPAIGN && game.levelnum>0 && !game.playreplay)
+      if (game.over==GAMEOVER_NONE && game.levelnum<64 && level.gametype==GAMETYPE_CAMPAIGN && game.levelnum>0 && !game.playreplay)
         createmenuitem(TXT_EXITGAME_MINUSONE,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
       else
         createmenuitem(TXT_EXITGAME,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);

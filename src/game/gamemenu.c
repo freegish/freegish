@@ -351,11 +351,11 @@ void pregamemenu(void)
       if (game.levelnum==64)
         {
         game.levelnum=4;
-        if (game.over==3)
+        if (game.over==GAMEOVER_WARPZONE)
           game.levelnum=22;
-        if (game.over==4)
+        if (game.over==GAMEOVER_WARPZONE2)
           game.levelnum=15;
-        if (game.over==5)
+        if (game.over==GAMEOVER_WARPZONE3)
           game.levelnum=8;
 
         goto changelevelbypass;

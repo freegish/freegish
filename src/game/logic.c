@@ -177,75 +177,75 @@ void gamelogic(void)
         if (object[player].hitpoints <= 0)
         {
             object[player].hitpoints = 0;
-            game.over = 1;
+            game.over = GAMEOVER_DIED;
             if (game.levelnum == 65)
                 playsound(24, object[player].position, NULL, 1.0f, 0, 1.0f, -1, 0);
         }
 
         if (object[player].position[0] >= level.area[0][0] && object[player].position[0] < level.area[0][2])
         if (object[player].position[1] >= level.area[0][1] && object[player].position[1] < level.area[0][3])
-        game.over = 2;
+        game.over = GAMEOVER_WON;
 
         if (game.levelnum == 34)
         if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[1][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[1][2])
         if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[1][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[1][3])
-        game.over = 2;
+        game.over = GAMEOVER_WON;
         if (game.levelnum == 34)
         if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[2][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[2][2])
         if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[2][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[2][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 3)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 4)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 8)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 18)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 25)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 64)
         if (object[player].position[0] >= level.area[1][0] && object[player].position[0] < level.area[1][2])
         if (object[player].position[1] >= level.area[1][1] && object[player].position[1] < level.area[1][3])
-        game.over = 3;
+        game.over = GAMEOVER_WARPZONE;
 
         if (game.levelnum == 64)
         if (object[player].position[0] >= level.area[2][0] && object[player].position[0] < level.area[2][2])
         if (object[player].position[1] >= level.area[2][1] && object[player].position[1] < level.area[2][3])
-        game.over = 4;
+        game.over = GAMEOVER_WARPZONE2;
 
         if (game.levelnum == 64)
         if (object[player].position[0] >= level.area[3][0] && object[player].position[0] < level.area[3][2])
         if (object[player].position[1] >= level.area[3][1] && object[player].position[1] < level.area[3][3])
-        game.over = 5;
+        game.over = GAMEOVER_WARPZONE3;
     }
 
-    if (game.over==0)
+    if (game.over==GAMEOVER_NONE)
     if (game.bosslevel)
     if (game.levelnum!=34)
       {
-      game.over=2;
+      game.over=GAMEOVER_WON;
       for (count=0;count<numofobjects;count++)
         if (object[count].type==OBJ_TYPE_BEAST_OR_BOBBLE)
-          game.over=0;
+          game.over=GAMEOVER_NONE;
       if (numofbosses>0)
-        game.over=0;
+        game.over=GAMEOVER_NONE;
       }
 
     game.time++;

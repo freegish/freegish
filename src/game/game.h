@@ -40,6 +40,15 @@ typedef enum {
 	GAMEEXIT_WARPZONE = 5
 } gameexit;
 
+typedef enum {
+	GAMEOVER_NONE = 0,
+	GAMEOVER_DIED = 1,
+	GAMEOVER_WON = 2,
+	GAMEOVER_WARPZONE = 3,
+	GAMEOVER_WARPZONE2 = 4,
+	GAMEOVER_WARPZONE3 = 5
+} gameover;
+
 typedef enum
 {
     DIFFICULTY_EASY = 0,
