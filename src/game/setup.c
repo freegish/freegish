@@ -301,7 +301,7 @@ void setupgame(void)
   game.scoredelay=0;
   game.startdelay=0;
   game.exitdelay=0;
-  game.over=0;
+  game.over=GAMEOVER_NONE;
   game.exit=GAMEEXIT_NONE;
   game.time=level.time;
   game.pause=0;

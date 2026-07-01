@@ -257,15 +257,15 @@ void gamelogic(void)
     if (object[player].hitpoints<=0)
       {
       object[player].hitpoints=0;
-      game.over=1;
+      game.over=GAMEOVER_DIED;
       }
     game.time--;
     if (game.time<=0)
-      game.over=1;
+      game.over=GAMEOVER_DIED;
     if (game.bonus[5]==game.numofbonus[5])
     if (game.bonus[6]==game.numofbonus[6])
     if (game.bonus[7]==game.numofbonus[7])
-      game.over=2;
+      game.over=GAMEOVER_WON;
     }
 
   if (level.gametype==GAMETYPE_2GREED)
@@ -288,7 +288,7 @@ void gamelogic(void)
 
       game.time--;
       if (game.time<=0)
-        game.over=1;
+        game.over=GAMEOVER_DIED;
       }
     }
 
@@ -300,7 +300,7 @@ void gamelogic(void)
         {
         game.time--;
         if (game.time<=0)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         }
       if (object[2].position[0]>=level.area[0][0] && object[2].position[0]<level.area[0][2])
       if (object[2].position[1]>=level.area[0][1] && object[2].position[1]<level.area[0][3])
@@ -359,7 +359,7 @@ void gamelogic(void)
         {
         game.score[1]++;
         if (game.score[1]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GRAYWINS_ROUND);
 
@@ -370,7 +370,7 @@ void gamelogic(void)
         {
         game.score[0]++;
         if (game.score[0]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GISHWINS_ROUND);
 
@@ -397,7 +397,7 @@ void gamelogic(void)
         object[0].hitpoints=0;
         game.score[1]++;
         if (game.score[1]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GRAYWINS_ROUND);
         }
@@ -406,7 +406,7 @@ void gamelogic(void)
         object[1].hitpoints=0;
         game.score[0]++;
         if (game.score[0]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GISHWINS_ROUND);
         }
@@ -479,7 +479,7 @@ void gamelogic(void)
         {
         game.score[0]++;
         if (game.score[0]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GISHWINS_ROUND);
         }
@@ -488,7 +488,7 @@ void gamelogic(void)
         {
         game.score[1]++;
         if (game.score[1]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GRAYWINS_ROUND);
         }
@@ -510,9 +510,9 @@ void gamelogic(void)
   if (level.gametype==GAMETYPE_2COLLECTION)
     {
     if (game.score[0]==game.numofbonus[5]/2)
-      game.over=1;
+      game.over=GAMEOVER_DIED;
     if (game.score[1]==game.numofbonus[5]/2)
-      game.over=1;
+      game.over=GAMEOVER_DIED;
     }
 
   if (level.gametype==GAMETYPE_4FOOTBALL)
@@ -523,7 +523,7 @@ void gamelogic(void)
         {
         game.time--;
         if (game.time<=0)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         }
       if (object[4].position[0]>=level.area[0][0] && object[4].position[0]<level.area[0][2])
       if (object[4].position[1]>=level.area[0][1] && object[4].position[1]<level.area[0][3])
@@ -584,7 +584,7 @@ void gamelogic(void)
         {
         game.score[1]++;
         if (game.score[1]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GRAYWINS_ROUND);
 
@@ -597,7 +597,7 @@ void gamelogic(void)
         {
         game.score[0]++;
         if (game.score[0]>=4)
-          game.over=1;
+          game.over=GAMEOVER_DIED;
         game.scoredelay++;
         strcpy(game.text,TXT_GISHWINS_ROUND);
 
@@ -633,7 +633,7 @@ void gamedisplay(void)
   float miny,maxy;
   float red,green,blue;
 
-  if (game.over==0)
+  if (game.over==GAMEOVER_NONE)
     {
     if ((level.gametype>=GAMETYPE_2FOOTBALL && level.gametype<=GAMETYPE_2DRAGSTER) || level.gametype==GAMETYPE_4FOOTBALL || level.gametype==GAMETYPE_4SUMO)
       {
@@ -1257,7 +1257,7 @@ void gamedisplay(void)
 
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
 
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1271,7 +1271,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2SUMO || level.gametype==GAMETYPE_4SUMO)
     {
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1289,7 +1289,7 @@ void gamedisplay(void)
       drawtext("/i:0/i",0,0,0,1.0f,1.0f,1.0f,1.0f,(game.time/3000),((game.time/50)%60));
 
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1333,7 +1333,7 @@ void gamedisplay(void)
       drawtext("/i:0/i",0,0,0,1.0f,1.0f,1.0f,1.0f,(game.time/3000),((game.time/50)%60));
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
     */
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1343,7 +1343,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2DRAGSTER)
     {
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1353,7 +1353,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2COLLECTION)
     {
-    if (game.over!=0)
+    if (game.over!=GAMEOVER_NONE)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
