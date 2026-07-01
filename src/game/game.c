@@ -174,7 +174,7 @@ void gameloop(void)
       {
       if (game.over>=3 && game.over<=5)
         {
-        game.exit=GAMEXIT_WARPZONE;
+        game.exit=GAMEEXIT_WARPZONE;
         game.exitdelay=100;
         }
       if (game.over==2)
@@ -256,7 +256,7 @@ void gameloop(void)
       setmenuitem(MO_RESIZE,(320|TEXT_CENTER),(240|TEXT_CENTER),256,128);
       setmenuitem(MO_SET,&game.exitdelay,0);
       }
-    if (game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WARPZONE)
       {
       if (game.levelnum!=34)
         {
@@ -520,7 +520,7 @@ void gameloop(void)
 
     setuptextdisplay();
 
-    if (game.exit==GAMEEXIT_WON || game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WON || game.exit==GAMEEXIT_WARPZONE)
       {
       glDisable(GL_TEXTURE_2D);
 
@@ -577,7 +577,7 @@ void gameloop(void)
 
     drawmenuitems();
 
-    if (game.exit==GAMEEXIT_DIED || game.exit==GAMEEXIT_WON || game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_DIED || game.exit==GAMEEXIT_WON || game.exit==GAMEEXIT_WARPZONE)
     if (game.exitdelay<20)
       {
       glDisable(GL_TEXTURE_2D);

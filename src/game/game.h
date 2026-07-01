@@ -37,7 +37,7 @@ typedef enum {
 	GAMEEXIT_EXITGAME = 2,
 	GAMEEXIT_DIED = 3,
 	GAMEEXIT_WON = 4,
-	GAMEXIT_WARPZONE = 5
+	GAMEEXIT_WARPZONE = 5
 } gameexit;
 
 typedef enum
