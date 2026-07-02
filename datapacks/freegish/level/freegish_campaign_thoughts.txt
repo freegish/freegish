@@ -24,3 +24,40 @@ Level 1. Tutorial with helper areas (!!).
 "Press the '/s' key to jump. Gish jumps best when he is" the most compressed, bouncing up and down will help you get higher and higher."
 "Press the '/s' key to break these blocks."
 "Press the '/s' key to stick to the wall.  Press the '/s' and '/s' keys to climb. If you are stuck to the floor, quickly release and then press the stick key"
+
+TODO: Introduction to physics objects (boxes)
+Introduction to moving platforms - is it needed here?
+
+
+Level 2.
+Introduction to switches
+Introduction to nibblers
+Very low platforms
+Interaction with physics objects (rolling a ball into a pit)
+
+Level 3.
+Introduction to water
+Introduction to spikes
+More wall climbing
+Ropes
+Warp secret
+
+Level 4.
+Warpzone to 4-3
+1-up in a secret
+More moving platforms
+Moving block onto a button
+Cool swing
+Slidey trapdoor
+Pulley door
+
+Level 5
+Enemy trap
+Multistage buttons
+Zombie enemy intro
+
+Level 6
+boss battle
+
+Level 7
+Cart ride
