@@ -778,8 +778,6 @@ void createlevel(void)
   loadtexture(253,"amber1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
   loadtexture(254,"amber2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
   loadtexture(255,"amber3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  editor.filename[0]=0;
   }
 
 void getlevellines(int objectnum)

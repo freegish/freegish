@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 _editor editor;
 char currentTextureFilename[256];
 
-void editlevel(void)
+void editlevel(int need_to_open_editor)
   {
   int count,count2;
   int x,y;
@@ -76,6 +76,12 @@ void editlevel(void)
     GAMETYPE_4FOOTBALL,
     GAMETYPE_4SUMO,
   };
+
+  if (need_to_open_editor && editor.filename[0]){
+    loadlevel(editor.filename);
+    setuplevel();
+    setupgame();
+  }
 
   simtimer=SDL_GetTicks();
 
