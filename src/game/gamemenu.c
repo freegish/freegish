@@ -294,7 +294,7 @@ void pregamemenu(void)
         }
 
       if (game.levelnum==34)
-      if (game.exit==GAMEEXIT_WON || game.exit==GAMEXIT_WARPZONE)
+      if (game.exit==GAMEEXIT_WON || game.exit==GAMEEXIT_WARPZONE)
         {
         game.score[0]=10000;
         if (game.levelnum==34 && game.exit==GAMEEXIT_WON)
@@ -351,11 +351,11 @@ void pregamemenu(void)
       if (game.levelnum==64)
         {
         game.levelnum=4;
-        if (game.over==3)
+        if (game.over==GAMEOVER_WARPZONE)
           game.levelnum=22;
-        if (game.over==4)
+        if (game.over==GAMEOVER_WARPZONE2)
           game.levelnum=15;
-        if (game.over==5)
+        if (game.over==GAMEOVER_WARPZONE3)
           game.levelnum=8;
 
         goto changelevelbypass;
@@ -387,7 +387,7 @@ void pregamemenu(void)
 
         goto changelevelbypass;
         }
-      if (game.exit==GAMEXIT_WARPZONE)
+      if (game.exit==GAMEEXIT_WARPZONE)
         {
         game.totalscore+=game.score[0];
 
@@ -541,7 +541,7 @@ void endingmenu(void)
       drawtext(TXT_ENDING_LINE12,64,count,14,1.0f,1.0f,1.0f,1.0f);
       count+=14;
       }
-    if (game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WARPZONE)
       {
       drawbackground(519,(320|TEXT_CENTER),48,256,128,640,480);
 
@@ -610,7 +610,7 @@ void endingmenu(void)
     glColor4f(1.0f,1.0f,1.0f,1.0f);
     displaybackground(560);
 
-    if (game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WARPZONE)
       drawbackground(256+68,288,320,96,96,640,480);
 
     drawmenuitems();
