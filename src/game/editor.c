@@ -148,6 +148,7 @@ void editlevel(void)
             if (menuitem[first_gametype_item+count].active){
                 editing_level_gametype = 0;
                 menuitem[first_gametype_item+count].active = 0;
+                level.gametype = gametypes[count];
             }
     }
 
