@@ -55,7 +55,7 @@ void checksystemmessages(void)
           windowinfo.minimized=0;
         }
       if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
-          if(game.exit==GAMEEXIT_NONE)
+          if(!game.exit)
             game.pause=1;
           windowinfo.minimized=1;
       }

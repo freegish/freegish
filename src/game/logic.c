@@ -152,7 +152,7 @@ void gamelogic(void)
       }
     }
 
-  if (game.over!=0)
+  if (game.over)
     return;
 
   if (level.gametype==GAMETYPE_CAMPAIGN)
@@ -189,11 +189,11 @@ void gamelogic(void)
         if (game.levelnum == 34)
         if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[LEVELAREA_WIN_GOOD][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[LEVELAREA_WIN_GOOD][2])
         if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[LEVELAREA_WIN_GOOD][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[LEVELAREA_WIN_GOOD][3])
-        game.over = GAMEOVER_WON;
+        game.over = GAMEOVER_WON_GOOD;
         if (game.levelnum == 34)
         if (object[2 + 2*(game.numofplayers - 1)].position[0] >= level.area[LEVELAREA_WIN_BAD][0] && object[2 + 2*(game.numofplayers - 1)].position[0] < level.area[LEVELAREA_WIN_BAD][2])
         if (object[2 + 2*(game.numofplayers - 1)].position[1] >= level.area[LEVELAREA_WIN_BAD][1] && object[2 + 2*(game.numofplayers - 1)].position[1] < level.area[LEVELAREA_WIN_BAD][3])
-        game.over = GAMEOVER_WARPZONE;
+        game.over = GAMEOVER_WON_BAD;
 
         if (game.levelnum == 3)
         if (object[player].position[0] >= level.area[LEVELAREA_WARPZONE][0] && object[player].position[0] < level.area[LEVELAREA_WARPZONE][2])
@@ -236,7 +236,7 @@ void gamelogic(void)
         game.over = GAMEOVER_WARPZONE3;
     }
 
-    if (game.over==GAMEOVER_NONE)
+    if (!game.over)
     if (game.bosslevel)
     if (game.levelnum!=34)
       {
@@ -633,7 +633,7 @@ void gamedisplay(void)
   float miny,maxy;
   float red,green,blue;
 
-  if (game.over==GAMEOVER_NONE)
+  if (!game.over)
     {
     if ((level.gametype>=GAMETYPE_2FOOTBALL && level.gametype<=GAMETYPE_2DRAGSTER) || level.gametype==GAMETYPE_4FOOTBALL || level.gametype==GAMETYPE_4SUMO)
       {
@@ -1257,7 +1257,7 @@ void gamedisplay(void)
 
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
 
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1271,7 +1271,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2SUMO || level.gametype==GAMETYPE_4SUMO)
     {
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1289,7 +1289,7 @@ void gamedisplay(void)
       drawtext("/i:0/i",0,0,0,1.0f,1.0f,1.0f,1.0f,(game.time/3000),((game.time/50)%60));
 
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1333,7 +1333,7 @@ void gamedisplay(void)
       drawtext("/i:0/i",0,0,0,1.0f,1.0f,1.0f,1.0f,(game.time/3000),((game.time/50)%60));
     drawtextbitmap((320|TEXT_CENTER),16,32,32);
     */
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1343,7 +1343,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2DRAGSTER)
     {
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
@@ -1353,7 +1353,7 @@ void gamedisplay(void)
     }
   if (level.gametype==GAMETYPE_2COLLECTION)
     {
-    if (game.over!=GAMEOVER_NONE)
+    if (game.over)
       {
       if (game.score[0]>game.score[1])
         drawbackground(820,0,480-256,512,256,640,480);
