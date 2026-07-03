@@ -62,6 +62,7 @@ void editlevel(int need_to_open_editor)
   int simtimer;
   int simcount;
   float vec[3];
+  int last_loadlevel = -1;
 
   gametype gametypes[] = {
     GAMETYPE_CAMPAIGN,
@@ -274,6 +275,26 @@ void editlevel(int need_to_open_editor)
     drawtext(TXT_TILESET":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.tileset);
     drawtext(TXT_TILE":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,editor.blocknum);
 
+    if (last_loadlevel >= 0){
+      if (last_loadlevel == LOADLEVELRESULT_OK){
+        drawtext(TXT_LOAD_LEVEL_OK,(639|TEXT_END),480-16*5,16,0.0f,1.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_UNKNOWN){
+        drawtext(TXT_LOAD_LEVEL_UNKNOWN,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_FILEERROR){
+        drawtext(TXT_LOAD_LEVEL_FILEERROR,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_OBJECTS){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_OBJECTS,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_ROPES){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_ROPES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG){
+        drawtext(TXT_LOAD_LEVEL_TEXTURE_SIZEX_TOO_BIG,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_BLOCK_LINES){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_BLOCK_LINES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else {
+        drawtext("IDK last_loadlevel = /i",(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f, last_loadlevel);
+      }
+    }
+
     // draw mouse pos
     screen_to_world(mouse.x, mouse.y, &vec[0], &vec[1]);
     x = (int)vec[0];
@@ -311,10 +332,14 @@ void editlevel(int need_to_open_editor)
         {
         if (!keyboard[SCAN_SHIFT])
           {
-          if (mouse.lmb)
+          if (mouse.lmb){
             setblock(x,y,editor.blocknum);
-          if (mouse.rmb && (editor.editstart[0]==0 && editor.editstart[1]==0))
+            last_loadlevel = -1;
+          }
+          if (mouse.rmb && (editor.editstart[0]==0 && editor.editstart[1]==0)){
             setblock(x,y,0);
+            last_loadlevel = -1;
+          }
           }
         else
           {
@@ -480,7 +505,7 @@ void editlevel(int need_to_open_editor)
       {
       if (keyboard[SCAN_F7] && !prevkeyboard[SCAN_F7])
         {
-        loadlevel(editor.filename);
+        last_loadlevel = loadlevel(editor.filename);
         setuplevel();
         setupgame();
         }

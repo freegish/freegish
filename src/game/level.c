@@ -309,7 +309,7 @@ void savelevel(char *filename)
     }
   }
 
-void loadlevel(char *filename)
+int loadlevel(char *filename)
   {
   int count,count2;
   int version = -1;
@@ -322,11 +322,11 @@ void loadlevel(char *filename)
   sprintf(filename_with_folder, "%s/%s/level/%s", datapacks_folder, loaded_datapack, filename); // MAYBE: add ability to list several datapacks and try loading them one by one
   filename_with_folder[255] = 0; // safety first
 
-  if ((fp=fopen(filename_with_folder,"rb"))!=NULL)
-    {
-    fread2(&version,4,1,fp);
+  if ((fp=fopen(filename_with_folder,"rb"))==NULL) return LOADLEVELRESULT_FILEERROR;
 
-    if (version==9)
+  fread2(&version,4,1,fp);
+
+  if (version==9)
       {
       strcpy(editor.filename,filename);
 
@@ -358,7 +358,7 @@ void loadlevel(char *filename)
       if (level.numofobjects<0 || level.numofobjects>=256)
         {
         fclose(fp);
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofobjects;count++)
         {
@@ -379,7 +379,7 @@ void loadlevel(char *filename)
       if (level.numofropes<0 || level.numofropes>=1024)
         {
         fclose(fp);
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofropes;count++)
         {
@@ -396,7 +396,7 @@ void loadlevel(char *filename)
         if (texture[count].sizex<0 || texture[count].sizex>=1024)
           {
           fclose(fp);
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         if (texture[count].sizex!=0)
           {
@@ -454,7 +454,7 @@ void loadlevel(char *filename)
         if (block[count].numoflines<0 || block[count].numoflines>=64)
           {
           fclose(fp);
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         for (count2=0;count2<block[count].numoflines;count2++)
           fread2(block[count].line[count2],4,8,fp);
@@ -468,7 +468,7 @@ void loadlevel(char *filename)
         fread2(&block[count].animationspeed,4,1,fp);
         }
       }
-    if (version==10)
+  if (version==10)
       {
       strcpy(editor.filename,filename);
 
@@ -491,7 +491,7 @@ void loadlevel(char *filename)
       if (level.numofobjects<0 || level.numofobjects>=256)
         {
         fclose(fp);
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofobjects;count++)
         {
@@ -512,7 +512,7 @@ void loadlevel(char *filename)
       if (level.numofropes<0 || level.numofropes>=1024)
         {
         fclose(fp);
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofropes;count++)
         {
@@ -529,7 +529,7 @@ void loadlevel(char *filename)
         if (texture[count].sizex<0 || texture[count].sizex>=1024)
           {
           fclose(fp);
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         if (texture[count].sizex!=0)
           {
@@ -568,7 +568,7 @@ void loadlevel(char *filename)
         if (block[count].numoflines<0 || block[count].numoflines>=64)
           {
           fclose(fp);
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         for (count2=0;count2<block[count].numoflines;count2++)
           fread2(block[count].line[count2],4,8,fp);
@@ -605,7 +605,7 @@ void loadlevel(char *filename)
 		  if (level.numofobjects<0 || level.numofobjects>=256)
 		  {
 			  fclose(fp);
-			  return;
+			  return LOADLEVELRESULT_TOO_MANY_OBJECTS;
 		  }
 		  for (count=0;count<level.numofobjects;count++)
 		  {
@@ -626,7 +626,7 @@ void loadlevel(char *filename)
 		  if (level.numofropes<0 || level.numofropes>=1024)
 		  {
 			  fclose(fp);
-			  return;
+			  return LOADLEVELRESULT_TOO_MANY_ROPES;
 		  }
 		  for (count=0;count<level.numofropes;count++)
 		  {
@@ -659,7 +659,7 @@ void loadlevel(char *filename)
 				  {
 					  if (debug_level_saveload) printf("Invalid blob!\n");
 					  fclose(fp);
-					  return;
+					  return LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG;
 				  }
 				  if (texture[count].sizex==0)
 				  {
@@ -700,7 +700,7 @@ void loadlevel(char *filename)
 			  if (block[count].numoflines<0 || block[count].numoflines>=64)
 			  {
 				  fclose(fp);
-				  return;
+				  return LOADLEVELRESULT_TOO_MANY_BLOCK_LINES;
 			  }
 			  for (count2=0;count2<block[count].numoflines;count2++)
 				  fread2(block[count].line[count2],4,8,fp);
@@ -730,7 +730,7 @@ void loadlevel(char *filename)
 	loadtexture(253,"amber1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
 	loadtexture(254,"amber2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
 	loadtexture(255,"amber3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-    }
+  return version;
   }
 
 void createlevel(void)
