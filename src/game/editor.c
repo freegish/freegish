@@ -40,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/gameobject.h"
 #include "../game/setup.h"
 #include "../game/gametexture.h"
+#include "../physics/particle.h"
 #include "../input/keyboard.h"
 #include "../input/mouse.h"
 #include "../math/vector.h"
@@ -61,7 +62,7 @@ void editlevel(int need_to_open_editor)
   int editing_level_gametype = 0;
   int simtimer;
   int simcount;
-  float vec[3];
+  float vec[3], vec2[3];
   int last_loadlevel = -1;
 
   gametype gametypes[] = {
@@ -455,6 +456,20 @@ void editlevel(int need_to_open_editor)
         }
       if (keyboard[SCAN_G])
         editor.blocknum=getblock(x,y);
+      // set first player position to mouse coords
+      if (keyboard[SCAN_P] && !prevkeyboard[SCAN_P]){
+        if (object[0].type == OBJ_TYPE_GISH){
+          get_mouse_coords(&vec[0], &vec[1]);
+          vec[2] = 0.0f;
+          subtractvectors(vec2, vec, object[0].position);
+          for (count = 0; count < 16; count++){
+            particle[object[0].particle[count]].position[0] += vec2[0];
+            particle[object[0].particle[count]].position[1] += vec2[1];
+          }
+          object[0].position[0] = vec[0];
+          object[0].position[1] = vec[1];
+        }
+      }
       if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
         {
         if (!keyboard[SCAN_SHIFT])
