@@ -269,9 +269,11 @@ void setup_presets_to_players(int* numplayers_out, int* controllers, int* preset
         glColor4f(1.0f,1.0f,1.0f,1.0f);
         //displaybackground(600);
 
-        drawtext(TXT_PRESS_JUMP_BUTTON,(320|TEXT_CENTER),240,16,1.0f,1.0f,1.0f,1.0f);
+        drawtext(TXT_PRESS_JUMP_BUTTON,(320|TEXT_CENTER),120,16,1.0f,1.0f,1.0f,1.0f);
         if (numplayers > 0){
-            drawtext(TXT_PRESS_HEAVY_BUTTON,(320|TEXT_CENTER),240+16,16,1.0f,1.0f,1.0f,1.0f);
+            drawtext(TXT_PRESS_HEAVY_BUTTON,(320|TEXT_CENTER),120+16,16,1.0f,1.0f,1.0f,1.0f);
+            drawtext(TXT_PRESS_RIGHT_CLICK_TO_LEAVE,(320|TEXT_CENTER),120+16+16,12,1.0f,1.0f,1.0f,1.0f);
+            drawtext(TXT_PRESS_DELETE_TO_LEAVE,(320|TEXT_CENTER),120+16+16+12,12,1.0f,1.0f,1.0f,1.0f);
         }
         for (int player_index = 0; player_index < numplayers; player_index++){
             if (controllers[player_index] == 0){
@@ -354,6 +356,17 @@ void setup_presets_to_players(int* numplayers_out, int* controllers, int* preset
             // save to out variables
             *numplayers_out = numplayers;
             break;
+        }
+        if (mouse.rmb && !prevmouse.rmb)
+        if (mouse.y > 300 && (mouse.x / 160) < numplayers){
+          for (int player_index = mouse.x / 160; player_index < numplayers-1; player_index++){
+              controllers[player_index] = controllers[player_index+1];
+              presets[player_index] = presets[player_index+1];
+          }
+          numplayers--;
+        }
+        if (keyboard[SCAN_DELETE] && !prevkeyboard[SCAN_DELETE]){
+          numplayers--;
         }
     }
     resetmenuitems();

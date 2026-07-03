@@ -222,6 +222,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_BACK											"Back"
 #define TXT_PRESS_JUMP_BUTTON								"Press jump button to join"
 #define TXT_PRESS_HEAVY_BUTTON								"Press heavy button to leave"
+#define TXT_PRESS_RIGHT_CLICK_TO_LEAVE						"Right-click on a preset to leave"
+#define TXT_PRESS_DELETE_TO_LEAVE							"Press delete to remove right-most preset"
 #define TXT_TOO_FEW_PlAYERS									"Too few players! Need at least /i"
 #define TXT_LEFT_ARROW										"<"
 #define TXT_RIGHT_ARROW										">"
