@@ -26,8 +26,6 @@ Level 1. Tutorial with helper areas (!!).
 "Press the '/s' key to stick to the wall.  Press the '/s' and '/s' keys to climb. If you are stuck to the floor, quickly release and then press the stick key"
 Introduction to physics objects (boxes)
 
-TODO: Introduction to moving platforms - is it needed here?
-
 
 Level 2.
 Introduction to switches
@@ -41,21 +39,23 @@ Introduction to spikes
 Zombie enemy intro
 Moving block onto a button
 
-More wall climbing
-Ropes
-Warp secret
+TODO: Warp secret to three locations
 
 Level 4.
-Warpzone to 4-3
-1-up in a secret
-More moving platforms
-Cool swing
+Chains
+More wall climbing
 Slidey trapdoor
-Pulley door
+Platform which shoots up
+
+TODO: Warpzone to 4-3
+1-up in a secret
 
 Level 5
+Taking block from the bottom of the pool
 Enemy trap
 Multistage buttons
+Cool swing
+Pulley door
 
 
 Level 6
