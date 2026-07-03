@@ -83,7 +83,7 @@ void editlevelobjects(void)
       {
       createmenuitem("Mass   ",(640|TEXT_END),0,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_FLOATINPUT,&level.object[editor.objectnum].mass);
-      setmenuitem(MO_HOTKEY,SCAN_M);
+      setmenuitem(MO_HOTKEY,SCAN_S);
       createmenuitem("Friction",(640|TEXT_END),32,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_FLOATINPUT,&level.object[editor.objectnum].friction);
       setmenuitem(MO_HOTKEY,SCAN_F);
@@ -175,27 +175,22 @@ void editlevelobjects(void)
 
     SDL_GL_SwapWindow(globalwindow);
 
+    get_mouse_coords(&vec[0], &vec[1]);
+    vec[2] = 0.0f;
+    x = (int)vec[0];
+    y = (int)vec[1];
     if (mouse.x<512 || mouse.y>224)
       {
-      get_mouse_coords(&vec[0], &vec[1]);
-      x = (int)vec[0];
-      y = (int)vec[1];
-      if (!keyboard[SCAN_K])
-        {
-        if (mouse.lmb && !prevmouse.lmb)
-          {
-          if (!keyboard[SCAN_H])
-            {
-            vec[0]=(float)x+0.5f;
-            vec[1]=(float)y+0.5f;
-            vec[2]=0.0f;
-            }
-          else
-            {
-            vec[0]=(float)x;
-            vec[1]=(float)y;
-            vec[2]=0.0f;
-            }
+      if (!keyboard[SCAN_K] && mouse.lmb && !prevmouse.lmb){
+        if (!keyboard[SCAN_H]){
+          vec[0]=(float)x+0.5f;
+          vec[1]=(float)y+0.5f;
+          vec[2]=0.0f;
+        } else {
+          vec[0]=(float)x;
+          vec[1]=(float)y;
+          vec[2]=0.0f;
+        }
 
     
           memset(&level.object[level.numofobjects],0,sizeof(level.object[level.numofobjects]));
@@ -230,33 +225,22 @@ void editlevelobjects(void)
 
           editor.objectnum=level.numofobjects;
           level.numofobjects++;
-          }
         }
-      if (keyboard[SCAN_K])
-        {
-        get_mouse_coords(&vec[0], &vec[1]);
-        vec[2]=0.0f;
-
-        if (mouse.lmb && !prevmouse.lmb)
-          {
-          if (editor.objectnum!=-1)
-          for (count=0;count<level.numofobjects;count++)
-            {
+      if (keyboard[SCAN_K] && editor.objectnum!=-1){
+        if (mouse.lmb && !prevmouse.lmb){
+          for (count=0;count<level.numofobjects;count++){
             subtractvectors(vec2,vec,level.object[count].position);
             if (vectorlength(vec2)<0.5f)
               level.object[editor.objectnum].link=count;
-            }
           }
+        }
         if (mouse.rmb && !prevmouse.rmb)
           level.object[editor.objectnum].link=-1;
-        }
+      }
       if (mouse.rmb && !prevmouse.rmb)
         {
-        get_mouse_coords(&vec[0], &vec[1]);
-        vec[2]=0.0f;
-  
         editor.objectnum=-1;
-  
+
         for (count=0;count<level.numofobjects;count++)
           {
           subtractvectors(vec2,vec,level.object[count].position);
@@ -264,11 +248,7 @@ void editlevelobjects(void)
             editor.objectnum=count;
           }
         }
-      if (keyboard[SCAN_E] && !prevkeyboard[SCAN_E])
-        {
-        get_mouse_coords(&vec[0], &vec[1]);
-        vec[2]=0.0f;
-
+      if (keyboard[SCAN_E] && !prevkeyboard[SCAN_E]){
         editor.objectnum=-1;
 
         for (count=0;count<level.numofobjects;count++){
@@ -283,12 +263,19 @@ void editlevelobjects(void)
     }
     if (!menuinputkeyboard)
       {
-      if (editor.objectnum!=-1)
-        {
-        vec[0]=1.0f;
-        if (level.object[editor.objectnum].type==LVL_OBJ_TYPE_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_ANCHORED_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_GENERATOR)
-          vec[0]=0.2f;
-
+      if (editor.objectnum!=-1){
+        if (keyboard[SCAN_M] && !prevkeyboard[SCAN_M]){
+          if (!keyboard[SCAN_H]){
+            vec[0]=(float)x+0.5f;
+            vec[1]=(float)y+0.5f;
+            vec[2]=0.0f;
+          } else {
+            vec[0]=(float)x;
+            vec[1]=(float)y;
+            vec[2]=0.0f;
+          }
+          copyvector(level.object[editor.objectnum].position,vec);
+          }
         if (keyboard[SCAN_HOME] && !prevkeyboard[SCAN_HOME])
         if (level.numofobjects>1)
           {
@@ -351,6 +338,10 @@ void editlevelobjects(void)
             }
           editor.objectnum=count2;
           }
+
+        vec[0]=1.0f;
+        if (level.object[editor.objectnum].type==LVL_OBJ_TYPE_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_ANCHORED_WHEEL || level.object[editor.objectnum].type==LVL_OBJ_TYPE_GENERATOR)
+          vec[0]=0.2f;
         if (keyboard[SCAN_LEFT] && !prevkeyboard[SCAN_LEFT])
         if (level.object[editor.objectnum].size[0]>vec[0])
           level.object[editor.objectnum].size[0]-=vec[0];
