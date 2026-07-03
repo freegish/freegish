@@ -83,7 +83,7 @@ void editlevelobjects(void)
       {
       createmenuitem("Mass   ",(640|TEXT_END),0,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_FLOATINPUT,&level.object[editor.objectnum].mass);
-      setmenuitem(MO_HOTKEY,SCAN_S);
+      setmenuitem(MO_HOTKEY,SCAN_M);
       createmenuitem("Friction",(640|TEXT_END),32,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_FLOATINPUT,&level.object[editor.objectnum].friction);
       setmenuitem(MO_HOTKEY,SCAN_F);
@@ -264,7 +264,7 @@ void editlevelobjects(void)
     if (!menuinputkeyboard)
       {
       if (editor.objectnum!=-1){
-        if (keyboard[SCAN_M] && !prevkeyboard[SCAN_M]){
+        if (keyboard[SCAN_P] && !prevkeyboard[SCAN_P]){
           if (!keyboard[SCAN_H]){
             vec[0]=(float)x+0.5f;
             vec[1]=(float)y+0.5f;
