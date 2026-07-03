@@ -264,22 +264,23 @@ void editlevelobjects(void)
             editor.objectnum=count;
           }
         }
-      if (keyboard[SCAN_E] && prevkeyboard[SCAN_E])
+      if (keyboard[SCAN_E] && !prevkeyboard[SCAN_E])
         {
         get_mouse_coords(&vec[0], &vec[1]);
         vec[2]=0.0f;
 
         editor.objectnum=-1;
 
-        for (count=0;count<level.numofobjects;count++)
-          {
+        for (count=0;count<level.numofobjects;count++){
           subtractvectors(vec2,vec,level.object[count].position);
-          if (vectorlength(vec2)<0.5f)
+          if (vectorlength(vec2)<0.5f){
             editor.objectnum=count;
-            editor.objecttype=object[count].type;
+            editor.objecttype=level.object[count].type;
+            break;
           }
         }
       }
+    }
     if (!menuinputkeyboard)
       {
       if (editor.objectnum!=-1)
