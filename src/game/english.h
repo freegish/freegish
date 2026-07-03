@@ -441,6 +441,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //texture.c
 #define TXT_LOAD_TILESET								"Load Tileset"
+#define TXT_LOAD_TEXTURE								"Load Texture"
 #define TXT_LEVEL_NAME									"Level Name"
 
 #define TXT_PLAYER3                     "Player 3"

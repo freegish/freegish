@@ -671,8 +671,9 @@ void editblock(void)
   int simcount;
   float friction;
   float vec[3]/*,vec2[3]*/;
+  int load_texture = -1;
+  char filename[256];
   //float normal[3];
-  //char filename[13]="text000.png";
   //int changeddir;
 
   /*
@@ -691,6 +692,8 @@ void editblock(void)
   texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
   texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
   setuptexture(EDITBLOCK_TEXTURE);
+  memset(filename, 0, 256);
+  strcpy(filename, texture[editor.blocknum].filename);
 
   simtimer=SDL_GetTicks();
 
@@ -739,11 +742,23 @@ void editblock(void)
     setmenuitem(MO_INTINPUT,&block[editor.blocknum].animationspeed);
     setmenuitem(MO_HOTKEY,SCAN_S);
     count+=32;
+    createmenuitem(TXT_FILENAME"                           ",(640|TEXT_END),448,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_STRINGINPUT,filename);
+    load_texture = createmenuitem(TXT_LOAD_TEXTURE,(640|TEXT_END),448-16,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY,SCAN_L);
 
     checksystemmessages();
     checkkeyboard();
     checkmouse();
     checkmenuitems();
+
+    if (menuitem[load_texture].active){
+      loadtexture(editor.blocknum,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
+      copytexture(EDITBLOCK_TEXTURE,editor.blocknum);
+      texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
+      texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
+      setuptexture(EDITBLOCK_TEXTURE);
+    }
 
     if (!menuinputkeyboard)
       {
@@ -961,6 +976,8 @@ void editblock(void)
 
       memcpy(texture[EDITBLOCK_TEXTURE].rgba[0],texture[editor.blocknum].rgba[0],texture[editor.blocknum].sizex*texture[editor.blocknum].sizey*4);
       setuptexture(EDITBLOCK_TEXTURE);
+
+      texture[editor.blocknum].filename[0] = 0; // detach this texture from its file because saving and loading will bring the whole texture back
       }
 
     if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
@@ -976,6 +993,8 @@ void editblock(void)
       texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
       texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
       setuptexture(EDITBLOCK_TEXTURE);
+      memset(filename, 0, 256);
+      strcpy(filename, texture[editor.blocknum].filename);
       /*
       changeddir=changetilesetdir();
     
@@ -1001,7 +1020,8 @@ void editblock(void)
       texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
       texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
       setuptexture(EDITBLOCK_TEXTURE);
-
+      memset(filename, 0, 256);
+      strcpy(filename, texture[editor.blocknum].filename);
       /*
       changeddir=changetilesetdir();
     
