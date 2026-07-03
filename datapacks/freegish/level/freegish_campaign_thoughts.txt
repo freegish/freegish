@@ -51,15 +51,16 @@ TODO: Warpzone to 4-3
 1-up in a secret
 
 Level 5
+Sliding wall climbing
 Taking block from the bottom of the pool
 Enemy trap
 Multistage buttons
-Cool swing
-Pulley door
-
 
 Level 6
 boss battle
 
 Level 7
 Cart ride
+
+Cool swing
+Pulley door
