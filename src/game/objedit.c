@@ -136,22 +136,18 @@ void editlevelobjects(void)
     drawtext(TXT_ROPES":/i",0,INFO_Y+OFFSET_Y,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
 
     // draw object type that will be created on lmb
-    if (editor.objecttype<19)
+    if (editor.objecttype <= 36)
         drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[editor.objecttype]);
-    else if (editor.objecttype == 19)
-        drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
     else
-        drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype-20);
+        drawtext(TXT_OBJECTSET":NOTHING /i",0,INFO_Y+OFFSET_Y*2,16,1.0f,1.0f,1.0f,1.0f,editor.objecttype);
 
     // draw stuff related to the picked object
     if (editor.objectnum!=-1){
       drawtext(TXT_OBJECTNUM":/i",0,INFO_Y+OFFSET_Y*3,16,1.0f,1.0f,1.0f,1.0f,editor.objectnum);
-      if (level.object[editor.objectnum].type<19)
+      if (level.object[editor.objectnum].type <= 36)
           drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[level.object[editor.objectnum].type]);
-      else if (level.object[editor.objectnum].type == 19)
-          drawtext(TXT_OBJECTSET":/s",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,LVL_OBJ_NAMES[0]);
       else
-          drawtext(TXT_OBJECTSET":enemy /i",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type-20);
+          drawtext(TXT_OBJECTSET":NOTHING /i",0,INFO_Y+OFFSET_Y*4,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].type);
       drawtext(TXT_LINK":/i",0,INFO_Y+OFFSET_Y*5,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
     }
 

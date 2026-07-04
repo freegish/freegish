@@ -453,7 +453,7 @@ void loadanimation(int animationnum, char* standname, int standlength, char* wal
 
 void loadanimations(void)
   {
-  numofanimations=1024;
+  numofanimations=ANIMATIONS_START_TEXTURE;
   loadanimation(0,  "bibsta", 6, "bibwlk", 9, "bibatk", 9, "nibdie", 9, 0, "");
   loadanimation(1,  "nibsta", 6, "nibwlk", 9, "nibatk", 9, "nibdie", 9, 0, "");
   loadanimation(2,  "ribsta", 6, "ribwlk", 9, "ribatk", 9, "ribdie", 9, 0, "");

@@ -169,39 +169,39 @@ void setuplevel(void)
     if (level.object[count].type==LVL_OBJ_TYPE_GENERATOR)
       creategenerator(level.object[count].position,level.object[count].mass);
 
-    if (level.object[count].type==20)
+    if (level.object[count].type==LVL_OBJ_TYPE_BONE_NIBBLER)
       createbeast(0,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==21)
+    if (level.object[count].type==LVL_OBJ_TYPE_CAVE_NIBBLER)
       createbeast(1,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==22)
+    if (level.object[count].type==LVL_OBJ_TYPE_HELL_NIBBLER)
       createbeast(2,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==23)
+    if (level.object[count].type==LVL_OBJ_TYPE_MUMMY)
       createbeast(3,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==24)
+    if (level.object[count].type==LVL_OBJ_TYPE_SKELETON)
       createbeast(4,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==25)
+    if (level.object[count].type==LVL_OBJ_TYPE_ZOMBIE)
       createbeast(5,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==26)
+    if (level.object[count].type==LVL_OBJ_TYPE_GIMP)
       createbeast(6,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==27)
+    if (level.object[count].type==LVL_OBJ_TYPE_VIS_SISTER)
       createbeast(7,level.object[count].position,3.0f,3.0f,20.0f,0.2f);
-    if (level.object[count].type==28)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANGEL_NIBBLER)
       createbeast(8,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==29)
+    if (level.object[count].type==LVL_OBJ_TYPE_ALTERBOY)
       createbeast(9,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==30)
+    if (level.object[count].type==LVL_OBJ_TYPE_STITCH)
       createbeast(10,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==31)
+    if (level.object[count].type==LVL_OBJ_TYPE_POOBLER)
       createbeast(11,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==32)
+    if (level.object[count].type==LVL_OBJ_TYPE_HONEY_BUCKET)
       createbeast(12,level.object[count].position,2.0f,0.85f,3.0f,0.2f);
-    if (level.object[count].type==33)
+    if (level.object[count].type==LVL_OBJ_TYPE_SISTER_VIS)
       createbeast(13,level.object[count].position,3.0f,3.0f,20.0f,0.2f);
-    if (level.object[count].type==34)
+    if (level.object[count].type==LVL_OBJ_TYPE_PAUNCHY_CHOPS)
       createboss(14,level.object[count].position);
-    if (level.object[count].type==35)
+    if (level.object[count].type==LVL_OBJ_TYPE_BASINJIN)
       createbeast(15,level.object[count].position,2.0f,2.0f,8.0f,0.2f);
-    if (level.object[count].type==36)
+    if (level.object[count].type==LVL_OBJ_TYPE_SATAN)
       createbeast(16,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
 
     if (numofobjects!=numofobjectstemp)
