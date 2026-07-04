@@ -157,12 +157,19 @@ void editlevelobjects(void)
     y = (int)vec[1];
     drawtext("/i /i", mouse.x, mouse.y, 10, 1.0f,1.0f,1.0f,1.0f, x, y);
 
-    if (debug_objectnums)
-    for (count = 0; count < level.numofobjects; count++){
-        world_to_screen(level.object[count].position[0], level.object[count].position[1], &vec[0], &vec[1]);
-        x = (int)vec[0];
-        y = (int)vec[1];
-        drawtext("/i", x, y+10, 10, 1.0f,1.0f,1.0f,1.0f, count);
+    if (debug_objectnums){
+      for (count = 0; count < level.numofobjects; count++){
+          world_to_screen(level.object[count].position[0], level.object[count].position[1], &vec[0], &vec[1]);
+          x = (int)vec[0];
+          y = (int)vec[1];
+          drawtext("/i", x, y+10, 10, 1.0f,1.0f,1.0f,1.0f, count);
+      }
+      if (debug_objectlinks){
+        for (count = 0; count < numofobjects; count++){
+            world_to_screen(object[count].position[0], object[count].position[1], &vec[0], &vec[1]);
+            drawtext("link: /i", (int)vec[0],(int)vec[1]+20, 10, 1.0f, 1.0f, 1.0f, 1.0f, object[count].link);
+        }
+      }
     }
 
     drawmenuitems();
