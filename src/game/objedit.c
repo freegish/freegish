@@ -276,6 +276,28 @@ void editlevelobjects(void)
           }
           copyvector(level.object[editor.objectnum].position,vec);
           }
+        // paste settings from another object
+        if (keyboard[SCAN_V] && !prevkeyboard[SCAN_V]){
+          for (count=0;count<level.numofobjects;count++){
+            if (level.object[count].type == level.object[editor.objectnum].type){
+              subtractvectors(vec2,vec,level.object[count].position);
+              if (vectorlength(vec2)<0.5f){
+                level.object[count].texturenum=level.object[editor.objectnum].texturenum;
+                level.object[count].size[0]=level.object[editor.objectnum].size[0];
+                level.object[count].size[1]=level.object[editor.objectnum].size[1];
+                level.object[count].mass=level.object[editor.objectnum].mass;
+                level.object[count].friction=level.object[editor.objectnum].friction;
+                level.object[count].lighttype=level.object[editor.objectnum].lighttype;
+                level.object[count].lightcolor[0]=level.object[editor.objectnum].lightcolor[0];
+                level.object[count].lightcolor[1]=level.object[editor.objectnum].lightcolor[1];
+                level.object[count].lightcolor[2]=level.object[editor.objectnum].lightcolor[2];
+                level.object[count].lightintensity=level.object[editor.objectnum].lightintensity;
+                editor.objectnum=count;
+                break;
+              }
+            }
+          }
+        }
         if (keyboard[SCAN_HOME] && !prevkeyboard[SCAN_HOME])
         if (level.numofobjects>1)
           {
