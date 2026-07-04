@@ -1448,9 +1448,9 @@ void gamedisplay(void)
       count=68;
       drawtext(TXT_TUTORIAL_LINE15,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_STICK]]);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE16,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_UP]]);
+      drawtext(TXT_TUTORIAL_LINE16,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE17,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_LEFT]]);
+      drawtext(TXT_TUTORIAL_LINE17,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
       drawtext(TXT_TUTORIAL_LINE18,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
