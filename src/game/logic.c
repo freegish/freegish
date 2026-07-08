@@ -1407,9 +1407,9 @@ void gamedisplay(void)
     if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][3])
       {
       count=68;
-      drawtext(TXT_TUTORIAL_LINE8,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_JUMP]]);
+      drawtext(TXT_TUTORIAL_LINE8,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE9,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
+      drawtext(TXT_TUTORIAL_LINE9,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_JUMP]]);
       count+=12;
       drawtext(TXT_TUTORIAL_LINE10,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
