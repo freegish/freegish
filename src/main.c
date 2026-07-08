@@ -54,9 +54,17 @@ int main (int argc,char *argv[])
 
   checkbigendian();
 
+  printf("Loading configs:\n");
+  fflush(stdout);
   loadconfig();
+  printf("Config loaded\n");
+  fflush(stdout);
   loadscores();
+  printf("Scores loaded\n");
+  fflush(stdout);
   loadplayers();
+  printf("Players loaded\n");
+  fflush(stdout);
 
   flags=SDL_INIT_VIDEO|SDL_INIT_TIMER;
   if (config.joystick)
@@ -73,11 +81,13 @@ int main (int argc,char *argv[])
 
   if ((display_count = SDL_GetNumVideoDisplays()) < 1)
     {
+    fprintf(stderr, "Failed to GetNumVideoDisplays:\n%s\n",SDL_GetError());
     return 1;
     }
 
   if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0)
     {
+    fprintf(stderr, "Failed to GetDisplayMode:\n%s\n",SDL_GetError());
     return 1;
     }
 
@@ -100,6 +110,8 @@ int main (int argc,char *argv[])
     }
 
   saveconfig();
+  printf("Sound initialized\n");
+  fflush(stdout);
 
   SDL_ShowCursor(SDL_DISABLE);
 
@@ -119,36 +131,41 @@ int main (int argc,char *argv[])
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,8);
     }
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,windowinfo.depthbits);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,windowinfo.stencilbits);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,windowinfo.depthbits);
+  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,windowinfo.stencilbits);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
 
-    globalwindow = SDL_CreateWindow("Gish", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                    windowinfo.resolutionx, windowinfo.resolutiony,
-                                    (windowinfo.fullscreen) ? SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN : SDL_WINDOW_OPENGL);
-    SDL_SetWindowDisplayMode(globalwindow, &mode);
+  globalwindow = SDL_CreateWindow("Gish", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                  windowinfo.resolutionx, windowinfo.resolutiony,
+                                  (windowinfo.fullscreen) ? SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN : SDL_WINDOW_OPENGL);
+  SDL_SetWindowDisplayMode(globalwindow, &mode);
 
-    if(globalwindow == NULL)
-    {
-    fprintf(stderr, "Failed to initialize video:\n%s\n",SDL_GetError());
-    return 1;
-    }
+  if(globalwindow == NULL)
+  {
+  fprintf(stderr, "Failed to initialize video:\n%s\n",SDL_GetError());
+  return 1;
+  }
 
-    windowicon = SDL_LoadBMP("freegish.bmp");
-    SDL_SetColorKey(windowicon, SDL_TRUE, SDL_MapRGB(windowicon->format, 255, 255, 255));
-    SDL_SetWindowIcon(globalwindow, windowicon);
+  windowicon = SDL_LoadBMP("freegish.bmp");
+  SDL_SetColorKey(windowicon, SDL_TRUE, SDL_MapRGB(windowicon->format, 255, 255, 255));
+  SDL_SetWindowIcon(globalwindow, windowicon);
 
-    glcontext = SDL_GL_CreateContext(globalwindow);
+  glcontext = SDL_GL_CreateContext(globalwindow);
 
   loadglextentions();
 
   for (count=0;count<2048;count++)
-    glGenTextures(1,&texture[count].glname);
+  glGenTextures(1,&texture[count].glname);
 
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
 
+  printf("SDL initialized\n");
+  fflush(stdout);
+
   setupjoysticks();
+  printf("Joysticks initialized\n");
+  fflush(stdout);
 
   font.texturenum=0;
   font.cursornum=0;
@@ -170,6 +187,9 @@ int main (int argc,char *argv[])
     
   if (config.sound)
     setupaudio();
+
+  printf("Before mainmenu\n");
+  fflush(stdout);
 
   mainmenu();
 
