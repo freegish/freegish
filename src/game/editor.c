@@ -131,6 +131,12 @@ void editlevel(int need_to_open_editor)
     menu_setup = createmenuitem(TXT_SETUP,(640-16*(strlen(TXT_SAVE)+strlen(TXT_LOAD)+4)|TEXT_END),464,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_F5);
     setmenuitem(MO_REPEAT);
+    createmenuitem("Show lines",0,0,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_L);
+    setmenuitem(MO_TOGGLE, &editor.showlines);
+    createmenuitem("Focus layer",0,16,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_K);
+    setmenuitem(MO_TOGGLE, &editor.showgrid);
 
     int y = 0;
     int offset = 16;
@@ -346,11 +352,6 @@ void editlevel(int need_to_open_editor)
 
     if (!menuinputkeyboard && !menuinputmouse)
       {
-      if (keyboard[SCAN_L] && !prevkeyboard[SCAN_L])
-        editor.showlines^=1;
-      if (keyboard[SCAN_K] && !prevkeyboard[SCAN_K])
-        editor.showgrid^=1;
-
       get_mouse_coords(&vec[0], &vec[1]);
       x = (int)vec[0];
       y = (int)vec[1];
