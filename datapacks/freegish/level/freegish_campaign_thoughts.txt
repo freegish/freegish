@@ -64,3 +64,58 @@ Cart ride
 
 Cool swing
 Pulley door
+
+
+World 2
+Level 1
+Center spinning block (low amplitude)
+Edge fixed bridge
+Rope block
+Brittle floor
+
+Level 2
+A couple of mobs (I'll skip them probably)
+Strong floor
+Throwing a block (simple)
+Water
+Rope platform jumping (not here, surely, player doesn't know ropes at all yet) - maybe chains here
+Moving blocks with gaps to hide
+
+Level 3
+Water
+Mobs
+Pulley door
+Taking block from the bottom of the pool - Done
+Huge underwater section with coins near spikes - Done
+
+Level 4
+Multistage buttons again
+Cool trick with jumping block and then taking unused cube to a later stage
+Elevator
+
+Level 5
+Center rotating block (full 360 spin)
+Cycle platforms
+Rope platforms attached to them
+A lot of them with climbing up
+Rope blocks across
+Sliding split
+
+Level 6
+Dark boss battle
+
+Level 7
+Chains riding Cart
+Lava at the bottom
+
+
+World 3
+Level 1
+
+
+
+Carousel
+
+Companion cube level:
+jump on the cube to get higher
+in the end throw it into lava :(
