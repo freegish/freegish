@@ -63,7 +63,10 @@ void editlevel(int need_to_open_editor)
   int simtimer;
   int simcount;
   float vec[3], vec2[3];
-  int last_loadlevel = -1;
+  int menu_last_loadlevel = -1;
+  int menu_save = -1;
+  int menu_load = -1;
+  int menu_setup = -1;
 
   gametype gametypes[] = {
     GAMETYPE_CAMPAIGN,
@@ -114,11 +117,20 @@ void editlevel(int need_to_open_editor)
     numofmenuitems=0;
     createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY,SCAN_F1);
-    createmenuitem(TXT_LEVELNAME"     ",(640|TEXT_END),448,16,1.0f,1.0f,1.0f,1.0f);
+    createmenuitem(TXT_LEVELNAME"     ",(640|TEXT_END),432,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_STRINGINPUT,editor.filename);
     setmenuitem(MO_HOTKEY,SCAN_ENTER);
-    createmenuitem(TXT_BACKGROUND"     ",(640|TEXT_END),416,16,1.0f,1.0f,1.0f,1.0f);
+    createmenuitem(TXT_BACKGROUND"     ",(640|TEXT_END),400,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_STRINGINPUT,&level.background);
+    menu_save = createmenuitem(TXT_SAVE,(640|TEXT_END),464,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_F9);
+    setmenuitem(MO_REPEAT);
+    menu_load = createmenuitem(TXT_LOAD,(640-16*(strlen(TXT_SAVE)+2)|TEXT_END),464,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_F7);
+    setmenuitem(MO_REPEAT);
+    menu_setup = createmenuitem(TXT_SETUP,(640-16*(strlen(TXT_SAVE)+strlen(TXT_LOAD)+4)|TEXT_END),464,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_F5);
+    setmenuitem(MO_REPEAT);
 
     int y = 0;
     int offset = 16;
@@ -159,6 +171,20 @@ void editlevel(int need_to_open_editor)
                 level.gametype = gametypes[count];
             }
     }
+    if (menuitem[menu_load].active)
+        {
+        menu_last_loadlevel = loadlevel(editor.filename);
+        setuplevel();
+        setupgame();
+        }
+      if (menuitem[menu_setup].active)
+        {
+        setuplevel();
+        setupgame();
+      }
+      if (menuitem[menu_save].active){
+        savelevel(editor.filename);
+      }
 
     zoom_view();
 
@@ -276,23 +302,23 @@ void editlevel(int need_to_open_editor)
     drawtext(TXT_TILESET":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.tileset);
     drawtext(TXT_TILE":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,editor.blocknum);
 
-    if (last_loadlevel >= 0){
-      if (last_loadlevel == LOADLEVELRESULT_OK){
+    if (menu_last_loadlevel >= 0){
+      if (menu_last_loadlevel == LOADLEVELRESULT_OK){
         drawtext(TXT_LOAD_LEVEL_OK,(639|TEXT_END),480-16*5,16,0.0f,1.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_UNKNOWN){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_UNKNOWN){
         drawtext(TXT_LOAD_LEVEL_UNKNOWN,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_FILEERROR){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_FILEERROR){
         drawtext(TXT_LOAD_LEVEL_FILEERROR,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_OBJECTS){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_TOO_MANY_OBJECTS){
         drawtext(TXT_LOAD_LEVEL_TOO_MANY_OBJECTS,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_ROPES){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_TOO_MANY_ROPES){
         drawtext(TXT_LOAD_LEVEL_TOO_MANY_ROPES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG){
         drawtext(TXT_LOAD_LEVEL_TEXTURE_SIZEX_TOO_BIG,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
-      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_BLOCK_LINES){
+      } else if (menu_last_loadlevel == LOADLEVELRESULT_TOO_MANY_BLOCK_LINES){
         drawtext(TXT_LOAD_LEVEL_TOO_MANY_BLOCK_LINES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
       } else {
-        drawtext("IDK last_loadlevel = /i",(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f, last_loadlevel);
+        drawtext("LVL_VERSION = /i",(639|TEXT_END),480-16*6,16,1.0f,0.0f,0.0f,1.0f, menu_last_loadlevel);
       }
     }
 
@@ -318,7 +344,7 @@ void editlevel(int need_to_open_editor)
 
     SDL_GL_SwapWindow(globalwindow);
 
-    if (!menuinputkeyboard)
+    if (!menuinputkeyboard && !menuinputmouse)
       {
       if (keyboard[SCAN_L] && !prevkeyboard[SCAN_L])
         editor.showlines^=1;
@@ -335,11 +361,11 @@ void editlevel(int need_to_open_editor)
           {
           if (mouse.lmb){
             setblock(x,y,editor.blocknum);
-            last_loadlevel = -1;
+            menu_last_loadlevel = -1;
           }
           if (mouse.rmb && (editor.editstart[0]==0 && editor.editstart[1]==0)){
             setblock(x,y,0);
-            last_loadlevel = -1;
+            menu_last_loadlevel = -1;
           }
           }
         else
@@ -518,19 +544,6 @@ void editlevel(int need_to_open_editor)
       }
     if (!menuinputkeyboard)
       {
-      if (keyboard[SCAN_F7] && !prevkeyboard[SCAN_F7])
-        {
-        last_loadlevel = loadlevel(editor.filename);
-        setuplevel();
-        setupgame();
-        }
-      if (keyboard[SCAN_F5] && !prevkeyboard[SCAN_F5])
-        {
-        setuplevel();
-        setupgame();
-        }
-      if (keyboard[SCAN_F9] && !prevkeyboard[SCAN_F9])
-        savelevel(editor.filename);
       if (keyboard[SCAN_F2] && !prevkeyboard[SCAN_F2])
         {
         editblock();

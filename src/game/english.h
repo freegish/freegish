@@ -464,6 +464,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_PLAY_CAMPAIGN               "Play Campaign"
 #define TXT_PLAYER_INFO_MAPPACK         "Level /s Lives /i Score /i High /i"
 #define TXT_SAVE                        "Save"
+#define TXT_LOAD                        "Load"
+#define TXT_SETUP                       "Setup"
 #define TXT_CAMPAIGN_EDITOR             "Campaign Editor"
 #define TXT_LEVEL_EDITOR                "Level Editor"
 #define TXT_ADD_LEVEL                   "Add Level"
