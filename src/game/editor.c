@@ -60,6 +60,7 @@ void editlevel(int need_to_open_editor)
   int count,count2;
   int x,y;
   int editing_level_gametype = 0;
+  int editing_editor_mode = 0;
   int simtimer;
   int simcount;
   float vec[3], vec2[3];
@@ -137,6 +138,54 @@ void editlevel(int need_to_open_editor)
     createmenuitem("Focus layer",0,16,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_K);
     setmenuitem(MO_TOGGLE, &editor.showgrid);
+
+    if (editing_editor_mode){
+      createmenuitem(TXT_BACK,0,368,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_ESC);
+      setmenuitem(MO_TOGGLE, &editing_editor_mode);
+      createmenuitem(TXT_BACKGROUND,0,368-16,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_1);
+      setmenuitem(MO_SET, &editor.mode, 0);
+      createmenuitem(TXT_MIDGROUND,0,368-32,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_2);
+      setmenuitem(MO_SET, &editor.mode, 1);
+      createmenuitem(TXT_FOREGROUND,0,368-48,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_3);
+      setmenuitem(MO_SET, &editor.mode, 2);
+      createmenuitem(TXT_WAYBACKGROUND,0,368-64,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_4);
+      setmenuitem(MO_SET, &editor.mode, 3);
+    }
+    else{
+      if (editor.mode==0){
+        createmenuitem(TXT_BACKGROUND,0,368,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_TOGGLE, &editing_editor_mode);
+      }
+      else if (editor.mode==1){
+        createmenuitem(TXT_MIDGROUND,0,368,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_TOGGLE, &editing_editor_mode);
+      }
+      else if (editor.mode==2){
+        createmenuitem(TXT_FOREGROUND,0,368,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_TOGGLE, &editing_editor_mode);
+      }
+      else if (editor.mode==3){
+        createmenuitem(TXT_WAYBACKGROUND,0,368,16,1.0f,1.0f,1.0f,1.0f);
+        setmenuitem(MO_TOGGLE, &editing_editor_mode);
+      }
+      createmenuitem("",0,368,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_1);
+      setmenuitem(MO_SET, &editor.mode, 0);
+      createmenuitem("",0,368,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_2);
+      setmenuitem(MO_SET, &editor.mode, 1);
+      createmenuitem("",0,368,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_3);
+      setmenuitem(MO_SET, &editor.mode, 2);
+      createmenuitem("",0,368,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_4);
+      setmenuitem(MO_SET, &editor.mode, 3);
+    }
 
     int y = 0;
     int offset = 16;
@@ -297,15 +346,7 @@ void editlevel(int need_to_open_editor)
 
     glEnd();
 
-    if (editor.mode==0)
-      drawtext(TXT_BACKGROUND,0,384,16,1.0f,1.0f,1.0f,1.0f);
-    if (editor.mode==1)
-      drawtext(TXT_MIDGROUND,0,384,16,1.0f,1.0f,1.0f,1.0f);
-    if (editor.mode==2)
-      drawtext(TXT_FOREGROUND,0,384,16,1.0f,1.0f,1.0f,1.0f);
-    if (editor.mode==3)
-      drawtext(TXT_WAYBACKGROUND,0,384,16,1.0f,1.0f,1.0f,1.0f);
-    drawtext(TXT_TILESET":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.tileset);
+    drawtext(TXT_TILESET":/i",0,384,16,1.0f,1.0f,1.0f,1.0f,level.tileset);
     drawtext(TXT_TILE":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,editor.blocknum);
 
     if (menu_last_loadlevel >= 0){
@@ -522,15 +563,6 @@ void editlevel(int need_to_open_editor)
       if (keyboard[SCAN_RGT_BRACKET] && !prevkeyboard[SCAN_RGT_BRACKET])
       if (level.tileset<7)
         level.tileset++;
-  
-      if (keyboard[SCAN_1])
-        editor.mode=0;
-      if (keyboard[SCAN_2])
-        editor.mode=1;
-      if (keyboard[SCAN_3])
-        editor.mode=2;
-      if (keyboard[SCAN_4])
-        editor.mode=3;
       }
 
     simcount=0;
