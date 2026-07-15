@@ -824,7 +824,7 @@ void editlevel(int need_to_open_editor)
       setmenuitem(MO_HOTKEY, SCAN_9);
       setmenuitem(MO_SET, &ropeedit.ropetype, BAR);
       count -= 16;
-      createmenuitem(ROPE_TYPE_NAMES[0],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      createmenuitem(ROPE_TYPE_NAMES[10],0,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY, SCAN_0);
       setmenuitem(MO_SET, &ropeedit.ropetype, SPRING);
       count -= 16;
