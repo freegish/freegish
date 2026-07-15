@@ -486,6 +486,161 @@ void process_events_objects(){
   }
 }
 
+void setup_rope_edit(){
+        float vec[3], vec2[3];
+        int x,y;
+        int count, count2;
+
+        ropeedit.numofpoints=0;
+        for (count=0;count<level.numofobjects;count++)
+          {
+          if (level.object[count].type>=LVL_OBJ_TYPE_BOX && level.object[count].type<LVL_OBJ_TYPE_WHEEL)
+            {
+            for (count2=0;count2<4;count2++)
+              {
+              if (count2==0 || count2==3)
+                vec[0]=level.object[count].position[0]-level.object[count].size[0]*0.5f;
+              else
+                vec[0]=level.object[count].position[0]+level.object[count].size[0]*0.5f;
+              if (count2<2)
+                vec[1]=level.object[count].position[1]+level.object[count].size[1]*0.5f;
+              else
+                vec[1]=level.object[count].position[1]-level.object[count].size[1]*0.5f;
+              vec[2]=0.0f;
+              copyvector(ropeedit.point[ropeedit.numofpoints].position,vec);
+              ropeedit.point[ropeedit.numofpoints].objectnum=count;
+              ropeedit.point[ropeedit.numofpoints].particlenum=count2;
+              ropeedit.numofpoints++;
+
+              copyvector(level.object[count].vertex[count2],vec);
+              }
+            }
+          if (level.object[count].type>=LVL_OBJ_TYPE_WHEEL && level.object[count].type<=LVL_OBJ_TYPE_ANCHORED_WHEEL)
+            {
+            for (count2=0;count2<4;count2++)
+              {
+              vec[0]=level.object[count].position[0];
+              vec[1]=level.object[count].position[1];
+              if (count2==0)
+                vec[0]=level.object[count].position[0]+level.object[count].size[0]*0.5f;
+              if (count2==1)
+                vec[1]=level.object[count].position[1]-level.object[count].size[1]*0.5f;
+              if (count2==2)
+                vec[0]=level.object[count].position[0]-level.object[count].size[0]*0.5f;
+              if (count2==3)
+                vec[1]=level.object[count].position[1]+level.object[count].size[1]*0.5f;
+              vec[2]=0.0f;
+              copyvector(ropeedit.point[ropeedit.numofpoints].position,vec);
+              ropeedit.point[ropeedit.numofpoints].objectnum=count;
+              ropeedit.point[ropeedit.numofpoints].particlenum=count2*4;
+              ropeedit.numofpoints++;
+
+              copyvector(level.object[count].vertex[count2],vec);
+              }
+
+            count2=4;
+            vec[0]=level.object[count].position[0];
+            vec[1]=level.object[count].position[1];
+            vec[2]=0.0f;
+
+            copyvector(ropeedit.point[ropeedit.numofpoints].position,vec);
+            ropeedit.point[ropeedit.numofpoints].objectnum=count;
+            ropeedit.point[ropeedit.numofpoints].particlenum=16;
+            ropeedit.numofpoints++;
+
+            copyvector(level.object[count].vertex[count2],vec);
+            }
+          if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
+            {
+            vec[0]=level.object[count].position[0];
+            vec[1]=level.object[count].position[1];
+            vec[2]=0.0f;
+            copyvector(ropeedit.point[ropeedit.numofpoints].position,vec);
+            ropeedit.point[ropeedit.numofpoints].objectnum=count;
+            ropeedit.point[ropeedit.numofpoints].particlenum=0;
+            ropeedit.numofpoints++;
+            copyvector(level.object[count].vertex[0],vec);
+            }
+          }
+        ropeedit.pointnum=-1;
+}
+
+void rope_edit_button_function(){
+  setup_rope_edit();
+  menuset();
+}
+
+void process_events_ropes(){
+    float vec[3], vec2[3];
+    int count;
+    get_mouse_coords(&vec[0], &vec[1]);
+    vec[2]=0.0f;
+
+    ropeedit.pointhighlight=-1;
+    for (count=0;count<ropeedit.numofpoints;count++)
+      {
+      subtractvectors(vec2,ropeedit.point[count].position,vec);
+      if (vectorlength(vec2)<0.25f)
+        ropeedit.pointhighlight=count;
+      }
+
+    if (mouse.lmb && !prevmouse.lmb){
+      if (ropeedit.pointnum==-1)
+        {
+        if (ropeedit.pointhighlight!=-1)
+          ropeedit.pointnum=ropeedit.pointhighlight;
+        }
+      else
+        {
+
+          {
+          if (ropeedit.pointhighlight!=-1)
+          if (ropeedit.point[ropeedit.pointnum].objectnum!=ropeedit.point[ropeedit.pointhighlight].objectnum)
+            {
+            level.rope[level.numofropes].type=ropeedit.ropetype;
+            level.rope[level.numofropes].obj1=ropeedit.point[ropeedit.pointnum].objectnum;
+            level.rope[level.numofropes].obj1part=ropeedit.point[ropeedit.pointnum].particlenum;
+
+            level.rope[level.numofropes].obj2=ropeedit.point[ropeedit.pointhighlight].objectnum;
+            level.rope[level.numofropes].obj2part=ropeedit.point[ropeedit.pointhighlight].particlenum;
+            level.rope[level.numofropes].texturenum=ropeedit.texturenum;
+
+            level.numofropes++;
+            }
+          ropeedit.pointnum=-1;
+          }
+        }
+    }
+
+    if (mouse.rmb && !prevmouse.rmb)
+      {
+      for (count=0;count<level.numofropes;count++)
+        {
+        if (ropeedit.point[ropeedit.pointhighlight].objectnum==level.rope[count].obj1 && ropeedit.point[ropeedit.pointhighlight].particlenum==level.rope[count].obj1part)
+          deletelevelrope(count);
+        }
+      for (count=0;count<level.numofropes;count++)
+        {
+        if (ropeedit.point[ropeedit.pointhighlight].objectnum==level.rope[count].obj2 && ropeedit.point[ropeedit.pointhighlight].particlenum==level.rope[count].obj2part)
+          deletelevelrope(count);
+        }
+      /*
+      for (count=0;count<level.numofropes;count++)
+        {
+        if (pointintersectline(vec,level.object[level.rope[count].obj1].vertex[level.rope[count].obj1part],level.object[level.rope[count].obj2].vertex[level.rope[count].obj2part],0.25f))
+          deletelevelrope(count);
+        }
+      */
+      }
+    if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
+    if (ropeedit.texturenum<3)
+      ropeedit.texturenum++;
+
+    if (keyboard[SCAN_Z] && !prevkeyboard[SCAN_Z])
+    if (ropeedit.texturenum>0)
+      ropeedit.texturenum--;
+}
+
 void editlevel(int need_to_open_editor)
   {
   int count,count2;
@@ -528,7 +683,7 @@ void editlevel(int need_to_open_editor)
   joystickmenu=0;
 
   editor.active=1;
-  ropeedit.ropetype=WEAK_ROPE;
+  ropeedit.ropetype=PULLING_PISTON;
   view.zoom=10.0f;
 
   while (!menuitem[0].active && !windowinfo.shutdown)
@@ -569,6 +724,10 @@ void editlevel(int need_to_open_editor)
     createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_F6);
     setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_TILES);
+    createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_F4);
+    setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_ROPES);
+    setmenuitem(MO_FUNCTION, rope_edit_button_function); // MO_SET *must* be called before MO_FUNCTION
     createmenuitem("Show lines",0,0,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_L);
     setmenuitem(MO_TOGGLE, &editor.showlines);
@@ -576,6 +735,7 @@ void editlevel(int need_to_open_editor)
     setmenuitem(MO_HOTKEY, SCAN_K);
     setmenuitem(MO_TOGGLE, &editor.showgrid);
 
+    // bottom left corner
     if (editor_mode == EDITOR_MODE_TILES){
       if (editing_editor_layer){
         createmenuitem(TXT_BACK,0,368,16,1.0f,1.0f,1.0f,1.0f);
@@ -625,7 +785,52 @@ void editlevel(int need_to_open_editor)
         setmenuitem(MO_SET, &editor.mode, 3);
       }
     }
+    if (editor_mode == EDITOR_MODE_ROPES){
+      // maybe: make a loop?
+      count = 432;
+      createmenuitem(ROPE_TYPE_NAMES[1],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_1);
+      setmenuitem(MO_SET, &ropeedit.ropetype, WEAK_ROPE);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[2],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_2);
+      setmenuitem(MO_SET, &ropeedit.ropetype, STRONG_ROPE);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[3],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_3);
+      setmenuitem(MO_SET, &ropeedit.ropetype, WEAK_CHAIN);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[4],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_4);
+      setmenuitem(MO_SET, &ropeedit.ropetype, STRONG_CHAIN);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[5],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_5);
+      setmenuitem(MO_SET, &ropeedit.ropetype, PUSHING_PISTON);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[6],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_6);
+      setmenuitem(MO_SET, &ropeedit.ropetype, HALF_PUSHED_PUSHING_PISTON);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[7],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_7);
+      setmenuitem(MO_SET, &ropeedit.ropetype, PULLING_PISTON);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[8],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_8);
+      setmenuitem(MO_SET, &ropeedit.ropetype, HALF_PULLED_PULLING_PISTON);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[9],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_9);
+      setmenuitem(MO_SET, &ropeedit.ropetype, BAR);
+      count -= 16;
+      createmenuitem(ROPE_TYPE_NAMES[0],0,count,16,1.0f,1.0f,1.0f,1.0f);
+      setmenuitem(MO_HOTKEY, SCAN_0);
+      setmenuitem(MO_SET, &ropeedit.ropetype, SPRING);
+      count -= 16;
+    }
 
+    // top right corner
     if (editor_mode == EDITOR_MODE_TILES){
       int y = 0;
       int offset = 16;
@@ -719,6 +924,11 @@ void editlevel(int need_to_open_editor)
     if (!editor.showgrid)
       rendershadows();
 
+    if (editor_mode == EDITOR_MODE_ROPES){
+      glEnable(GL_ALPHA_TEST);
+      glAlphaFunc(GL_GREATER,0.0f);
+      }
+
     if (!editor.showgrid || editor.mode==0)
       renderlevelback();
     if (!editor.showgrid || editor.mode==1)
@@ -727,9 +937,13 @@ void editlevel(int need_to_open_editor)
       renderobjects();
     if (!editor.showgrid || editor.mode==2)
       renderlevelfore();
-    if (editor_mode == EDITOR_MODE_OBJECTS)
+    if (editor_mode == EDITOR_MODE_OBJECTS || editor_mode == EDITOR_MODE_ROPES)
       renderlevelobjects();
 
+    if (editor_mode == EDITOR_MODE_ROPES){
+      glDisable(GL_ALPHA_TEST);
+      renderropeedit();
+    }
     scalevector(level.ambient[editor.mode],level.ambient[editor.mode],0.5f);
 
     if (editor.showlines)
@@ -740,7 +954,6 @@ void editlevel(int need_to_open_editor)
     setuptextdisplay();
 
     glDisable(GL_TEXTURE_2D);
-
     for (count=0;count<8;count++)
       {
       glBegin(GL_LINES);
@@ -838,6 +1051,10 @@ void editlevel(int need_to_open_editor)
         drawtext(TXT_LINK":/i",0,INFO_Y+OFFSET_Y*5,16,1.0f,1.0f,1.0f,1.0f,level.object[editor.objectnum].link);
       }
     }
+    if (editor_mode == EDITOR_MODE_ROPES){
+      drawtext(TXT_NUMOFROPES":/i",0,448,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
+      drawtext(TXT_TEXTURENUM":/i",0,464,16,1.0f,1.0f,1.0f,1.0f,ropeedit.texturenum);
+    }
 
     if (menu_last_loadlevel >= 0){
       if (menu_last_loadlevel == LOADLEVELRESULT_OK){
@@ -890,6 +1107,11 @@ void editlevel(int need_to_open_editor)
         }
       }
     }
+    if (editor_mode == EDITOR_MODE_ROPES){
+      if (debug_ropeedit_points){
+        drawtext("/i", 0, 0, 10, 1.0f,1.0f,1.0f,1.0f, ropeedit.numofpoints);
+      }
+    }
 
     drawmenuitems();
 
@@ -902,6 +1124,9 @@ void editlevel(int need_to_open_editor)
     }
     if (editor_mode == EDITOR_MODE_OBJECTS){
       process_events_objects();
+    }
+    if (editor_mode == EDITOR_MODE_ROPES){
+      process_events_ropes();
     }
 
     simcount=0;
@@ -919,11 +1144,6 @@ void editlevel(int need_to_open_editor)
       if (keyboard[SCAN_F2] && !prevkeyboard[SCAN_F2])
         {
         editblock();
-        simtimer=SDL_GetTicks();
-        }
-      if (keyboard[SCAN_F4] && !prevkeyboard[SCAN_F4])
-        {
-        editlevelrope();
         simtimer=SDL_GetTicks();
         }
       if (keyboard[SCAN_T] && !prevkeyboard[SCAN_T])
