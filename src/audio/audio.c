@@ -212,32 +212,49 @@ void loadwav(int buffernum,char *filename)
 
   char filename_with_folder[256];
   sprintf(filename_with_folder, "%s/%s/sound/%s", datapacks_folder, loaded_datapack, filename); // MAYBE: add ability to list several datapacks and try loading them one by one
+  printf("Loading sound: %s\n", filename_with_folder);
+  fflush(stdout);
   filename_with_folder[255] = 0; // safety first
 
-  if (SDL_LoadWAV(filename,&wavspec,&wavbuffer,&wavlength))
-    {
-    if (wavspec.channels==1)
-      {
-      if (wavspec.format==AUDIO_U8 || wavspec.format==AUDIO_S8)
-        format=AL_FORMAT_MONO8;
-      else
-        format=AL_FORMAT_MONO16;
+  if (!SDL_LoadWAV(filename_with_folder,&wavspec,&wavbuffer,&wavlength)){
+    printf("Error loading audio! %s\n", SDL_GetError());
+    fflush(stdout);
+    return;
+  }
 
-      if (bigendian)
-      if (format==AL_FORMAT_MONO16)
-        {
-        for (count=0;count<wavlength/2;count++)
-          {
-          temp=wavbuffer[count*2+0];
-          wavbuffer[count*2+0]=wavbuffer[count*2+1];
-          wavbuffer[count*2+1]=temp;
-          }
-        }
-
-      alBufferData(soundbuffer[buffernum],format,wavbuffer,wavlength,wavspec.freq);
-      bufferloaded[buffernum]=1;
-      }
+  if (wavspec.channels == 1){
+    if (wavspec.format==AUDIO_U8 || wavspec.format==AUDIO_S8)
+      format=AL_FORMAT_MONO8;
+    else
+      format=AL_FORMAT_MONO16;
+  }
+  else if (wavspec.channels == 2){
+    if (wavspec.format==AUDIO_U8 || wavspec.format==AUDIO_S8)
+      format=AL_FORMAT_STEREO8;
+    else
+      format=AL_FORMAT_STEREO16;
+  }
+  else{
+    printf("Error loading audio! wavspec.channels != 1. wavspec.channels = %d\n", wavspec.channels);
+    fflush(stdout);
     SDL_FreeWAV(wavbuffer);
+    return;
+  }
+
+  if (bigendian)
+  if (format==AL_FORMAT_MONO16 || format == AL_FORMAT_STEREO16)
+    {
+    for (count=0;count<wavlength/2;count++)
+      {
+      temp=wavbuffer[count*2+0];
+      wavbuffer[count*2+0]=wavbuffer[count*2+1];
+      wavbuffer[count*2+1]=temp;
+      }
     }
+
+  alBufferData(soundbuffer[buffernum],format,wavbuffer,wavlength,wavspec.freq);
+  bufferloaded[buffernum]=1;
+  SDL_FreeWAV(wavbuffer);
+
   }
 
