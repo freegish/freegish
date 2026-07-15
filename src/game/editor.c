@@ -40,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/gameobject.h"
 #include "../game/setup.h"
 #include "../game/gametexture.h"
+#include "../physics/particle.h"
 #include "../input/keyboard.h"
 #include "../input/mouse.h"
 #include "../math/vector.h"
@@ -54,14 +55,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 _editor editor;
 char currentTextureFilename[256];
 
-void editlevel(void)
+void editlevel(int need_to_open_editor)
   {
   int count,count2;
   int x,y;
   int editing_level_gametype = 0;
   int simtimer;
   int simcount;
-  float vec[3];
+  float vec[3], vec2[3];
+  int last_loadlevel = -1;
 
   gametype gametypes[] = {
     GAMETYPE_CAMPAIGN,
@@ -76,6 +78,12 @@ void editlevel(void)
     GAMETYPE_4FOOTBALL,
     GAMETYPE_4SUMO,
   };
+
+  if (need_to_open_editor && editor.filename[0]){
+    loadlevel(editor.filename);
+    setuplevel();
+    setupgame();
+  }
 
   simtimer=SDL_GetTicks();
 
@@ -148,6 +156,7 @@ void editlevel(void)
             if (menuitem[first_gametype_item+count].active){
                 editing_level_gametype = 0;
                 menuitem[first_gametype_item+count].active = 0;
+                level.gametype = gametypes[count];
             }
     }
 
@@ -267,6 +276,26 @@ void editlevel(void)
     drawtext(TXT_TILESET":/i",0,368,16,1.0f,1.0f,1.0f,1.0f,level.tileset);
     drawtext(TXT_TILE":/i",0,400,16,1.0f,1.0f,1.0f,1.0f,editor.blocknum);
 
+    if (last_loadlevel >= 0){
+      if (last_loadlevel == LOADLEVELRESULT_OK){
+        drawtext(TXT_LOAD_LEVEL_OK,(639|TEXT_END),480-16*5,16,0.0f,1.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_UNKNOWN){
+        drawtext(TXT_LOAD_LEVEL_UNKNOWN,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_FILEERROR){
+        drawtext(TXT_LOAD_LEVEL_FILEERROR,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_OBJECTS){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_OBJECTS,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_ROPES){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_ROPES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG){
+        drawtext(TXT_LOAD_LEVEL_TEXTURE_SIZEX_TOO_BIG,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else if (last_loadlevel == LOADLEVELRESULT_TOO_MANY_BLOCK_LINES){
+        drawtext(TXT_LOAD_LEVEL_TOO_MANY_BLOCK_LINES,(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f);
+      } else {
+        drawtext("IDK last_loadlevel = /i",(639|TEXT_END),480-16*5,16,1.0f,0.0f,0.0f,1.0f, last_loadlevel);
+      }
+    }
+
     // draw mouse pos
     screen_to_world(mouse.x, mouse.y, &vec[0], &vec[1]);
     x = (int)vec[0];
@@ -304,10 +333,14 @@ void editlevel(void)
         {
         if (!keyboard[SCAN_SHIFT])
           {
-          if (mouse.lmb)
+          if (mouse.lmb){
             setblock(x,y,editor.blocknum);
-          if (mouse.rmb && (editor.editstart[0]==0 && editor.editstart[1]==0))
+            last_loadlevel = -1;
+          }
+          if (mouse.rmb && (editor.editstart[0]==0 && editor.editstart[1]==0)){
             setblock(x,y,0);
+            last_loadlevel = -1;
+          }
           }
         else
           {
@@ -423,6 +456,20 @@ void editlevel(void)
         }
       if (keyboard[SCAN_G])
         editor.blocknum=getblock(x,y);
+      // set first player position to mouse coords
+      if (keyboard[SCAN_P] && !prevkeyboard[SCAN_P]){
+        if (object[0].type == OBJ_TYPE_GISH){
+          get_mouse_coords(&vec[0], &vec[1]);
+          vec[2] = 0.0f;
+          subtractvectors(vec2, vec, object[0].position);
+          for (count = 0; count < 16; count++){
+            particle[object[0].particle[count]].position[0] += vec2[0];
+            particle[object[0].particle[count]].position[1] += vec2[1];
+          }
+          object[0].position[0] = vec[0];
+          object[0].position[1] = vec[1];
+        }
+      }
       if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
         {
         if (!keyboard[SCAN_SHIFT])
@@ -473,7 +520,7 @@ void editlevel(void)
       {
       if (keyboard[SCAN_F7] && !prevkeyboard[SCAN_F7])
         {
-        loadlevel(editor.filename);
+        last_loadlevel = loadlevel(editor.filename);
         setuplevel();
         setupgame();
         }
@@ -624,8 +671,9 @@ void editblock(void)
   int simcount;
   float friction;
   float vec[3]/*,vec2[3]*/;
+  int load_texture = -1;
+  char filename[256];
   //float normal[3];
-  //char filename[13]="text000.png";
   //int changeddir;
 
   /*
@@ -644,6 +692,8 @@ void editblock(void)
   texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
   texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
   setuptexture(EDITBLOCK_TEXTURE);
+  memset(filename, 0, 256);
+  strcpy(filename, texture[editor.blocknum].filename);
 
   simtimer=SDL_GetTicks();
 
@@ -692,11 +742,23 @@ void editblock(void)
     setmenuitem(MO_INTINPUT,&block[editor.blocknum].animationspeed);
     setmenuitem(MO_HOTKEY,SCAN_S);
     count+=32;
+    createmenuitem(TXT_FILENAME"                           ",(640|TEXT_END),448,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_STRINGINPUT,filename);
+    load_texture = createmenuitem(TXT_LOAD_TEXTURE,(640|TEXT_END),448-16,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY,SCAN_L);
 
     checksystemmessages();
     checkkeyboard();
     checkmouse();
     checkmenuitems();
+
+    if (menuitem[load_texture].active){
+      loadtexture(editor.blocknum,filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
+      copytexture(EDITBLOCK_TEXTURE,editor.blocknum);
+      texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
+      texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
+      setuptexture(EDITBLOCK_TEXTURE);
+    }
 
     if (!menuinputkeyboard)
       {
@@ -914,6 +976,8 @@ void editblock(void)
 
       memcpy(texture[EDITBLOCK_TEXTURE].rgba[0],texture[editor.blocknum].rgba[0],texture[editor.blocknum].sizex*texture[editor.blocknum].sizey*4);
       setuptexture(EDITBLOCK_TEXTURE);
+
+      texture[editor.blocknum].filename[0] = 0; // detach this texture from its file because saving and loading will bring the whole texture back
       }
 
     if (keyboard[SCAN_Q] && !prevkeyboard[SCAN_Q])
@@ -929,6 +993,8 @@ void editblock(void)
       texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
       texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
       setuptexture(EDITBLOCK_TEXTURE);
+      memset(filename, 0, 256);
+      strcpy(filename, texture[editor.blocknum].filename);
       /*
       changeddir=changetilesetdir();
     
@@ -954,7 +1020,8 @@ void editblock(void)
       texture[EDITBLOCK_TEXTURE].magfilter=GL_NEAREST;
       texture[EDITBLOCK_TEXTURE].minfilter=GL_NEAREST;
       setuptexture(EDITBLOCK_TEXTURE);
-
+      memset(filename, 0, 256);
+      strcpy(filename, texture[editor.blocknum].filename);
       /*
       changeddir=changetilesetdir();
     

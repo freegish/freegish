@@ -655,7 +655,6 @@ void gameloop(void)
     if (game.levelnum==0 && game.editing)
     if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1] || need_to_open_editor)
       {
-      need_to_open_editor = 0;
       game.songnum=-1;
       checkmusic();
 
@@ -672,7 +671,8 @@ void gameloop(void)
       if (animation[count].loaded==0)
         animation[count].loaded=2;
 
-      editlevel();
+      editlevel(need_to_open_editor);
+      need_to_open_editor = 0;
 
       savelevel("backup.lvl");
 

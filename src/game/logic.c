@@ -649,6 +649,42 @@ void gamedisplay(void)
         }
       }
     }
+  if (debug_character_positions) {
+      float vec[2];
+      for (int player = 0; player < game.numofplayers; player++) {
+          world_to_screen(object[player].position[0], object[player].position[1], &vec[0], &vec[1]);
+          drawtext("/i /i", (int)vec[0],(int)vec[1], 10, 1.0f, 1.0f, 1.0f, 1.0f, (int)object[player].position[0], (int)object[player].position[1]);
+      }
+
+      float midpoint[3];
+      float sub_result[3];
+      float distance_to_midpoint = 0.0f;
+      zerovector(midpoint);
+
+      for (int i = 0; i < game.numofplayers; i++)
+          addvectors(midpoint, midpoint, object[i].position);
+      scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
+
+      for (int i = 0; i < game.numofplayers; i++) {
+          subtractvectors(sub_result, midpoint, object[i].position);
+          distance_to_midpoint += vectorlength(sub_result);
+      }
+      world_to_screen(midpoint[0], midpoint[1], &vec[0], &vec[1]);
+      drawtext("mid/i /i /i", (int)vec[0],(int)vec[1], 10, 1.0f, 1.0f, 1.0f, 1.0f, (int)midpoint[0], (int)midpoint[1], (int)distance_to_midpoint);
+  }
+  if (debug_objectnums){
+      float vec[2];
+      for (count = 0; count < numofobjects; count++){
+          world_to_screen(object[count].position[0], object[count].position[1], &vec[0], &vec[1]);
+          drawtext("/i", (int)vec[0],(int)vec[1]+10, 10, 1.0f, 1.0f, 1.0f, 1.0f, count);
+      }
+      if (debug_objectlinks){
+        for (count = 0; count < numofobjects; count++){
+            world_to_screen(object[count].position[0], object[count].position[1], &vec[0], &vec[1]);
+            drawtext("link: /i", (int)vec[0],(int)vec[1]+20, 10, 1.0f, 1.0f, 1.0f, 1.0f, object[count].link);
+        }
+      }
+  }
   if (level.gametype == GAMETYPE_CAMPAIGN || level.gametype == GAMETYPE_COLLECTION)
   {
       drawbackground(720, 16, 0, 48, 48, 640, 480);
@@ -666,38 +702,6 @@ void gamedisplay(void)
           drawtext("/i", 0, 0, 0, red, green, blue, 1.0f, object[player].hitpoints / 10);
           drawtextbitmap(64, 12 + 16 * player, 24, 24);
       }
-
-    if (debug_character_positions) {
-        float vec[2];
-        for (int player = 0; player < game.numofplayers; player++) {
-            world_to_screen(object[player].position[0], object[player].position[1], &vec[0], &vec[1]);
-            drawtext("/i /i", (int)vec[0],(int)vec[1], 10, 1.0f, 1.0f, 1.0f, 1.0f, (int)object[player].position[0], (int)object[player].position[1]);
-        }
-
-        float midpoint[3];
-        float sub_result[3];
-        float distance_to_midpoint = 0.0f;
-        zerovector(midpoint);
-
-        for (int i = 0; i < game.numofplayers; i++)
-            addvectors(midpoint, midpoint, object[i].position);
-        scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
-
-        for (int i = 0; i < game.numofplayers; i++) {
-            subtractvectors(sub_result, midpoint, object[i].position);
-            distance_to_midpoint += vectorlength(sub_result);
-        }
-        world_to_screen(midpoint[0], midpoint[1], &vec[0], &vec[1]);
-        drawtext("mid/i /i /i", (int)vec[0],(int)vec[1], 10, 1.0f, 1.0f, 1.0f, 1.0f, (int)midpoint[0], (int)midpoint[1], (int)distance_to_midpoint);
-    }
-    if (debug_objectnums){
-        float vec[2];
-        for (count = 0; count < numofobjects; count++){
-            world_to_screen(object[count].position[0], object[count].position[1], &vec[0], &vec[1]);
-            drawtext("/i", (int)vec[0],(int)vec[1]+10, 10, 1.0f, 1.0f, 1.0f, 1.0f, count);
-        }
-    }
-
     glColor3f(1.0f,1.0f,1.0f);
 
     //drawtext("/i",(40|TEXT_CENTER),24,16,1.0f,1.0f,1.0f,1.0f,object[0].hitpoints/10);
@@ -1403,9 +1407,9 @@ void gamedisplay(void)
     if (object[0].position[1]>=level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][1] && object[0].position[1]<level.area[LEVELAREA_TUTORIAL_LINE_8_TO_12][3])
       {
       count=68;
-      drawtext(TXT_TUTORIAL_LINE8,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_JUMP]]);
+      drawtext(TXT_TUTORIAL_LINE8,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE9,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
+      drawtext(TXT_TUTORIAL_LINE9,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_JUMP]]);
       count+=12;
       drawtext(TXT_TUTORIAL_LINE10,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
@@ -1448,9 +1452,9 @@ void gamedisplay(void)
       count=68;
       drawtext(TXT_TUTORIAL_LINE15,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_STICK]]);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE16,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_UP]]);
+      drawtext(TXT_TUTORIAL_LINE16,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
-      drawtext(TXT_TUTORIAL_LINE17,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f,keyboardlabel[control[0].key[KEYALIAS_LEFT]]);
+      drawtext(TXT_TUTORIAL_LINE17,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;
       drawtext(TXT_TUTORIAL_LINE18,(320|TEXT_CENTER),count,12,1.0f,1.0f,1.0f,1.0f);
       count+=12;

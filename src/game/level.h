@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 int lineintersectlevel(float *intersectpoint,float *normal,float *scale,float *startpoint,float *endpoint);
 void savelevel(char *filename);
-void loadlevel(char *filename);
+int loadlevel(char *filename);
 void createlevel(void);
 void getlevellines(int objectnum);
 void setuplevellines(int xstart,int ystart,int xend,int yend);
@@ -82,6 +82,16 @@ typedef enum {
         LEVELAREA_TUTORIAL_LINE_13_TO_14 = 5,
         LEVELAREA_TUTORIAL_LINE_15_TO_19 = 6
 } levelarea;
+
+typedef enum {
+  LOADLEVELRESULT_OK = 0,
+  LOADLEVELRESULT_UNKNOWN = 1,
+  LOADLEVELRESULT_FILEERROR = 2,
+  LOADLEVELRESULT_TOO_MANY_OBJECTS = 3,
+  LOADLEVELRESULT_TOO_MANY_ROPES = 4,
+  LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG = 5,
+  LOADLEVELRESULT_TOO_MANY_BLOCK_LINES = 6
+} loadlevelresult;
 
 typedef struct
   {

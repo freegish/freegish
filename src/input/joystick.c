@@ -42,13 +42,28 @@ void setupjoysticks(void){
   if (config.joystick)
     {
     numofjoysticks=SDL_NumJoysticks();
+    printf("%d joysticks found\n", numofjoysticks);
+    fflush(stdout);
     for (int count=0;count<numofjoysticks;count++)
       {
+      printf("Initializing joystick %d\n", count);
+      fflush(stdout);
       joy[count]=SDL_JoystickOpen(count);
+      if (joy[count] == NULL){
+        fprintf(stderr, "Failed to open joystick %d:\n%s\n",count,SDL_GetError());
+        continue;
+      }
       temp=SDL_JoystickName(joy[count]);
-      strcpy(joystick[count].name,temp);
+      if (temp == NULL){
+        fprintf(stderr, "Failed to get joystick %d name:\n%s\n",count,SDL_GetError());
+      }
+      else{
+        strcpy(joystick[count].name,temp);
+      }
       joystick[count].numofbuttons=SDL_JoystickNumButtons(joy[count]);
       joystick[count].numofhats=SDL_JoystickNumHats(joy[count]);
+      printf("Joystick %d done\n", count);
+      fflush(stdout);
       }
 
     SDL_JoystickEventState(SDL_IGNORE);

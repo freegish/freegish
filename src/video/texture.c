@@ -660,9 +660,9 @@ void load_all_static_textures(void){
     SDL_GL_SwapWindow(globalwindow);
 
     for (count=0;count<64;count++){
-        texfilename[4]=48+(count/100)%10;
-        texfilename[5]=48+(count/10)%10;
-        texfilename[6]=48+count%10;
+        texfilename[4]='0'+(count/100)%10;
+        texfilename[5]='0'+(count/10)%10;
+        texfilename[6]='0'+count%10;
         loadtexture(count+256,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
     }
     loadtexture(256+64,"cage1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
