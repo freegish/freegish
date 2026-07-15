@@ -259,6 +259,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TXT_WAYBACKGROUND								"WAYBACKGROUND"
 #define TXT_TILESET											"TILESET"
 #define TXT_TILE												"TILE"
+#define TXT_TILES												"TILES"
 #define TXT_FRICTION										"Friction"
 #define TXT_BREAKPOINT									"Breakpoint"
 #define TXT_MIDDAMAGE										"Middamage"

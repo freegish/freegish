@@ -718,13 +718,13 @@ void editlevel(int need_to_open_editor)
     menu_setup = createmenuitem(TXT_SETUP,(640-16*(strlen(TXT_SAVE)+strlen(TXT_LOAD)+4)|TEXT_END),464,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_F5);
     setmenuitem(MO_REPEAT);
-    createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
-    setmenuitem(MO_HOTKEY, SCAN_F3);
-    setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_OBJECTS);
-    createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
+    createmenuitem(TXT_TILES,0,464,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_F6);
     setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_TILES);
-    createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
+    createmenuitem(TXT_OBJECTS,(strlen(TXT_TILES)+1)*16,464,16,1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY, SCAN_F3);
+    setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_OBJECTS);
+    createmenuitem(TXT_ROPES,(strlen(TXT_TILES)+strlen(TXT_OBJECTS)+2)*16,464,16,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_HOTKEY, SCAN_F4);
     setmenuitem(MO_SET, &editor_mode, EDITOR_MODE_ROPES);
     setmenuitem(MO_FUNCTION, rope_edit_button_function); // MO_SET *must* be called before MO_FUNCTION
@@ -787,7 +787,7 @@ void editlevel(int need_to_open_editor)
     }
     if (editor_mode == EDITOR_MODE_ROPES){
       // maybe: make a loop?
-      count = 432;
+      count = 416;
       createmenuitem(ROPE_TYPE_NAMES[1],0,count,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY, SCAN_1);
       setmenuitem(MO_SET, &ropeedit.ropetype, WEAK_ROPE);
@@ -1052,8 +1052,8 @@ void editlevel(int need_to_open_editor)
       }
     }
     if (editor_mode == EDITOR_MODE_ROPES){
-      drawtext(TXT_NUMOFROPES":/i",0,448,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
-      drawtext(TXT_TEXTURENUM":/i",0,464,16,1.0f,1.0f,1.0f,1.0f,ropeedit.texturenum);
+      drawtext(TXT_NUMOFROPES":/i",0,432,16,1.0f,1.0f,1.0f,1.0f,level.numofropes);
+      drawtext(TXT_TEXTURENUM":/i",0,448,16,1.0f,1.0f,1.0f,1.0f,ropeedit.texturenum);
     }
 
     if (menu_last_loadlevel >= 0){
