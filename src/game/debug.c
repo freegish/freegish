@@ -33,3 +33,4 @@ int debug_next_level = 0;
 int debug_render_bonds = 0;
 int debug_render_player_vertices = 0;
 int debug_render_level_lines = 0;
+int debug_ropeedit_points = 0;

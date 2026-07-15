@@ -28,6 +28,13 @@ void rendereditblocks(void);
 void editblock(void);
 void renderlevellines(void);
 
+typedef enum {
+  EDITOR_MODE_TILES = 0,
+  EDITOR_MODE_OBJECTS = 1,
+  EDITOR_MODE_ROPES = 2,
+  // EDITOR_MODE_TILES = 3,
+} _editor_mode;
+
 typedef struct
   {
   int active;

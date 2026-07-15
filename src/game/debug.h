@@ -32,5 +32,6 @@ extern int debug_next_level;
 extern int debug_render_bonds;
 extern int debug_render_player_vertices;
 extern int debug_render_level_lines;
+extern int debug_ropeedit_points;
 
 #endif /* GISH_GAME_DEBUG_H */

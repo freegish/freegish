@@ -85,6 +85,7 @@ extern int numofmenuitems;
 extern _menuitem menuitem[MAXMENUITEMS];
 
 extern int menuinputkeyboard;
+extern int menuinputmouse;
 extern int menuinputselectpos;
 extern int menuinputcursorpos;
 extern int menuinputinsert;
