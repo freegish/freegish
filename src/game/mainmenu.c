@@ -59,195 +59,11 @@ void mainmenu(void)
   int count,temp;
   int prevjoymenunum;
   //int registered;
-  char loadfilename[32]="loading00.png";
-  char texfilename[32]="text000.png";
   //unsigned int x,y;
 
   srand(time(NULL));
-  count=(rand()%11)+1;
 
-  loadfilename[7]=48+count/10;
-  loadfilename[8]=48+count%10;
-  loadbackground(800,loadfilename);
-
-  glClearColor(0.0f,0.0f,0.0f,0.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  setuptextdisplay();
-
-  glColor4f(1.0f,1.0f,1.0f,1.0f);
-  displaybackground(800);
-
-  drawtext(TXT_LOADING,(320|TEXT_CENTER),448,16,1.0f,1.0f,1.0f,1.0f);
-
-  SDL_GL_SwapWindow(globalwindow);
-
-  for (count=0;count<64;count++)
-    {
-    texfilename[4]=48+(count/100)%10;
-    texfilename[5]=48+(count/10)%10;
-    texfilename[6]=48+count%10;
-    loadtexture(count+256,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-    }
-
-  loadtexture(256+64,"cage1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(256+65,"cage2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(256+66,"cage3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(256+67,"cage4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(256+68,"x.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  setuplightingtextures();
-
-  loadbackground(470,"gishtitle.png");
-
-  loadtexture(462,"complete.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(465,"breatalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(468,"lvlcomplete.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(469,"gishy.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(512,"gishtalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(513,"honeytalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(514,"paunchytalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(515,"vistalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(516,"bastalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(517,"sistalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(518,"heratalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(519,"badending.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(520,"goodending.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(521,"sewerimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(522,"caveimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(523,"hellimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(524,"egyptimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(525,"churchimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(526,"warpimg.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(527,"satantalk.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(528,"crypticsea.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(529,"turbo.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(530,"sumo.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(531,"football.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(532,"greed.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(533,"duel.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(534,"dragster.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(535,"collect.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadbackground(540,"level.png");
-
-  loadbackground(560,"congrats.png");
-  loadbackground(580,"blank.png");
-
-  loadbackground(600,"vsmode.png");
-  loadbackground(620,"storymode.png");
-
-  loadtexturepartial(640,"border.png",0,0,256,256);
-  loadtexturepartial(641,"border.png",256,0,256,256);
-  loadtexturepartial(642,"border.png",512,0,256,256);
-  loadtexturepartial(643,"border.png",0,256,256,256);
-  loadtexturepartial(644,"border.png",256,256,256,256);
-  loadtexturepartial(645,"border.png",512,256,256,256);
-
-  loadtexture(820,"gishwin.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(821,"graywin.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(822,"fight.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(823,"ready.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(700,"0.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(701,"1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(702,"2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(703,"3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(704,"4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(705,"5.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(706,"6.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(707,"7.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(708,"8.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(709,"9.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(710,"10.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(711,"11.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(712,"12.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(720,"gishhud.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(721,"greyhud.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(722,"tarballs.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(723,"key.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(360,"rope.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(361,"chain.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(362,"piston1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(363,"tar2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(364,"poop.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(365,"dust.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(366,"bubble.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(367,"blood.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(368,"tar.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(369,"amber.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(370,"face.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(371,"facem1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(372,"facem2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(373,"facem3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(374,"facem4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(375,"faceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(376,"faceb2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(377,"faceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(378,"faceh1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(379,"faceh2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(380,"faceh3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(381,"faceh4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(382,"gishhurt.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(370+20,"gface.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(371+20,"gfacem1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(372+20,"gfacem2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(373+20,"gfacem3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(374+20,"gfacem4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(375+20,"gfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(376+20,"gfaceb2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(377+20,"gfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(378+20,"gfaceh01.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(379+20,"gfaceh02.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(380+20,"gfaceh03.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(381+20,"gfaceh03.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(382+20,"grayhurt.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(370+40,"bface.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(371+40,"bfacem1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(372+40,"bfacem2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(373+40,"bfacem3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(374+40,"bfacem4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(375+40,"bfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(376+40,"bfaceb2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(377+40,"bfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(378+40,"bfaceh1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(379+40,"bfaceh2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(380+40,"bfaceh3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(381+40,"bfaceh3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(382+40,"bhurt.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(383+40,"btar.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  loadtexture(370+60,"rface.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(371+60,"rfacem1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(372+60,"rfacem2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(373+60,"rfacem3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(374+60,"rfacem4.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(375+60,"rfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(376+60,"rfaceb2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(377+60,"rfaceb1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(378+60,"rfaceh1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(379+60,"rfaceh2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(380+60,"rfaceh3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(381+60,"rfaceh3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(382+60,"rhurt.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-  loadtexture(383+60,"rtar.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  numofanimations=1024;
-
-  //loadanimations();
-
-  if (config.sound)
-    loadoggs();
+  load_datapack();
 
   setupphysics();
 
@@ -266,6 +82,7 @@ void mainmenu(void)
 
   joymenunum=1;
   game.turbomode=1;
+  game.numofplayers = 1;
 
   while (!menuitem[0].active && !windowinfo.shutdown)
     {
@@ -313,6 +130,7 @@ void mainmenu(void)
 
     if (game.turbomode)
       drawtext(TXT_TURBO_EDITION,(640|TEXT_END),470,10,1.0f,1.0f,1.0f,1.0f);
+
     drawtext("Version 1.53",0,470,10,1.0f,1.0f,1.0f,1.0f);
 
     drawtext(TXT_COPYRIGHT,(320|TEXT_CENTER),470,10,0.75f,0.75f,0.75f,1.0f);
@@ -352,6 +170,8 @@ void mainmenu(void)
       //checkmusic();
 
       prevjoymenunum=2;
+      if (versus_numplayers < 2)
+          setup_presets_to_players(&versus_numplayers, versus_is_joystick, versus_presets, 2);
       versusmenu();
       joymenunum=prevjoymenunum;
       }
@@ -402,6 +222,166 @@ void displaybackground(int texturenum)
   drawbackground(texturenum+11,768,512,256,256,800,600);
   }
 
+void setup_presets_to_players(int* numplayers_out, int* controllers, int* presets, int minplayers){
+    resetmenuitems();
+
+    // controllers is a 4-length int array where
+    // 0 is kb
+    // 1-4 is joystick
+
+    // int teams[4] = {0, 1, 2, 3};
+
+    int numplayers = *numplayers_out;
+
+    joymenunum=1;
+
+    while (!menuitem[0].active && !windowinfo.shutdown)
+        {
+        glClearColor(0.0f,0.0f,0.0f,0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        numofmenuitems=0;
+
+        int continue_button = createmenuitem(TXT_CONTINUE,640|TEXT_END,0,16,1.0f,1.0f,1.0f,1.0f);
+        int left_arrows[4] = {-1, -1, -1, -1};
+        int right_arrows[4] = {-1, -1, -1, -1};
+
+        /* // need this if you want to have same keys for different players. Irrelevant for now.
+        for (int player_index = 0; player_index < numplayers; player_index++){
+            left_arrows[player_index] = createmenuitem(TXT_LEFT_ARROW, (80 - 80 + player_index * 160), 360+16+10, 10,1.0f,1.0f,1.0f,1.0f);
+            left_arrows[player_index] = createmenuitem(TXT_RIGHT_ARROW, (80 + 80 + player_index * 160)|TEXT_END, 360+16+10, 10,1.0f,1.0f,1.0f,1.0f);
+        }
+        */
+
+        checksystemmessages();
+        checkkeyboard();
+        checkmouse();
+        checkjoystick();
+        checkmenuitems();
+
+        updateogg();
+        checkmusic();
+        game.songnum=8;
+        soundsimulation(view.position,view.orientation);
+
+        setuptextdisplay();
+
+        glColor4f(1.0f,1.0f,1.0f,1.0f);
+        //displaybackground(600);
+
+        drawtext(TXT_PRESS_JUMP_BUTTON,(320|TEXT_CENTER),120,16,1.0f,1.0f,1.0f,1.0f);
+        if (numplayers > 0){
+            drawtext(TXT_PRESS_HEAVY_BUTTON,(320|TEXT_CENTER),120+16,16,1.0f,1.0f,1.0f,1.0f);
+            drawtext(TXT_PRESS_RIGHT_CLICK_TO_LEAVE,(320|TEXT_CENTER),120+16+16,12,1.0f,1.0f,1.0f,1.0f);
+            drawtext(TXT_PRESS_DELETE_TO_LEAVE,(320|TEXT_CENTER),120+16+16+12,12,1.0f,1.0f,1.0f,1.0f);
+        }
+        for (int player_index = 0; player_index < numplayers; player_index++){
+            if (controllers[player_index] == 0){
+                drawtext(TXT_KEYBOARD, (80 + player_index * 160)|TEXT_CENTER, 360, 16,1.0f,1.0f,1.0f,1.0f);
+
+                drawtext(keyboardpresets[presets[player_index]].name, (80 + player_index * 160)|TEXT_CENTER, 360+16+10, 10,1.0f,1.0f,1.0f,1.0f);
+            }
+            else{
+                drawtext(TXT_JOYSTICK, (80 + player_index * 160)|TEXT_CENTER, 360, 16,1.0f,1.0f,1.0f,1.0f);
+                drawtext(joystick[controllers[player_index]-1].name, (80 + player_index * 160)|TEXT_CENTER, 360+16, 10,0.5f,0.5f,0.5f,1.0f);
+                drawtext(joystickpresets[presets[player_index]].name, (80 + player_index * 160)|TEXT_CENTER, 360+16+10, 10, 1.0f,1.0f,1.0f,1.0f);
+            }
+        }
+        if (numplayers < minplayers) {
+            drawtext(TXT_TOO_FEW_PlAYERS,(640|TEXT_END),16,10,1.0f,1.0f,1.0f,1.0f, minplayers);
+        }
+
+        drawmenuitems();
+
+        drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
+
+        SDL_GL_SwapWindow(globalwindow);
+
+        // joining
+        if (numplayers < 4){
+            for (int kbpreset=0;kbpreset<numkeyboardpresets;kbpreset++){
+                int jump_button = keyboardpresets[kbpreset].key[KEYALIAS_JUMP];
+                if (keyboard[jump_button] && !prevkeyboard[jump_button]){
+                    controllers[numplayers] = 0;
+                    presets[numplayers] = kbpreset;
+                    numplayers++;
+                    break;
+                }
+            }
+            for (int jpreset=0; jpreset<numjoystickpresets; jpreset++){
+                int joystick_index = joystickpresets[jpreset].joysticknum;
+                int jump_button = joystickpresets[jpreset].button[KEYALIAS_JUMP];
+                if (joystick[joystick_index].button[jump_button] && !prevjoystick[joystick_index].button[jump_button]){
+                    controllers[numplayers] = joystick_index+1;
+                    presets[numplayers] = jpreset;
+                    numplayers++;
+                    break;
+                }
+            }
+        }
+        // leaving
+        for (int player_index = numplayers-1; player_index >= 0; player_index--){
+            if (controllers[player_index] == 0){
+                int heavy_button = keyboardpresets[presets[player_index]].key[KEYALIAS_HEAVY];
+                if (keyboard[heavy_button] && !prevkeyboard[heavy_button]){
+                    // found, exclude them
+                    for (; player_index < numplayers-1; player_index++){
+                        controllers[player_index] = controllers[player_index+1];
+                        presets[player_index] = presets[player_index+1];
+                    }
+                    numplayers--;
+                    break;
+                }
+            }
+            else {
+                int joystick_index = joystickpresets[controllers[player_index]-1].joysticknum;
+                int heavy_button = joystickpresets[controllers[player_index]-1].button[KEYALIAS_HEAVY];
+                if (joystick[joystick_index].button[heavy_button] && !prevjoystick[joystick_index].button[heavy_button]){
+                    // found, exclude them
+                    for (; player_index < numplayers-1; player_index++){
+                        controllers[player_index] = controllers[player_index+1];
+                        presets[player_index] = presets[player_index+1];
+                    }
+                    numplayers--;
+                    break;
+                }
+            }
+        }
+
+        if (menuitem[continue_button].active){
+            if (numplayers < minplayers) {
+                menuitem[continue_button].active = 0;
+                continue;
+            }
+            // save to out variables
+            *numplayers_out = numplayers;
+            break;
+        }
+        if (mouse.rmb && !prevmouse.rmb)
+        if (mouse.y > 300 && (mouse.x / 160) < numplayers){
+          for (int player_index = mouse.x / 160; player_index < numplayers-1; player_index++){
+              controllers[player_index] = controllers[player_index+1];
+              presets[player_index] = presets[player_index+1];
+          }
+          numplayers--;
+        }
+        if (keyboard[SCAN_DELETE] && !prevkeyboard[SCAN_DELETE]){
+          numplayers--;
+        }
+    }
+    resetmenuitems();
+}
+void bind_presets_to_controls(int numplayers, int* controllers, int* presets){
+    // setup controls
+    for (int player_index = 0; player_index < numplayers; player_index++){
+        if (controllers[player_index] == 0){
+            control[player_index] = keyboardpresets[presets[player_index]];
+        }
+        else{
+            control[player_index] = joystickpresets[presets[player_index]];
+        }
+    }
+}
 void versusmenu(void)
   {
   int count;
@@ -409,7 +389,7 @@ void versusmenu(void)
 
   unlocked=0;
   for (count=0;count<6;count++)
-  if (player[count].unlock[0])
+  if (player[count].unlock[WON_NORMAL])
     unlocked=1;
 
   resetmenuitems();
@@ -441,6 +421,11 @@ void versusmenu(void)
       createmenuitem(TXT_COLLECTION,(512|TEXT_CENTER),444,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_C);
       }
+    else{
+        createmenuitemempty(); //stupid
+    }
+    int change_players = createmenuitem(TXT_CHANGE_PLAYERS, 640|TEXT_END, 0, 16, 1.0f,1.0f,1.0f,1.0f);
+    setmenuitem(MO_HOTKEY,SCAN_H);
 
     checksystemmessages();
     checkkeyboard();
@@ -471,9 +456,13 @@ void versusmenu(void)
 
     SDL_GL_SwapWindow(globalwindow);
 
-    for (count=1;count<=7;count++)
-    if (menuitem[count].active)
-      versusmodemenu(count-1);
+    for (count=1;count<7;count++)
+    if (menuitem[count].active){
+        bind_presets_to_controls(versus_numplayers, versus_is_joystick, versus_presets);
+        versusmodemenu(count-1);
+    }
+    if (menuitem[change_players].active)
+        setup_presets_to_players(&versus_numplayers, versus_is_joystick, versus_presets, 2);
     }
 
   resetmenuitems();

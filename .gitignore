@@ -27,3 +27,7 @@ freegish.dir/
 x64/
 x86/
 .DS_Store
+
+INSTALL*
+level/backup.lvl
+datapacks/official/

@@ -69,7 +69,7 @@ void listfiles(char *path,char *filespec,char filelist[1024][32],int directories
   {
 #ifdef WINDOWS
   int count,count2;
-  int handle;
+  intptr_t handle;
   struct _finddata_t fileinfo;
   size_t len;
 

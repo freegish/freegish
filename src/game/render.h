@@ -25,6 +25,7 @@ void renderlevelback(void);
 void renderlevel(void);
 void renderlevelfore(void);
 void renderbonds(void);
+void renderplayervertices(void);
 void renderobjectinvisible(int objectnum);
 void setuplighttexcoord(int lightcount,float position[3]);
 float calclight(int lightcount,float position[3],float normal[3]);

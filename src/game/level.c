@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../game/level.h"
 #include "../game/config.h"
+#include "../game/options.h"
 #include "../game/block.h"
 #include "../game/editor.h"
 #include "../game/game.h"
@@ -47,6 +48,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../sdl/file.h"
 #include "../video/texture.h"
 #include "../game/debug.h"
+
+int GAMETYPE_COUNT = 11;
+const char* GAMETYPE_NAMES[] = {
+    "CAMPAIGN",
+    "COLLECTION",
+    "","","","","","","","", // skip missing gametypes
+    "2FOOTBALL",
+    "2SUMO",
+    "2GREED",
+    "2DUEL",
+    "2DRAGSTER",
+    "2COLLECTION",
+    "2RACING",
+    "4FOOTBALL",
+    "4SUMO",
+};
 
 unsigned int cryptdata[1048576];
 
@@ -147,13 +164,13 @@ void savelevel(char *filename)
   {
   int count,count2,count3;
   int blocknum;
-  int changeddir;
   int version;
   FILE *fp;
   char path[PATH_MAX];
+  int numofloadedtextures = 0;
 
   for (count=0;count<256;count++)
-    textureused[count]=1;
+    textureused[count]=0;
 
   for (count=0;count<256;count++)
   for (count2=0;count2<256;count2++)
@@ -182,8 +199,10 @@ void savelevel(char *filename)
   if (!textureused[count])
     texture[count].sizex=0;
   */
+  sprintf(path, "%s/%s/level/%s", datapacks_folder, loaded_datapack, filename); // MAYBE: add ability to list several datapacks and try loading them one by one
+  path[255] = 0; // safety first
 
-  if ((fp=fopen(userpath(path,"level",filename),"wb"))!=NULL)
+  if ((fp=fopen(path,"wb"))!=NULL)
     {
     version=11;
 
@@ -229,80 +248,85 @@ void savelevel(char *filename)
       fwrite2(&level.rope[count].obj2part,4,1,fp);
       }
 
-    for (count=1;count<251;count++)
-      {
-      if (textureused[count])
-        {
-			if (debug_level_saveload) printf("Saving %i as ", count);
-			if (texture[count].filename[0] != 0)
-			{
-				int filenameLength;
-				if (debug_level_saveload) printf("\"%s\"...\n", texture[count].filename);
-				filenameLength = -strlen(texture[count].filename);
-				//length = -1;
-				fwrite2(&filenameLength,4,1,fp);
-				filenameLength = abs(filenameLength);
-				fwrite2(texture[count].filename,1,filenameLength,fp);
-				fflush(fp);
-			}
-			else
-			{
-				if (debug_level_saveload) printf("blob: ");
-				fwrite2(&texture[count].sizex,4,1,fp);
-				if (texture[count].sizex == 0)
-				{
-					if (debug_level_saveload) printf("empty\n");
-				}
-				else
-				{
-					if (debug_level_saveload) printf("%ix%i\n", texture[count].sizex, texture[count].sizey);
-					fwrite2(&texture[count].sizey,4,1,fp);
-					fwrite2(&texture[count].magfilter,4,1,fp);
-					fwrite2(&texture[count].minfilter,4,1,fp);
-					fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
-				}
-			}
+    for (int count=1;count<251;count++){
+        if (textureused[count]){
+            if (debug_level_saveload) printf("Saving %i as ", count);
+
+            if (texture[count].filename[0] == 0){
+                // look for the texture in some folders
+                if (numofloadedtextures == 0) // didn't load textures yet
+                    numofloadedtextures = load_all_text_textures();
+                look_for_texture_in_folders(count, numofloadedtextures);
+            }
+
+		    if (texture[count].filename[0] != 0)
+		    {
+		    	int filenameLength;
+		    	if (debug_level_saveload) printf("\"%s\"...\n", texture[count].filename);
+		    	filenameLength = -strlen(texture[count].filename); // save a negative number to indicate a texture from a file
+		    	//length = -1;
+		    	fwrite2(&filenameLength,4,1,fp);
+		    	filenameLength = abs(filenameLength);
+		    	fwrite2(texture[count].filename,1,filenameLength,fp);
+		    	fflush(fp);
+		    }
+		    else
+		    {
+		    	if (debug_level_saveload) printf("blob: ");
+		    	fwrite2(&texture[count].sizex,4,1,fp);
+		    	if (texture[count].sizex == 0)
+		    	{
+		    		if (debug_level_saveload) printf("empty\n");
+		    	}
+		    	else
+		    	{
+		    		if (debug_level_saveload) printf("%ix%i\n", texture[count].sizex, texture[count].sizey);
+		    		fwrite2(&texture[count].sizey,4,1,fp);
+		    		fwrite2(&texture[count].magfilter,4,1,fp);
+		    		fwrite2(&texture[count].minfilter,4,1,fp);
+		    		fwrite2(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);
+		    	}
+	        }
         }
-      else
-        {
-        count2=0;
-        fwrite2(&count2,4,1,fp);
+        else{
+            count2=0;
+            fwrite2(&count2,4,1,fp);
         }
 
-      fwrite2(&block[count].numoflines,4,1,fp);
-      for (count2=0;count2<block[count].numoflines;count2++)
-        fwrite2(block[count].line[count2],4,8,fp);
-      fwrite2(&block[count].friction,4,1,fp);
-      fwrite2(&block[count].breakpoint,4,1,fp);
-      fwrite2(&block[count].middamage,4,1,fp);
-      fwrite2(&block[count].foredamage,4,1,fp);
-      fwrite2(&block[count].density,4,1,fp);
-      fwrite2(&block[count].drag,4,1,fp);
-      fwrite2(&block[count].animation,4,1,fp);
-      fwrite2(&block[count].animationspeed,4,1,fp);
-      }
-
+        fwrite2(&block[count].numoflines,4,1,fp);
+        for (count2=0;count2<block[count].numoflines;count2++)
+          fwrite2(block[count].line[count2],4,8,fp);
+        fwrite2(&block[count].friction,4,1,fp);
+        fwrite2(&block[count].breakpoint,4,1,fp);
+        fwrite2(&block[count].middamage,4,1,fp);
+        fwrite2(&block[count].foredamage,4,1,fp);
+        fwrite2(&block[count].density,4,1,fp);
+        fwrite2(&block[count].drag,4,1,fp);
+        fwrite2(&block[count].animation,4,1,fp);
+        fwrite2(&block[count].animationspeed,4,1,fp);
+    }
     fclose(fp);
     }
   }
 
-void loadlevel(char *filename)
+int loadlevel(char *filename)
   {
   int count,count2;
-  int changeddir;
   int version = -1;
   unsigned int x/*,y*/;
   FILE *fp;
 
   x=0x17AF2E03;
 
-  changeddir=chdir("level");
+  char filename_with_folder[256];
+  sprintf(filename_with_folder, "%s/%s/level/%s", datapacks_folder, loaded_datapack, filename); // MAYBE: add ability to list several datapacks and try loading them one by one
+  filename_with_folder[255] = 0; // safety first
 
-  if ((fp=fopen(filename,"rb"))!=NULL)
-    {
-    fread2(&version,4,1,fp);
+  if ((fp=fopen(filename_with_folder,"rb"))==NULL) return LOADLEVELRESULT_FILEERROR;
 
-    if (version==9)
+  fread2(&version,4,1,fp);
+
+  if (version==9)
       {
       strcpy(editor.filename,filename);
 
@@ -334,9 +358,7 @@ void loadlevel(char *filename)
       if (level.numofobjects<0 || level.numofobjects>=256)
         {
         fclose(fp);
-        if (changeddir==0)
-          chdir("..");
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofobjects;count++)
         {
@@ -357,9 +379,7 @@ void loadlevel(char *filename)
       if (level.numofropes<0 || level.numofropes>=1024)
         {
         fclose(fp);
-        if (changeddir==0)
-          chdir("..");
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofropes;count++)
         {
@@ -376,12 +396,32 @@ void loadlevel(char *filename)
         if (texture[count].sizex<0 || texture[count].sizex>=1024)
           {
           fclose(fp);
-          if (changeddir==0)
-            chdir("..");
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         if (texture[count].sizex!=0)
           {
+            // these are set
+            // int sizex;
+            // int sizey;
+            // int magfilter;
+            // int minfilter;
+            // unsigned int *rgba[16];	// XXX: use uint32_t
+            // char filename[256];
+            // int mipmaplevels;
+            // int format;
+            // int alphamap;
+            // int normalmap;
+            // int glossmap;
+            // int wraps;
+            // int wrapt;
+            //
+            // these are not set
+            // int isalpha;
+            // GLuint glname;
+            // int glnamenormal;
+            // unsigned int *normal[16];	// XXX: use uint32_t
+            // int glnamegloss;
+            // unsigned char *gloss[16];
           fread2(&texture[count].sizey,4,1,fp);
           fread2(&texture[count].magfilter,4,1,fp);
           fread2(&texture[count].minfilter,4,1,fp);
@@ -392,6 +432,9 @@ void loadlevel(char *filename)
           decryptdata(x,4*texture[count].sizex*texture[count].sizey/4);
           memcpy(texture[count].rgba[0],cryptdata,4*texture[count].sizex*texture[count].sizey);
 
+          if (game.editing)
+            texture[count].filename[0] = 0;
+
           texture[count].mipmaplevels=1;
           texture[count].format=GL_RGBA;
           texture[count].alphamap=0;
@@ -399,7 +442,7 @@ void loadlevel(char *filename)
           texture[count].glossmap=0;
           texture[count].wraps=GL_CLAMP_TO_EDGE;
           texture[count].wrapt=GL_CLAMP_TO_EDGE;
-          texture[count].magfilter=GL_LINEAR;
+          texture[count].magfilter=GL_LINEAR; // why override?
           texture[count].minfilter=GL_LINEAR;
 
           if ((texture[count].sizex&(texture[count].sizex-1))==0)
@@ -411,9 +454,7 @@ void loadlevel(char *filename)
         if (block[count].numoflines<0 || block[count].numoflines>=64)
           {
           fclose(fp);
-          if (changeddir==0)
-            chdir("..");
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         for (count2=0;count2<block[count].numoflines;count2++)
           fread2(block[count].line[count2],4,8,fp);
@@ -427,7 +468,7 @@ void loadlevel(char *filename)
         fread2(&block[count].animationspeed,4,1,fp);
         }
       }
-    if (version==10)
+  if (version==10)
       {
       strcpy(editor.filename,filename);
 
@@ -450,9 +491,7 @@ void loadlevel(char *filename)
       if (level.numofobjects<0 || level.numofobjects>=256)
         {
         fclose(fp);
-        if (changeddir==0)
-          chdir("..");
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofobjects;count++)
         {
@@ -473,9 +512,7 @@ void loadlevel(char *filename)
       if (level.numofropes<0 || level.numofropes>=1024)
         {
         fclose(fp);
-        if (changeddir==0)
-          chdir("..");
-        return;
+        return LOADLEVELRESULT_UNKNOWN;
         }
       for (count=0;count<level.numofropes;count++)
         {
@@ -492,9 +529,7 @@ void loadlevel(char *filename)
         if (texture[count].sizex<0 || texture[count].sizex>=1024)
           {
           fclose(fp);
-          if (changeddir==0)
-            chdir("..");
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         if (texture[count].sizex!=0)
           {
@@ -514,6 +549,15 @@ void loadlevel(char *filename)
           texture[count].wrapt=GL_CLAMP_TO_EDGE;
           texture[count].magfilter=GL_LINEAR;
           texture[count].minfilter=GL_LINEAR;
+          // set string to 0 length because when saved and loaded again
+          // it will become corrupted
+          // explanation: 
+          // before load, filename is text002.tga
+          // loaded ver10, isn't set to 0, texture loaded from blob
+          // saved ver11, saved to file (still thinking that filename is text002.tga)
+          // loaded ver11, load from disk but text002.tga doesn't match the previous texture
+          if (game.editing)
+          texture[count].filename[0] = 0; // still bad because the levelfile is still large, probably should find corresponding texture
 
           if ((texture[count].sizex&(texture[count].sizex-1))==0)
           if ((texture[count].sizey&(texture[count].sizey-1))==0)
@@ -524,9 +568,7 @@ void loadlevel(char *filename)
         if (block[count].numoflines<0 || block[count].numoflines>=64)
           {
           fclose(fp);
-          if (changeddir==0)
-            chdir("..");
-          return;
+          return LOADLEVELRESULT_UNKNOWN;
           }
         for (count2=0;count2<block[count].numoflines;count2++)
           fread2(block[count].line[count2],4,8,fp);
@@ -540,7 +582,7 @@ void loadlevel(char *filename)
         fread2(&block[count].animationspeed,4,1,fp);
         }
       }
-	  if (version==11)
+	if (version==11)
 	  {
 		  strcpy(editor.filename,filename);
 
@@ -563,9 +605,7 @@ void loadlevel(char *filename)
 		  if (level.numofobjects<0 || level.numofobjects>=256)
 		  {
 			  fclose(fp);
-			  if (changeddir==0)
-				  chdir("..");
-			  return;
+			  return LOADLEVELRESULT_TOO_MANY_OBJECTS;
 		  }
 		  for (count=0;count<level.numofobjects;count++)
 		  {
@@ -586,9 +626,7 @@ void loadlevel(char *filename)
 		  if (level.numofropes<0 || level.numofropes>=1024)
 		  {
 			  fclose(fp);
-			  if (changeddir==0)
-				  chdir("..");
-			  return;
+			  return LOADLEVELRESULT_TOO_MANY_ROPES;
 		  }
 		  for (count=0;count<level.numofropes;count++)
 		  {
@@ -603,7 +641,7 @@ void loadlevel(char *filename)
 		  {
 			  if (debug_level_saveload) printf("Loading %i as ", count);
 			  fread2(&texture[count].sizex,4,1,fp);
-			  if (texture[count].sizex<0)
+			  if (texture[count].sizex<0) // check a negative number which indicates a texture from a file
 			  {
 				  int filenameLength = abs(texture[count].sizex);
 				  char filename[256];
@@ -611,11 +649,7 @@ void loadlevel(char *filename)
 				  fread2(filename, 1, filenameLength, fp);
 
 				  if (debug_level_saveload) printf("\"%s\"...\n", filename);
-				  if (changeddir==0)
-					chdir("..");
 				  loadtexture(count, filename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-				  if (changeddir==0)
-					changeddir = chdir("level");
 			  }
 			  else
 			  {
@@ -625,9 +659,7 @@ void loadlevel(char *filename)
 				  {
 					  if (debug_level_saveload) printf("Invalid blob!\n");
 					  fclose(fp);
-					  if (changeddir==0)
-						  chdir("..");
-					  return;
+					  return LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG;
 				  }
 				  if (texture[count].sizex==0)
 				  {
@@ -652,6 +684,10 @@ void loadlevel(char *filename)
 					  texture[count].magfilter=GL_LINEAR;
 					  texture[count].minfilter=GL_LINEAR;
 
+                      if (game.editing) // see ver10 for explanation
+                      texture[count].filename[0] = 0; // still bad because the levelfile is still large, probably should find corresponding texture
+
+
 					  if (debug_level_saveload) printf("%ix%i...\n", texture[count].sizex, texture[count].sizey);
 
 					  if ((texture[count].sizex&(texture[count].sizex-1))==0)
@@ -664,9 +700,7 @@ void loadlevel(char *filename)
 			  if (block[count].numoflines<0 || block[count].numoflines>=64)
 			  {
 				  fclose(fp);
-				  if (changeddir==0)
-					  chdir("..");
-				  return;
+				  return LOADLEVELRESULT_TOO_MANY_BLOCK_LINES;
 			  }
 			  for (count2=0;count2<block[count].numoflines;count2++)
 				  fread2(block[count].line[count2],4,8,fp);
@@ -683,9 +717,6 @@ void loadlevel(char *filename)
 
     fclose(fp);
 
-	if (changeddir==0)
-		chdir("..");
-
 	if (version<7)
 		loadleveltextures();
 	else
@@ -699,7 +730,7 @@ void loadlevel(char *filename)
 	loadtexture(253,"amber1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
 	loadtexture(254,"amber2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
 	loadtexture(255,"amber3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-    }
+  return version;
   }
 
 void createlevel(void)
@@ -747,8 +778,6 @@ void createlevel(void)
   loadtexture(253,"amber1.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
   loadtexture(254,"amber2.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
   loadtexture(255,"amber3.png",0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-
-  editor.filename[0]=0;
   }
 
 void getlevellines(int objectnum)
@@ -943,9 +972,7 @@ void loadleveltextures(void)
   {
   int count;
   int changeddir;
-  char texfilename[32]="text000.png";
-
-  changeddir=changetilesetdir();
+  char texfilename[256];
 
   loadbackground(660,"bg.png");
 
@@ -953,17 +980,12 @@ void loadleveltextures(void)
     loadblock(count);
   for (count=0;count<251;count++)
     {
-    texfilename[4]=48+(count/100)%10;
-    texfilename[5]=48+(count/10)%10;
-    texfilename[6]=48+count%10;
+    sprintf(texfilename, "../tile%02i/texture/text%03i.png", level.tileset+1, count);
     if (game.levelnum!=6)
       loadtexture(count,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_LINEAR,GL_LINEAR);
-    else
+    else // ???
       loadtexture(count,texfilename,0,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE,GL_NEAREST,GL_NEAREST);
     }
-
-  if (changeddir==0)
-    chdir("..");
   }
 
 int lineintersectline3(float *intersectpoint,float *normal,float *scale,float *startpoint,float *endpoint,float *vertex1,float *vertex2)

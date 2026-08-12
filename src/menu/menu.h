@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void checkmenuitems(void);
 void drawmenuitems(void);
-void createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b,float a);
+int createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b,float a);
 void setmenuitem(int option,...);
 void createmenuitemempty(void);
 void resetmenuitems(void);
@@ -85,6 +85,7 @@ extern int numofmenuitems;
 extern _menuitem menuitem[MAXMENUITEMS];
 
 extern int menuinputkeyboard;
+extern int menuinputmouse;
 extern int menuinputselectpos;
 extern int menuinputcursorpos;
 extern int menuinputinsert;

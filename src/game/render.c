@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/render.h"
 #include "../game/block.h"
 #include "../game/editor.h"
+#include "../game/debug.h"
 #include "../game/game.h"
 #include "../game/level.h"
 #include "../game/lighting.h"
@@ -409,6 +410,29 @@ void renderlevel(void)
 
   glDisable(GL_STENCIL_TEST);
 
+  if (debug_objectlinks){
+        float vec[3];
+        glDisable(GL_TEXTURE_2D);
+        for (count = 0; count < numofobjects; count++){
+            if (object[count].link != -1) {
+                glBegin(GL_LINES);
+                glColor4f(1.0f,0.0f,0.0f,1.0f);
+
+                vec[0] = object[count].position[0];
+                vec[1] = object[count].position[1];
+                vec[2] = 0;
+                glVertex3fv(vec);
+                vec[0] = object[object[count].link].position[0];
+                vec[1] = object[object[count].link].position[1];
+                vec[2] = 0;
+                glVertex3fv(vec);
+
+                glEnd();
+            }
+        }
+        glEnable(GL_TEXTURE_2D);
+    }
+
   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
   }
 
@@ -516,6 +540,33 @@ void renderbonds(void)
 
   glEnable(GL_TEXTURE_2D);
   }
+
+void renderplayervertices(){
+    glDisable(GL_TEXTURE_2D);
+    glColor4f(1.f,1.f,1.f,1.0f);
+    float vec[3];
+    vec[2] = 0;
+    for (int count=0; count < numofobjectrenders; count++){
+        if (objectrender[count].type == 1)
+        for (int count2=0;count2<32;count2++){
+            glBegin(GL_TRIANGLE_FAN);
+            vec[0] = objectrender[count].vertex[count2][0] - 0.02;
+            vec[1] = objectrender[count].vertex[count2][1] - 0.02;
+            glVertex3fv(vec);
+            vec[0] = objectrender[count].vertex[count2][0] - 0.02;
+            vec[1] = objectrender[count].vertex[count2][1] + 0.02;
+            glVertex3fv(vec);
+            vec[0] = objectrender[count].vertex[count2][0] + 0.02;
+            vec[1] = objectrender[count].vertex[count2][1] + 0.02;
+            glVertex3fv(vec);
+            vec[0] = objectrender[count].vertex[count2][0] + 0.02;
+            vec[1] = objectrender[count].vertex[count2][1] - 0.02;
+            glVertex3fv(vec);
+            glEnd();
+        }
+    }
+    glEnable(GL_TEXTURE_2D);
+}
 
 void renderobjectinvisible(int objectnum)
   {
@@ -731,31 +782,40 @@ void renderobjects(void)
       else
         {
         glDisable(GL_TEXTURE_2D);
-  
-        glBegin(GL_TRIANGLES);
-  
-        glColor4f(0.0f,0.0f,0.0f,1.0f);
-        if (objectrender[count].objectnum==1)
-          glColor4f(0.5f,0.5f,0.5f,1.0f);
-        if (objectrender[count].objectnum==2)
-          glColor4f(0.355f,0.31f,0.15f,1.0f);
-        if (objectrender[count].objectnum==3)
-          glColor4f(0.453f,0.3f,0.28f,1.0f);
+        
+        // hardcoded gish colors
+        float r,g,b;
+        r=0.0f;
+        g=0.0f;
+        b=0.0f;
+        if (objectrender[count].objectnum==1){
+            r=0.5f;
+            g=0.5f;
+            b=0.5f;
+        }
+        if (objectrender[count].objectnum==2){
+            r=0.355f;
+            g=0.31f;
+            b=0.15f;
+        }
+        if (objectrender[count].objectnum==3){
+            r=0.453f;
+            g=0.3f;
+            b=0.28f;
+        }
+        glColor4f(r,g,b,1.0f);
+         
   
         if (object[objectrender[count].objectnum].hitpoints<object[objectrender[count].objectnum].prevhitpoints)
-          glColor4f(0.25f,0.0f,0.0f,1.0f);
-  
-        for (count2=0;count2<32;count2++)
-          {
-          glVertex3fv(objectrender[count].vertex[count2]);
-          glVertex3fv(objectrender[count].vertex[((count2+1)&31)]);
-          glVertex3fv(objectrender[count].vertex[32]);
-          }
-  
-        glEnd();
+            glColor4f(0.25f,0.0f,0.0f,1.0f);
 
-        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_TRIANGLE_FAN);
+        for (count2=0;count2<32;count2++){
+            glVertex3fv(objectrender[count].vertex[count2]);
         }
+        glEnd();
+        glEnable(GL_TEXTURE_2D);
+      }
 
       renderobjectspecular(count);
 
@@ -913,7 +973,7 @@ void renderobjects(void)
       glColor4f(level.ambient[1][0],level.ambient[1][1],level.ambient[1][2],objectrender[count].alpha);
 
       if (objectrender[count].type==8)
-      if (object[objectrender[count].objectnum].lighttype==1)
+      if (object[objectrender[count].objectnum].lighttype==LIGHT_DEFAULT_ON)
         glColor3fv(object[objectrender[count].objectnum].lightcolor);
 
       for (count2=0;count2<objectrender[count].numoftris;count2++)

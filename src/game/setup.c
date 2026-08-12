@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/game.h"
 #include "../game/level.h"
 #include "../game/gameobject.h"
+#include "../game/objfunc.h"
 #include "../game/physics.h"
 #include "../game/random.h"
 #include "../game/replay.h"
@@ -61,34 +62,33 @@ void setuplevel(void)
   numofbosses=0;
 
   for (count=0;count<level.numofobjects;count++)
-    if (level.object[count].type>=20 && level.object[count].type<40)
-      {
-      if (animation[level.object[count].type-20].loaded==0)
-        animation[level.object[count].type-20].loaded=2;
-      if (level.object[count].type-20==7)
-        if (animation[2].loaded==0)
-          animation[2].loaded=2;
-      if (level.object[count].type-20==13)
-        if (animation[8].loaded==0)
-          animation[8].loaded=2;
-      if (level.object[count].type-20==12)
-        if (animation[11].loaded==0)
-          animation[11].loaded=2;
-      }
-  loadanimations();
-
-  for (count=0;count<level.numofobjects;count++)
     {
     numofobjectstemp=numofobjects;
 
-    if (level.object[count].type==1)
+    if (level.object[count].type==LVL_OBJ_TYPE_GISH)
       {
-      createtarboy(level.object[count].position);
-      object[numofobjects-1].texturenum=1;
+        if (level.gametype != GAMETYPE_CAMPAIGN || game.numofplayers == 1) {
+            createtarboy(level.object[count].position);
+            object[numofobjects - 1].texturenum = 1;
+        }
+        if (level.gametype == GAMETYPE_CAMPAIGN) {
+            if (game.numofplayers > 1) {
+                for (int i = 0; i < game.numofplayers; i++)
+                {
+                    float angle = pi / 2 + (float)i * 2 * pi / game.numofplayers;
+                    float size = 0.9f;
+                    vec[0] = level.object[count].position[0] + cos(angle) * size;
+                    vec[1] = level.object[count].position[1] - sin(angle) * size;
+                    vec[2] = 0.0f;
+                    createtarboy(vec);
+                    object[numofobjects - 1].texturenum = 1;
+                }
+            }
+        }
       }
-    if (level.object[count].type==2)
+    if (level.object[count].type==LVL_OBJ_TYPE_BOX)
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
-    if (level.object[count].type==3)
+    if (level.object[count].type==LVL_OBJ_TYPE_MIDDLE_FIXED_BOX)
       {
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       createparticle(2,level.object[count].position,NULL,10000.0f,-1,10000);
@@ -97,7 +97,7 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==4)
+    if (level.object[count].type==LVL_OBJ_TYPE_LEFT_FIXED_BOX_OR_CAR)
       {
       if (level.gametype!=GAMETYPE_2RACING)
         {
@@ -114,7 +114,7 @@ void setuplevel(void)
       else
         createcar(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       }
-    if (level.object[count].type==5)
+    if (level.object[count].type==LVL_OBJ_TYPE_RIGHT_FIXED_BOX)
       {
       createbox(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction);
       vec[0]=level.object[count].position[0]+(level.object[count].size[0]-1.0f)*0.5f;
@@ -126,93 +126,100 @@ void setuplevel(void)
       createbond(numofparticles-3,numofparticles-1,1,-1);
       createbond(numofparticles-2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==6)
+    if (level.object[count].type==LVL_OBJ_TYPE_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,0);
       }
-    if (level.object[count].type==7)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANCHORED_WHEEL)
       {
       createwheel(level.object[count].position,level.object[count].size[0],level.object[count].size[1],level.object[count].mass,level.object[count].friction,1);
       //createparticle(2,level.object[count].position,NULL,10000.0f,-1,10000);
       //for (count2=0;count2<16;count2++)
       //  createbond(numofparticles-17+count2,numofparticles-1,1,-1);
       }
-    if (level.object[count].type==8)
+    if (level.object[count].type==LVL_OBJ_TYPE_LIGHT_OR_ANCHOR)
       createanchor(level.object[count].position);
-    if (level.object[count].type==9)
+    if (level.object[count].type==LVL_OBJ_TYPE_BUTTON)
       createbutton(level.object[count].position,level.object[count].mass);
-    if (level.object[count].type==10)
+    if (level.object[count].type==LVL_OBJ_TYPE_ONE_TIME_BUTTON)
       {
       createbutton(level.object[count].position,level.object[count].mass);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==11)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_UP)
       createswitch(level.object[count].position,level.object[count].mass,0);
-    if (level.object[count].type==12)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_RIGHT)
       createswitch(level.object[count].position,level.object[count].mass,1);
-    if (level.object[count].type==13)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_DOWN)
       createswitch(level.object[count].position,level.object[count].mass,2);
-    if (level.object[count].type==14)
+    if (level.object[count].type== LVL_OBJ_TYPE_SWITCH_LEFT)
       createswitch(level.object[count].position,level.object[count].mass,3);
-    if (level.object[count].type==15)
+    if (level.object[count].type==LVL_OBJ_TYPE_AREASWITCH)
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-    if (level.object[count].type==16)
+    if (level.object[count].type== LVL_OBJ_TYPE_ONE_TIME_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
       object[numofobjects-1].idata[1]=1;
       }
-    if (level.object[count].type==18)
+    if (level.object[count].type==LVL_OBJ_TYPE_SECRET_AREASWITCH)
       {
       createareaswitch(level.object[count].position,level.object[count].size[0],level.object[count].size[1]);
-      object[numofobjects-1].idata[1]=2;
+      object[numofobjects-1].idata[1]=IS_SECRET;
       }
-    if (level.object[count].type==17)
+    if (level.object[count].type==LVL_OBJ_TYPE_GENERATOR)
       creategenerator(level.object[count].position,level.object[count].mass);
 
-    if (level.object[count].type==20)
+    if (level.object[count].type==LVL_OBJ_TYPE_BONE_NIBBLER)
       createbeast(0,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==21)
+    if (level.object[count].type==LVL_OBJ_TYPE_CAVE_NIBBLER)
       createbeast(1,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==22)
+    if (level.object[count].type==LVL_OBJ_TYPE_HELL_NIBBLER)
       createbeast(2,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==23)
+    if (level.object[count].type==LVL_OBJ_TYPE_MUMMY)
       createbeast(3,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==24)
+    if (level.object[count].type==LVL_OBJ_TYPE_SKELETON)
       createbeast(4,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==25)
+    if (level.object[count].type==LVL_OBJ_TYPE_ZOMBIE)
       createbeast(5,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==26)
+    if (level.object[count].type==LVL_OBJ_TYPE_GIMP)
       createbeast(6,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==27)
+    if (level.object[count].type==LVL_OBJ_TYPE_VIS_SISTER)
       createbeast(7,level.object[count].position,3.0f,3.0f,20.0f,0.2f);
-    if (level.object[count].type==28)
+    if (level.object[count].type==LVL_OBJ_TYPE_ANGEL_NIBBLER)
       createbeast(8,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==29)
+    if (level.object[count].type==LVL_OBJ_TYPE_ALTERBOY)
       createbeast(9,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==30)
+    if (level.object[count].type==LVL_OBJ_TYPE_STITCH)
       createbeast(10,level.object[count].position,1.5f,1.1f,8.0f,0.2f);
-    if (level.object[count].type==31)
+    if (level.object[count].type==LVL_OBJ_TYPE_POOBLER)
       createbeast(11,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
-    if (level.object[count].type==32)
+    if (level.object[count].type==LVL_OBJ_TYPE_HONEY_BUCKET)
       createbeast(12,level.object[count].position,2.0f,0.85f,3.0f,0.2f);
-    if (level.object[count].type==33)
+    if (level.object[count].type==LVL_OBJ_TYPE_SISTER_VIS)
       createbeast(13,level.object[count].position,3.0f,3.0f,20.0f,0.2f);
-    if (level.object[count].type==34)
+    if (level.object[count].type==LVL_OBJ_TYPE_PAUNCHY_CHOPS)
       createboss(14,level.object[count].position);
-    if (level.object[count].type==35)
+    if (level.object[count].type==LVL_OBJ_TYPE_BASINJIN)
       createbeast(15,level.object[count].position,2.0f,2.0f,8.0f,0.2f);
-    if (level.object[count].type==36)
+    if (level.object[count].type==LVL_OBJ_TYPE_SATAN)
       createbeast(16,level.object[count].position,1.0f,1.0f,1.0f,0.2f);
 
     if (numofobjects!=numofobjectstemp)
       {
-      if (level.object[count].type>1 && level.object[count].type<20)
+      if (level.object[count].type>LVL_OBJ_TYPE_GISH && level.object[count].type<LVL_OBJ_TYPE_MONSTER_BEGIN)
         object[numofobjects-1].texturenum=level.object[count].texturenum;
-      object[numofobjects-1].link=level.object[count].link;
+      if (level.gametype == GAMETYPE_CAMPAIGN && level.object[count].link != -1){
+          object[numofobjects - 1].link = level.object[count].link + game.numofplayers - 1;
+          if (game.levelnum == 34)
+              object[numofobjects - 1].link += game.numofplayers - 1;
+      }
+      else
+          object[numofobjects - 1].link = level.object[count].link;
+      
       object[numofobjects-1].lighttype=level.object[count].lighttype;
-      if (level.object[count].lighttype==1 || level.object[count].lighttype==3)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_ON || level.object[count].lighttype==FLICKERING_LIGHT)
         object[numofobjects-1].lighton=1;
-      if (level.object[count].lighttype==2)
+      if (level.object[count].lighttype==LIGHT_DEFAULT_OFF)
         object[numofobjects-1].lighton=0;
   
       object[numofobjects-1].size[0]=level.object[count].size[0];
@@ -226,12 +233,13 @@ void setuplevel(void)
       }
     }
 
-  for (count=0;count<level.numofobjects;count++)
+  for (count=0;count<numofobjects;count++)
     {
-    if ((level.object[count].type>=23 && level.object[count].type<=26) || level.object[count].type==29 || level.object[count].type==30)
+    if (object[count].type == OBJ_TYPE_BEAST_OR_BOBBLE)
+    if ((object[count].beasttype>=3 && object[count].beasttype<=6) || object[count].beasttype==9 || object[count].beasttype==10)
       {
-      vec[0]=level.object[count].position[0];
-      vec[1]=level.object[count].position[1]+1.4f;//+1.42f;
+      vec[0]=object[count].position[0];
+      vec[1]=object[count].position[1]+1.4f;//+1.42f;
       vec[2]=0.0f;
       createhead(vec,2.0f,1.6f,2.0f,0.5f);
 
@@ -248,7 +256,28 @@ void setuplevel(void)
 
   for (count=0;count<level.numofropes;count++)
     {
-    createrope(level.rope[count].type,object[level.rope[count].obj1].particle[level.rope[count].obj1part],object[level.rope[count].obj2].particle[level.rope[count].obj2part],level.rope[count].obj1,level.rope[count].obj2,level.rope[count].texturenum);
+
+      int obj1;
+      int obj2;
+      if (level.gametype == GAMETYPE_CAMPAIGN) {
+          obj1 = level.rope[count].obj1 + game.numofplayers - 1;
+          obj2 = level.rope[count].obj2 + game.numofplayers - 1;
+          if (game.levelnum == 34){
+              obj1 += game.numofplayers - 1;
+              obj2 += game.numofplayers - 1;
+          }
+      }
+      else {
+          obj1 = level.rope[count].obj1;
+          obj2 = level.rope[count].obj2;
+      }
+    createrope(
+        level.rope[count].type,
+        object[obj1].particle[level.rope[count].obj1part],
+        object[obj2].particle[level.rope[count].obj2part],
+        obj1,
+        obj2,
+        level.rope[count].texturenum);
     }
   }
 
@@ -271,7 +300,7 @@ void setupgame(void)
   game.scoredelay=0;
   game.startdelay=0;
   game.exitdelay=0;
-  game.over=0;
+  game.over=GAMEOVER_NONE;
   game.exit=GAMEEXIT_NONE;
   game.time=level.time;
   game.pause=0;
@@ -345,8 +374,8 @@ void setupgame(void)
     }
 
   for (count=0;count<numofobjects;count++)
-  if (object[count].type==16)
-  if (object[count].idata[1]==2)
+  if (object[count].type==OBJ_TYPE_AREASWITCH)
+  if (object[count].idata[1]==IS_SECRET)
     game.numofbonus[8]++;
 
   if (level.gametype==GAMETYPE_COLLECTION)
@@ -501,6 +530,7 @@ void loadstorylevel(int levelnum)
     loadlevel("death.lvl");
   if (levelnum==68)
     loadlevel("death2.lvl");
+  game.levelnum=levelnum;
   }
 
 void loadcollectionlevel(int levelnum)

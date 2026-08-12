@@ -29,8 +29,8 @@ void saveconfig(void);
 void notsupportedmenu(void);
 void optionreadint(int *ptr,char *str);
 void optionwriteint(FILE *fp, int *ptr,char *str);
-/*void optionreadstring(char *ptr,char *str,int size);
-void optionwritestring(FILE *fp, char *ptr,char *str,int size);*/
+void optionreadstring(char *ptr,char *str,int size);
+void optionwritestring(FILE *fp, char *ptr,char *str,int size);
 
 typedef struct {
   int resolutionx;

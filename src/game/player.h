@@ -29,6 +29,14 @@ void playerdifficultymenu(void);
 void collectionmenu(void);
 void singlelevelmenu(void);
 
+typedef enum
+{
+	WON_NORMAL = 0,
+	WON_HARD = 1,
+	WON_LUDICROUS = 2,
+	WON_MINI_GISH = 3,
+} unlocks;
+
 typedef struct
   {
   char name[32];
@@ -39,6 +47,9 @@ typedef struct
   int gamepassed;
   int highscore;
   int unlock[16];
+  int numplayers;
+  int is_joystick[4];
+  int presets[4];
   } _player;
 
 extern int playernum;

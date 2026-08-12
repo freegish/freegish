@@ -21,6 +21,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+void pan_view(void);
+void zoom_view(void);
+void get_mouse_coords(float *x, float *y);
+void screen_to_world(float x, float y, float *x_out, float *y_out);
+void world_to_screen(float x, float y, float *x_out, float *y_out);
 void gameloop(void);
 void renderlevel(void);
 void simulation(void);
@@ -32,8 +37,28 @@ typedef enum {
 	GAMEEXIT_EXITGAME = 2,
 	GAMEEXIT_DIED = 3,
 	GAMEEXIT_WON = 4,
-	GAMEXIT_WARPZONE = 5
+	GAMEEXIT_WARPZONE = 5
 } gameexit;
+
+typedef enum {
+	GAMEOVER_NONE = 0,
+	GAMEOVER_DIED = 1,
+	GAMEOVER_WON = 2,
+	GAMEOVER_WON_GOOD = 2,
+	GAMEOVER_WON_BAD = 3,
+	GAMEOVER_WARPZONE = 3,
+	GAMEOVER_WARPZONE2 = 4,
+	GAMEOVER_WARPZONE3 = 5
+} gameover;
+
+typedef enum
+{
+    DIFFICULTY_EASY = 0,
+	DIFFICULTY_NORMAL = 1,
+	DIFFICULTY_HARD = 2,
+	DIFFICULTY_LUDICROUS = 3,
+	DIFFICULTY_MINI_GISH = 4,
+} difficulty;
 
 typedef struct
   {
@@ -72,6 +97,7 @@ typedef struct
   int oldschool;
   int oldschoolsound;
   int turbomode;
+  int numofplayers;
   int supersize;
   unsigned int simspeed;
   int playreplay;

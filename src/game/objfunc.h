@@ -24,4 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void objectcycle(void);
 void objectsound(int objectnum);
 
+#define IS_ACTIVATED 0
+#define IS_ONE_TIME 1
+#define IS_SECRET 2
+
 #endif /* GISH_GAME_OBJFUNC_H */

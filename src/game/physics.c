@@ -248,8 +248,8 @@ void objectcollision(int objectnum)
     object[objectnum].numoforientations=0;
     zerovector(object[objectnum].orientation[1]);
 
-    if (object[objectnum].type!=1)
-    if (object[objectnum].type!=2 || object[objectnum].size[0]>0.5f)
+    if (object[objectnum].type!=OBJ_TYPE_GISH)
+    if (object[objectnum].type!=OBJ_TYPE_BOX || object[objectnum].size[0]>0.5f)
       {
       getlevellines(objectnum);
       for (count=0;count<numoflevellines;count++)
@@ -325,7 +325,7 @@ void objectcollision(int objectnum)
         if (object[objectnum].timetolive==10001)
           object[objectnum].timetolive=50;
 
-        if (object[objectnum].type==1 || object[objectnum].type==4)
+        if (object[objectnum].type==OBJ_TYPE_GISH || object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
           {
           blocknum=collision.blocknum;
 
@@ -335,9 +335,9 @@ void objectcollision(int objectnum)
 
           if (block[blocknum].middamage!=0)
             {
-            if (object[objectnum].type==1)
+            if (object[objectnum].type==OBJ_TYPE_GISH)
               object[objectnum].hitpoints-=block[blocknum].middamage;
-            if (object[objectnum].type==4)
+            if (object[objectnum].type==OBJ_TYPE_BEAST_OR_BOBBLE)
               object[objectnum].hitpoints-=block[blocknum].middamage*4;
             }
           }
@@ -362,7 +362,7 @@ void objectcollision(int objectnum)
         copyvector(physicstemp.bond[physicstemp.numofbonds].normal,normal);
         physicstemp.numofbonds++;
 
-        if ((object[objectnum].button&1)==1 && object[objectnum].type==1)
+        if ((object[objectnum].button&1)==1 && object[objectnum].type==OBJ_TYPE_GISH)
         if (collision.friction>0.1f)
           {
           if (!object[objectnum].particlestick[count])
@@ -411,13 +411,13 @@ void objectcollisionobject(int objectnum)
   float scale;
   float friction;
 
-  if (object[objectnum].type==3)
+  if (object[objectnum].type==OBJ_TYPE_WHEEL)
     for (count=0;count<object[objectnum].numofparticles;count++)
       {
       particlenum=object[objectnum].particle[count];
 
       for (count2=0;count2<numofropes;count2++)
-      if (rope[count2].type<=4)
+      if (rope[count2].type<=OBJ_TYPE_BEAST_OR_BOBBLE)
       if (lineintersectline(intersectpoint,normal,&scale,object[objectnum].position,particle[object[objectnum].particle[count]].position,particle[rope[count2].part1].position,particle[rope[count2].part2].position))
         {
         subtractvectors(vec,intersectpoint,particle[particlenum].position);
@@ -461,7 +461,7 @@ void objectcollisionobject(int objectnum)
   for (objectcount=0;objectcount<numofobjects;objectcount++)
   if (objectnum!=objectcount)
   if (objecttype[object[objectnum].type].collide[object[objectcount].type])
-  if ((object[objectnum].type!=2 || object[objectnum].timetolive>175) && (object[objectcount].type!=2 || object[objectcount].timetolive>175))
+  if ((object[objectnum].type!=OBJ_TYPE_BOX || object[objectnum].timetolive>175) && (object[objectcount].type!=OBJ_TYPE_BOX || object[objectcount].timetolive>175))
   if (object[objectnum].timetolive>40 && object[objectcount].timetolive>40)
     {
     subtractvectors(vec,object[objectnum].position,object[objectcount].position);
@@ -483,7 +483,7 @@ void objectcollisionobject(int objectnum)
           scaleaddvectors(object[objectnum].orientation[1],object[objectnum].orientation[1],normal,0.5f);
           object[objectnum].numoforientations++;
 
-          if (object[objectnum].type==1)
+          if (object[objectnum].type==OBJ_TYPE_GISH)
           if (game.levelnum==29)
           if (objectcount==38)
           if (game.godmode==0)
@@ -492,13 +492,13 @@ void objectcollisionobject(int objectnum)
             playsound(10,object[objectnum].position,NULL,0.4f,0,1.0f,-1,0);
             }
 
-          if (object[objectnum].type==1)
-          if (object[objectcount].type==4)
+          if (object[objectnum].type==OBJ_TYPE_GISH)
+          if (object[objectcount].type==OBJ_TYPE_BEAST_OR_BOBBLE)
           if (object[objectcount].beasttype==15)
             object[objectnum].hitpoints--;
             
-          if (object[objectnum].type==1)
-          if (object[objectcount].type==6)
+          if (object[objectnum].type==OBJ_TYPE_GISH)
+          if (object[objectcount].type==OBJ_TYPE_AMBER)
           if (object[objectcount].timetolive>16)
             {
             object[objectcount].timetolive=16;
@@ -539,7 +539,7 @@ void objectcollisionobject(int objectnum)
 
           copyvector(physicstemp.bond[physicstemp.numofbonds].normal,normal);
           physicstemp.bond[physicstemp.numofbonds].cycles=0;
-          if (object[objectnum].type==2 && object[objectcount].type==2)
+          if (object[objectnum].type==OBJ_TYPE_BOX && object[objectcount].type==OBJ_TYPE_BOX)
           if (object[objectnum].size[0]<=0.5f && object[objectcount].size[0]<=0.5f)
             physicstemp.bond[physicstemp.numofbonds].cycles=3;
           physicstemp.bond[physicstemp.numofbonds].elasticity=0.2f;
@@ -553,8 +553,8 @@ void objectcollisionobject(int objectnum)
           physicstemp.bond[physicstemp.numofbonds].blocky=0;
           physicstemp.numofbonds++;
 
-          if ((object[objectnum].button&1)==1 && object[objectnum].type==1)
-          if (object[objectcount].type!=1 || (object[objectcount].button&4)==0)
+          if ((object[objectnum].button&1)==1 && object[objectnum].type==OBJ_TYPE_GISH)
+          if (object[objectcount].type!=OBJ_TYPE_GISH || (object[objectcount].button&4)==0)
             {
             //if (!object[objectnum].particlestick[count])
               {
@@ -582,7 +582,7 @@ void objectcollisionobject(int objectnum)
               physicstemp.bond[physicstemp.numofbonds].breakpoint=0.3f;
               if (fabs(normal[1])<0.707f)
                 physicstemp.bond[physicstemp.numofbonds].breakpoint=0.25f;
-              if (object[objectcount].type>=3 && object[objectcount].type<=5)
+              if (object[objectcount].type>LVL_OBJ_TYPE_BOX && object[objectcount].type<LVL_OBJ_TYPE_WHEEL)
                 physicstemp.bond[physicstemp.numofbonds].breakpoint*=1.5f;
               physicstemp.bond[physicstemp.numofbonds].friction=friction;
               physicstemp.bond[physicstemp.numofbonds].objectnum[0]=objectnum;
@@ -610,7 +610,7 @@ void objectcollisionobject(int objectnum)
 
   if (level.gametype>=GAMETYPE_2FOOTBALL)
   for (objectcount=0;objectcount<numofobjects;objectcount++)
-  if (object[objectcount].type==1)
+  if (object[objectcount].type==LVL_OBJ_TYPE_GISH)
     {
     for (count=0;count<object[objectcount].numofparticles;count++)
       {

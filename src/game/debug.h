@@ -21,8 +21,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-extern int debugit;
 extern int debug_level_saveload;
 extern int debug_texture_load;
+extern int debug_character_positions;
+extern int debug_objectnums;
+extern int debug_objectlinks;
+extern int debug_unlocks;
+extern int debug_grid_blocknums;
+extern int debug_next_level;
+extern int debug_render_bonds;
+extern int debug_render_player_vertices;
+extern int debug_render_level_lines;
+extern int debug_ropeedit_points;
 
 #endif /* GISH_GAME_DEBUG_H */

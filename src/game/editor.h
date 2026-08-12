@@ -21,12 +21,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-void editlevel(void);
+void editlevel(int need_to_open_editor);
 void setblock(int x,int y,int blocknum);
 int getblock(int x,int y);
 void rendereditblocks(void);
 void editblock(void);
 void renderlevellines(void);
+
+typedef enum {
+  EDITOR_MODE_TILES = 0,
+  EDITOR_MODE_OBJECTS = 1,
+  EDITOR_MODE_ROPES = 2,
+  // EDITOR_MODE_TILES = 3,
+} _editor_mode;
 
 typedef struct
   {

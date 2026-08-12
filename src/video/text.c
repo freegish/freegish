@@ -53,7 +53,7 @@ void drawtextunformatted(char *textstring,int x,int y,int textsize,float red,flo
 	x&=0xFFFF;
 	y&=0xFFFF;
 
-	glBindTexture(GL_TEXTURE_2D,texture[1000+font.texturenum].glname);
+	glBindTexture(GL_TEXTURE_2D,texture[TEXT_START_TEXTURE+font.texturenum].glname);
 
 	count=0;
 	while (textstring[count]!=0)

@@ -39,6 +39,7 @@ int numofmenuitems;
 _menuitem menuitem[MAXMENUITEMS];
 
 int menuinputkeyboard=0;
+int menuinputmouse=0;
 int menuinputselectpos;
 int menuinputcursorpos;
 int menuinputinsert;
@@ -61,6 +62,8 @@ void checkmenuitems(void)
       menuitem[count].active=0;
 
   font.cursornum=0;
+  if (menuinputmouse && !mouse.lmb)
+    menuinputmouse = 0;
 
   for (count=0;count<numofmenuitems;count++)
     {
@@ -74,8 +77,10 @@ void checkmenuitems(void)
       if (mouse.y<menuitem[count].y+menuitem[count].sizey*menuitem[count].textsize)
         {
         menuitem[count].highlight=2;
-        if (mouse.lmb && !prevmouse.lmb)
+        if (mouse.lmb && !prevmouse.lmb){
           menuitem[count].active=1;
+          menuinputmouse = 1;
+        }
         font.cursornum=menuitem[count].cursornum;
         }
 
@@ -304,7 +309,7 @@ void drawmenuitems(void)
   font.texturenum=0;
   }
 
-void createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b,float a)
+int createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b,float a)
   {
   if ((x&TEXT_CENTER)==TEXT_CENTER)
     x=x-(strlen(label)*textsize)/2;
@@ -337,7 +342,7 @@ void createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b
   menuitem[numofmenuitems].texturenum=-1;
   menuitem[numofmenuitems].cursornum=0;
   menuitem[numofmenuitems].background=0;
-  numofmenuitems++;
+  return numofmenuitems++; // return value, then increment
   }
 
 void setmenuitem(int option,...)

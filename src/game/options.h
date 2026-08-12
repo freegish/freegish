@@ -24,11 +24,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../input/keyboard.h"
 
 #define CONTROLS_LENGTH 4
+#define PRESETS_LENGTH 16
 
 void optionsmenu(void);
+void load_datapack(void);
 void videooptionsmenu(void);
 void drawsliderbars(void);
-void optionsmenu2(void);
 
 typedef enum {
 	KEYALIAS_LEFT = 0,
@@ -39,7 +40,8 @@ typedef enum {
 	KEYALIAS_JUMP = 5,
 	KEYALIAS_SLIDE = 6,
 	KEYALIAS_HEAVY = 7,
-	KEYALIAS_LAST = KEYALIAS_HEAVY,
+	KEYALIAS_START_PAUSE = 8,
+	KEYALIAS_LAST = KEYALIAS_START_PAUSE,
 	KEYALIAS_LENGTH = KEYALIAS_LAST+1
 } keyalias;
 
@@ -54,6 +56,7 @@ typedef struct
 
 typedef struct
   {
+  char name[32];
   keyboardkey key[KEYALIAS_LENGTH];
   int joysticknum;
   int axis[4];
@@ -62,5 +65,16 @@ typedef struct
 
 extern _option option;
 extern _control control[CONTROLS_LENGTH];
+extern _control keyboardpresets[PRESETS_LENGTH];
+extern _control joystickpresets[PRESETS_LENGTH];
+extern int numkeyboardpresets;
+extern int numjoystickpresets;
+
+extern int versus_numplayers;
+extern int versus_is_joystick[4];
+extern int versus_presets[4];
+
+extern char datapacks_folder[32];
+extern char loaded_datapack[32];
 
 #endif /* GISH_GAME_OPTIONS_H */

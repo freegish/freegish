@@ -25,9 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../sdl/sdl.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
 
+#include "../game/debug.h"
 #include "../game/game.h"
 #include "../game/animation.h"
 #include "../game/gameaudio.h"
@@ -68,6 +70,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 _view view;
 _game game;
 
+void pan_view(void){
+    float speed = 0.2f * view.zoom / 10.f; // base zoom is 10, so 0.2 is default speed at zoom 10
+    if (keyboard[SCAN_SHIFT]) speed *= 5;
+    if (keyboard[SCAN_W])
+        view.position[1]+=speed;
+    if (keyboard[SCAN_S])
+        view.position[1]-=speed;
+    if (keyboard[SCAN_A])
+        view.position[0]-=speed;
+    if (keyboard[SCAN_D])
+        view.position[0]+=speed;
+}
+
+void zoom_view(void){
+    if (keyboard[SCAN_EQUALS])
+      view.zoom/=1.189207115f; // 2^0.25
+    if (keyboard[SCAN_MINUS])
+      view.zoom*=1.189207115f;
+}
+
+void get_mouse_coords(float *x, float *y){
+    assert(x);
+    assert(y);
+    *x=view.position[0]+(float)(mouse.x-320)/32.0f * view.zoom / 10.f;
+    *y=view.position[1]+(float)(240-mouse.y)/32.0f * view.zoom / 10.f;
+}
+
+void screen_to_world(float x, float y, float *x_out, float *y_out){
+    assert(x_out);
+    assert(y_out);
+    *x_out=view.position[0]+(float)(x-320)/32.0f * view.zoom / 10.f;
+    *y_out=view.position[1]+(float)(240-y)/32.0f * view.zoom / 10.f;
+}
+
+void world_to_screen(float x, float y, float *x_out, float *y_out){
+    assert(x_out);
+    assert(y_out);
+    *x_out = (x - view.position[0]) * 320.f / view.zoom + 320.f;
+    *y_out = -((y - view.position[1]) * 320.f / view.zoom - 240.f);
+}
+
 void gameloop(void)
   {
   int count,count2;
@@ -78,6 +121,7 @@ void gameloop(void)
   //char filename[13]="text000.png";
   int scorenum;
   //unsigned int x;
+  int need_to_open_editor = 0;
 
   game.godparticle=-1;
 
@@ -105,6 +149,9 @@ void gameloop(void)
 
   resetmenuitems();
 
+  if (game.levelnum==0 && game.editing)
+    need_to_open_editor = 1;
+
   while ((game.exit<GAMEEXIT_EXITGAME || game.exitdelay>0) && !windowinfo.shutdown)
     {
     frametimer=SDL_GetTicks();
@@ -122,20 +169,20 @@ void gameloop(void)
     if (level.background[0]!=0)
       displaybackground(660);
 
-    if (game.over!=0 && level.gametype<GAMETYPE_2FOOTBALL)
-    if (game.exit==GAMEEXIT_NONE)
+    if (game.over && level.gametype<GAMETYPE_2FOOTBALL)
+    if (!game.exit)
       {
-      if (game.over>=3 && game.over<=5)
+      if (game.over==GAMEOVER_WARPZONE || game.over == GAMEOVER_WARPZONE2 || game.over==GAMEOVER_WARPZONE3)
         {
-        game.exit=GAMEXIT_WARPZONE;
+        game.exit=GAMEEXIT_WARPZONE;
         game.exitdelay=100;
         }
-      if (game.over==2)
+      if (game.over==GAMEOVER_WON)
         {
         game.exit=GAMEEXIT_WON;
         game.exitdelay=100;
         }
-      if (game.over==1)
+      if (game.over==GAMEOVER_DIED)
         {
         game.exit=GAMEEXIT_DIED;
         game.exitdelay=100;
@@ -144,8 +191,10 @@ void gameloop(void)
         }
       }
 
+    int reset_level = -1;
+
     numofmenuitems=0;
-    if (game.exit==GAMEEXIT_NONE)
+    if (!game.exit)
       {
       createmenuitem("",0,0,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_HOTKEY,SCAN_ESC);
@@ -155,7 +204,7 @@ void gameloop(void)
       {
       count=240;
 
-      if (game.over==0)
+      if (!game.over)
         {
         createmenuitem(TXT_RETURN_TO_GAME,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
         setmenuitem(MO_HOTKEY,SCAN_ESC);
@@ -168,9 +217,9 @@ void gameloop(void)
       if (game.levelnum<64)
         {
         if (level.gametype==GAMETYPE_CAMPAIGN && (game.levelnum>0 || mappack.active) && !game.playreplay)
-          createmenuitem(TXT_RESETLEVEL_MINUSONE,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
+          reset_level = createmenuitem(TXT_RESETLEVEL_MINUSONE,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
         else
-          createmenuitem(TXT_RESETLEVEL,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
+          reset_level = createmenuitem(TXT_RESETLEVEL,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
         setmenuitem(MO_HOTKEY,SCAN_R);
         if (level.gametype==GAMETYPE_CAMPAIGN)
           setmenuitem(MO_SET,&game.exit,GAMEEXIT_DIED);
@@ -179,7 +228,7 @@ void gameloop(void)
       else
         createmenuitemempty();
 
-      if (game.over==0 && game.levelnum<64 && level.gametype==GAMETYPE_CAMPAIGN && game.levelnum>0 && !game.playreplay)
+      if (!game.over && game.levelnum<64 && level.gametype==GAMETYPE_CAMPAIGN && game.levelnum>0 && !game.playreplay)
         createmenuitem(TXT_EXITGAME_MINUSONE,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
       else
         createmenuitem(TXT_EXITGAME,(320|TEXT_CENTER),count,16,1.0f,1.0f,1.0f,1.0f);
@@ -207,7 +256,7 @@ void gameloop(void)
       setmenuitem(MO_RESIZE,(320|TEXT_CENTER),(240|TEXT_CENTER),256,128);
       setmenuitem(MO_SET,&game.exitdelay,0);
       }
-    if (game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WARPZONE)
       {
       if (game.levelnum!=34)
         {
@@ -233,13 +282,13 @@ void gameloop(void)
 
     if (game.exit==GAMEEXIT_INGAMEMENU)
     if (level.gametype!=GAMETYPE_CAMPAIGN)
-    if (menuitem[1].active)
+    if (menuitem[reset_level].active)
       {
       setuplevel();
       setupgame();
 
       game.exit=GAMEEXIT_NONE;
-      menuitem[1].active=0;
+      menuitem[reset_level].active=0;
       }
 
     if (game.dialog>0)
@@ -356,7 +405,7 @@ void gameloop(void)
       setuplevel();
       setupgame();
       }
-    if (keyboard[SCAN_P] && !prevkeyboard[SCAN_P] && game.exit==GAMEEXIT_NONE)
+    if (keyboard[SCAN_P] && !prevkeyboard[SCAN_P] && !game.exit)
       game.pause^=1;
     //if (keyboard[SCAN_R] && !prevkeyboard[SCAN_R])
     //  movie.record^=1;
@@ -373,6 +422,23 @@ void gameloop(void)
       view.zoom=24.0f;
     if (level.gametype==GAMETYPE_4FOOTBALL || level.gametype==GAMETYPE_4SUMO)
       view.zoom=14.0f;
+    if (level.gametype == GAMETYPE_CAMPAIGN) {
+        float midpoint[3];
+        float sub_result[3];
+        float distance_to_midpoint = 0.0f;
+        zerovector(midpoint);
+
+        for(int i = 0; i < game.numofplayers; i++)
+            addvectors(midpoint, midpoint, object[i].position);
+        scalevector(midpoint, midpoint, 1.0f / game.numofplayers);
+
+        for (int i = 0; i < game.numofplayers; i++) {
+            subtractvectors(sub_result, midpoint, object[i].position);
+            distance_to_midpoint += vectorlength(sub_result);
+        }
+
+        view.zoom = 10.f + distance_to_midpoint / game.numofplayers / 1.25;
+    }
 
     view.zoomx=view.zoom+0.5f;
     view.zoomy=view.zoom*0.75f+0.5f;
@@ -406,15 +472,21 @@ void gameloop(void)
 
     renderlevel();
     renderlevelfore();
+    if (debug_render_bonds)
+        renderbonds();
+    if (debug_render_player_vertices)
+        renderplayervertices();
+    if (debug_render_level_lines)
+        renderlevellines();
 
     if (game.oldschool==1)// || game.oldschool==3)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,256,256,0);
       }
     if (game.oldschool==2)
       {
-      glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+      glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
       glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,128,128,0);
       }
 
@@ -423,9 +495,9 @@ void gameloop(void)
       setuptextdisplay();
   
       if (game.oldschool==1)// || game.oldschool==3)
-        glBindTexture(GL_TEXTURE_2D,texture[334].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL1_TEXTURE].glname);
       if (game.oldschool==2)
-        glBindTexture(GL_TEXTURE_2D,texture[333].glname);
+        glBindTexture(GL_TEXTURE_2D,texture[OLDSCHOOL2_TEXTURE].glname);
   
       glBegin(GL_QUADS);
     
@@ -448,7 +520,7 @@ void gameloop(void)
 
     setuptextdisplay();
 
-    if (game.exit==GAMEEXIT_WON || game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_WON || game.exit==GAMEEXIT_WARPZONE)
       {
       glDisable(GL_TEXTURE_2D);
 
@@ -505,7 +577,7 @@ void gameloop(void)
 
     drawmenuitems();
 
-    if (game.exit==GAMEEXIT_DIED || game.exit==GAMEEXIT_WON || game.exit==GAMEXIT_WARPZONE)
+    if (game.exit==GAMEEXIT_DIED || game.exit==GAMEEXIT_WON || game.exit==GAMEEXIT_WARPZONE)
     if (game.exitdelay<20)
       {
       glDisable(GL_TEXTURE_2D);
@@ -533,13 +605,13 @@ void gameloop(void)
     if (game.playreplay)
       drawtext(TXT_REPLAY,(612|TEXT_END),64,16,1.0f,1.0f,0.0f,1.0f);
 
-    if (game.pause && game.exit==GAMEEXIT_NONE)
+    if (game.pause && !game.exit)
       {
       drawtext(TXT_PAUSED,(320|TEXT_CENTER),240,16,1.0f,1.0f,1.0f,1.0f);
       drawtext(TXT_PRESS_P,(320|TEXT_CENTER),256,12,1.0f,1.0f,1.0f,1.0f);
       }
 
-    if (game.exit!=GAMEEXIT_NONE || game.godmode)
+    if (game.exit || game.godmode)
       drawmousecursor(768+font.cursornum,mouse.x,mouse.y,16,1.0f,1.0f,1.0f,1.0f);
 
     simcount=0;
@@ -564,7 +636,7 @@ void gameloop(void)
       if (keyboard[SCAN_ESC])
         game.exitdelay=0;
 
-      if (game.exit==GAMEEXIT_NONE && !game.pause && game.dialog==0 && !game.over)
+      if (!game.exit && !game.pause && game.dialog==0 && !game.over)
         {
         getinputs();
 
@@ -581,7 +653,7 @@ void gameloop(void)
       }
 
     if (game.levelnum==0 && game.editing)
-    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1])
+    if (keyboard[SCAN_F1] && !prevkeyboard[SCAN_F1] || need_to_open_editor)
       {
       game.songnum=-1;
       checkmusic();
@@ -599,9 +671,8 @@ void gameloop(void)
       if (animation[count].loaded==0)
         animation[count].loaded=2;
 
-      loadanimations();
-
-      editlevel();
+      editlevel(need_to_open_editor);
+      need_to_open_editor = 0;
 
       savelevel("backup.lvl");
 
@@ -636,8 +707,7 @@ void simulation(void)
   if (game.godmode)
   if (!game.playreplay)
     {
-    vec[0]=view.position[0]+(float)(mouse.x-320)/32.0f;
-    vec[1]=view.position[1]+(float)(240-mouse.y)/32.0f;
+    get_mouse_coords(&vec[0], &vec[1]);
     vec[2]=0.0f;
 
     if (mouse.lmb)
@@ -723,7 +793,7 @@ void simulation(void)
 
   for (count=0;count<numofobjects;count++)
     {
-    if (object[count].type==1)
+    if (object[count].type==OBJ_TYPE_GISH)
       {
       if (object[count].hitpoints<0)
         object[count].hitpoints=0;

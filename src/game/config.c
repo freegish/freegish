@@ -139,47 +139,34 @@ void loadconfig(void)
   option.music=1;
   option.soundvolume=1.0f;
   option.musicvolume=1.0f;
+  numkeyboardpresets = 1;
+  numjoystickpresets = 0;
 
-  control[0].key[KEYALIAS_LEFT]=SCAN_LEFT;
-  control[0].key[KEYALIAS_RIGHT]=SCAN_RIGHT;
-  control[0].key[KEYALIAS_DOWN]=SCAN_DOWN;
-  control[0].key[KEYALIAS_UP]=SCAN_UP;
-  control[0].key[KEYALIAS_STICK]=SCAN_A;
-  control[0].key[KEYALIAS_JUMP]=SCAN_SPACE;
-  control[0].key[KEYALIAS_SLIDE]=SCAN_S;
-  control[0].key[KEYALIAS_HEAVY]=SCAN_D;
-  control[0].joysticknum=0;
-  control[0].axis[0]=0;
-  control[0].axis[1]=1;
-  for (count=0;count<4;count++)
-    control[0].button[count]=-1;
-  for (count=0;count<4;count++)
-    control[0].button[count+4]=count;
-  control[0].button[8]=5;
+  for (count = 0; count < CONTROLS_LENGTH; count++){
+    control[count].joysticknum = -1;
+    for (count2 = 0; count2 < KEYALIAS_LENGTH; count2++){
+        control[count].key[count2] = -1;
+        control[count].button[count2] = -1;
+    }
+    for (count2 = 0; count2 < 4; count2++){
+        control[count].axis[count2] = -1;
+    }
+  }
 
-  control[1].joysticknum=-1;
-  control[1].axis[0]=0;
-  control[1].axis[1]=1;
-  for (count=0;count<4;count++)
-    control[1].button[count]=-1;
-  for (count=0;count<4;count++)
-    control[1].button[count+4]=count;
-
-  control[2].joysticknum=-1;
-  control[2].axis[0]=0;
-  control[2].axis[1]=1;
-  for (count=0;count<4;count++)
-    control[2].button[count]=-1;
-  for (count=0;count<4;count++)
-    control[2].button[count+4]=count;
-
-  control[3].joysticknum=-1;
-  control[3].axis[0]=0;
-  control[3].axis[1]=1;
-  for (count=0;count<4;count++)
-    control[3].button[count]=-1;
-  for (count=0;count<4;count++)
-    control[3].button[count+4]=count;
+  strcpy(keyboardpresets[0].name, "Default preset");
+  keyboardpresets[0].key[KEYALIAS_LEFT]=SCAN_LEFT;
+  keyboardpresets[0].key[KEYALIAS_RIGHT]=SCAN_RIGHT;
+  keyboardpresets[0].key[KEYALIAS_DOWN]=SCAN_DOWN;
+  keyboardpresets[0].key[KEYALIAS_UP]=SCAN_UP;
+  keyboardpresets[0].key[KEYALIAS_STICK]=SCAN_A;
+  keyboardpresets[0].key[KEYALIAS_JUMP]=SCAN_SPACE;
+  keyboardpresets[0].key[KEYALIAS_SLIDE]=SCAN_S;
+  keyboardpresets[0].key[KEYALIAS_HEAVY]=SCAN_D;
+  keyboardpresets[0].joysticknum=-1;
+  keyboardpresets[0].axis[0]=-1;
+  keyboardpresets[0].axis[1]=-1;
+  for (count=0;count<KEYALIAS_LENGTH;count++)
+    keyboardpresets[0].button[count]=-1;
 
   loadtextfile(userpath(path,NULL,"config.txt"));
   optionreadint(&config.resolutionx,"screenwidth=");
@@ -203,28 +190,49 @@ void loadconfig(void)
   if (count!=-1)
     option.musicvolume=(float)count/100.0f;
 
-  for (count=0;count<CONTROLS_LENGTH;count++)
-    {
-    for (count2=0;count2<KEYALIAS_LENGTH;count2++)
-      {
-      sprintf(tempstr,"player%dkey%d=",count+1,count2+1);
-      optionreadint((int*)&control[count].key[count2],tempstr);
-      }
+  optionreadint(&numkeyboardpresets,"numkeyboardpresets=");
+  optionreadint(&numjoystickpresets,"numjoystickpresets=");
 
-    sprintf(tempstr,"player%djoysticknum=",count+1);
-    optionreadint(&control[count].joysticknum,tempstr);
+  for (count=0;count<numkeyboardpresets;count++){
+    sprintf(tempstr,"keyboardpreset%dname=",count+1);
+    optionreadstring(&keyboardpresets[count].name, tempstr, 32);
+    for (count2=0;count2<KEYALIAS_LENGTH;count2++){
+      sprintf(tempstr,"keyboardpreset%dkey%d=",count+1,count2+1);
+      optionreadint((int*)&keyboardpresets[count].key[count2],tempstr);
+    }
+  }
+  for (count=0; count<numjoystickpresets;count++){
+    sprintf(tempstr,"joystickpreset%dname=",count+1);
+    optionreadstring(&joystickpresets[count].name, tempstr, 32);
+    sprintf(tempstr,"joystickpreset%djoysticknum=",count+1);
+    optionreadint(&joystickpresets[count].joysticknum,tempstr);
 
     for (count2=0;count2<4;count2++)
       {
-      sprintf(tempstr,"player%daxis%d=",count+1,count2+1);
-      optionreadint(&control[count].axis[count2],tempstr);
+      sprintf(tempstr,"joystickpreset%daxis%d=",count+1,count2+1);
+      optionreadint(&joystickpresets[count].axis[count2],tempstr);
       }
     for (count2=0;count2<16;count2++)
       {
-      sprintf(tempstr,"player%dbutton%d=",count+1,count2+1);
-      optionreadint(&control[count].button[count2],tempstr);
+      sprintf(tempstr,"joystickpreset%dbutton%d=",count+1,count2+1);
+      optionreadint(&joystickpresets[count].button[count2],tempstr);
       }
-    }
+  }
+  optionreadint(&versus_numplayers,"versus_numplayers=");
+  for (count=0; count<versus_numplayers;count++){
+    sprintf(tempstr,"versus_is_joystick%d=",count+1);
+    optionreadint(&versus_is_joystick[count],tempstr);
+    sprintf(tempstr,"versus_presets%d=",count+1);
+    optionreadint(&versus_presets[count],tempstr);
+  }
+
+  optionreadstring(datapacks_folder, "datapacks_folder=", 32);
+  optionreadstring(loaded_datapack, "loaded_datapack=", 32);
+
+  if (datapacks_folder[0] == 0)
+      strcpy(datapacks_folder, "datapacks");
+  if (loaded_datapack[0] == 0)
+      strcpy(loaded_datapack, "freegish");
 
   windowinfo.resolutionx=config.resolutionx;
   windowinfo.resolutiony=config.resolutiony;
@@ -267,30 +275,54 @@ void saveconfig(void)
   optionwriteint(fp, &count,"soundvolume=");
   count=option.musicvolume*100.0f;
   optionwriteint(fp, &count,"musicvolume=");
+  optionwriteint(fp, &numkeyboardpresets,"numkeyboardpresets=");
+  optionwriteint(fp, &numjoystickpresets,"numjoystickpresets=");
 
-  for (count=0;count<CONTROLS_LENGTH;count++)
-    {
+  for (count=0;count<numkeyboardpresets;count++){
+    sprintf(tempstr,"keyboardpreset%dname=",count+1);
+    optionwritestring(fp, keyboardpresets[count].name, tempstr, 32);
+    for (count2=0;count2<KEYALIAS_LENGTH;count2++){
+      sprintf(tempstr,"keyboardpreset%dkey%d=",count+1,count2+1);
+      optionwriteint(fp, (int*)&keyboardpresets[count].key[count2],tempstr);
+    }
+
+    keyboardpresets[count].joysticknum = -1;
+    for (count2=0;count2<4;count2++){
+        keyboardpresets[count].axis[count2] = -1;
+    }
+    for (count2=0;count2<16;count2++){
+        keyboardpresets[count].button[count2] = -1;
+    }
+  }
+  for (count=0; count<numjoystickpresets;count++){
+    sprintf(tempstr,"joystickpreset%dname=",count+1);
+    optionwritestring(fp, joystickpresets[count].name, tempstr, 32);
+    sprintf(tempstr,"joystickpreset%djoysticknum=",count+1);
+    optionwriteint(fp, &joystickpresets[count].joysticknum,tempstr);
+
     for (count2=0;count2<KEYALIAS_LENGTH;count2++)
-      {
-      sprintf(tempstr,"player%dkey%d=",count+1,count2+1);
-      optionwriteint(fp, (int*)&control[count].key[count2],tempstr);
-      }
-
-    sprintf(tempstr,"player%djoysticknum=",count+1);
-    optionwriteint(fp, &control[count].joysticknum,tempstr);
-
+        joystickpresets[count].key[count2] = -1;
     for (count2=0;count2<4;count2++)
       {
-      sprintf(tempstr,"player%daxis%d=",count+1,count2+1);
-      optionwriteint(fp, &control[count].axis[count2],tempstr);
+      sprintf(tempstr,"joystickpreset%daxis%d=",count+1,count2+1);
+      optionwriteint(fp, &joystickpresets[count].axis[count2],tempstr);
       }
     for (count2=0;count2<16;count2++)
       {
-      sprintf(tempstr,"player%dbutton%d=",count+1,count2+1);
-      optionwriteint(fp, &control[count].button[count2],tempstr);
+      sprintf(tempstr,"joystickpreset%dbutton%d=",count+1,count2+1);
+      optionwriteint(fp, &joystickpresets[count].button[count2],tempstr);
       }
-    }
+  }
 
+  optionwriteint(fp, &versus_numplayers,"versus_numplayers=");
+  for (count=0; count<versus_numplayers;count++){
+    sprintf(tempstr,"versus_is_joystick%d=",count+1);
+    optionwriteint(fp, &versus_is_joystick[count],tempstr);
+    sprintf(tempstr,"versus_presets%d=",count+1);
+    optionwriteint(fp, &versus_presets[count],tempstr);
+  }
+  optionwritestring(fp, datapacks_folder, "datapacks_folder=", 32);
+  optionwritestring(fp, loaded_datapack, "loaded_datapack=", 32);
   fclose(fp);
   }
 
@@ -401,7 +433,7 @@ void optionwriteint(FILE *fp, int *ptr,char *str)
   {
   fprintf(fp,"%s%d\r\n",str,*ptr);
   }
-/*
+
 void optionreadstring(char *ptr,char *str,int size)
   {
   if (findstring(str))
@@ -414,4 +446,4 @@ void optionwritestring(FILE *fp, char *ptr,char *str,int size)
   {
   fprintf(fp,"%s%s\r\n",str,ptr);
   }
-*/
+

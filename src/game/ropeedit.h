@@ -21,7 +21,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-void editlevelrope(void);
+#include "../game/gameobject.h"
+
 void renderropeedit(void);
 
 typedef struct
@@ -36,6 +37,7 @@ typedef struct
   int pointnum;
   int pointhighlight;
   int texturenum;
+  rope_types ropetype;
   } _ropeedit;
 
 extern _ropeedit ropeedit;

@@ -40,6 +40,99 @@ void deleterope(int ropenum);
 void objecttimetolive(void);
 void createcar(float position[3],float sizex,float sizey,float mass,float friction);
 
+// what more to dehardcode:
+// bond types
+// physicstemp.bond types
+// particle types
+// menuitem types
+// beast types
+
+
+typedef enum
+{
+    LVL_OBJ_TYPE_GISH = 1,
+    LVL_OBJ_TYPE_BOX = 2,
+    LVL_OBJ_TYPE_MIDDLE_FIXED_BOX = 3,
+    LVL_OBJ_TYPE_LEFT_FIXED_BOX_OR_CAR = 4,
+    LVL_OBJ_TYPE_RIGHT_FIXED_BOX = 5,
+    LVL_OBJ_TYPE_WHEEL = 6,
+    LVL_OBJ_TYPE_ANCHORED_WHEEL = 7,
+    LVL_OBJ_TYPE_LIGHT_OR_ANCHOR = 8,
+    LVL_OBJ_TYPE_BUTTON = 9,
+    LVL_OBJ_TYPE_ONE_TIME_BUTTON = 10,
+    LVL_OBJ_TYPE_SWITCH_UP = 11,
+    LVL_OBJ_TYPE_SWITCH_RIGHT = 12,
+    LVL_OBJ_TYPE_SWITCH_DOWN = 13,
+    LVL_OBJ_TYPE_SWITCH_LEFT = 14,
+    LVL_OBJ_TYPE_AREASWITCH = 15,
+    LVL_OBJ_TYPE_ONE_TIME_AREASWITCH = 16,
+    LVL_OBJ_TYPE_GENERATOR = 17,
+    LVL_OBJ_TYPE_SECRET_AREASWITCH = 18,
+
+    LVL_OBJ_TYPE_MONSTER_BEGIN = 20,
+    LVL_OBJ_TYPE_BONE_NIBBLER = 20,
+    LVL_OBJ_TYPE_CAVE_NIBBLER = 21,
+    LVL_OBJ_TYPE_HELL_NIBBLER = 22,
+    LVL_OBJ_TYPE_MUMMY = 23,
+    LVL_OBJ_TYPE_SKELETON = 24,
+    LVL_OBJ_TYPE_ZOMBIE = 25,
+    LVL_OBJ_TYPE_GIMP = 26,
+    LVL_OBJ_TYPE_VIS_SISTER = 27,
+    LVL_OBJ_TYPE_ANGEL_NIBBLER = 28,
+    LVL_OBJ_TYPE_ALTERBOY = 29,
+    LVL_OBJ_TYPE_STITCH = 30,
+    LVL_OBJ_TYPE_POOBLER = 31,
+    LVL_OBJ_TYPE_HONEY_BUCKET = 32,
+    LVL_OBJ_TYPE_SISTER_VIS = 33,
+    LVL_OBJ_TYPE_PAUNCHY_CHOPS = 34,
+    LVL_OBJ_TYPE_BASINJIN = 35,
+    LVL_OBJ_TYPE_SATAN = 36,
+    LVL_OBJ_TYPE_MONSTER_END = 36,
+
+} level_object_types;
+
+extern const char* LVL_OBJ_NAMES[]; // don't forget to rename things if changed enum
+
+typedef enum
+{
+    OBJ_TYPE_GISH = 1,
+    OBJ_TYPE_BOX = 2,
+    OBJ_TYPE_WHEEL = 3,
+    OBJ_TYPE_BEAST_OR_BOBBLE = 4,
+    OBJ_TYPE_HEAD = 5,
+    OBJ_TYPE_AMBER = 6,
+    OBJ_TYPE_ANCHOR = 8,
+    OBJ_TYPE_BUTTON = 9,
+    OBJ_TYPE_SWITCH = 10,
+    OBJ_TYPE_GENERATOR = 15,
+    OBJ_TYPE_AREASWITCH = 16,
+    OBJ_TYPE_CAR = 20,
+
+} gameobject_types;
+
+typedef enum
+{
+    WEAK_ROPE = 1,
+    STRONG_ROPE = 2,
+    WEAK_CHAIN = 3,
+    STRONG_CHAIN = 4,
+    PUSHING_PISTON = 5,
+    HALF_PUSHED_PUSHING_PISTON = 6,
+    PULLING_PISTON = 7,
+    HALF_PULLED_PULLING_PISTON = 8,
+    BAR = 9,
+    SPRING = 10,
+
+} rope_types;
+extern const char* ROPE_TYPE_NAMES[]; // don't forget to rename things if changed enum
+
+typedef enum
+{
+    LIGHT_DEFAULT_ON = 1,
+    LIGHT_DEFAULT_OFF = 2, // idk, maybe something else
+    FLICKERING_LIGHT = 3,
+} light_types;
+
 typedef struct
   {
   int type;

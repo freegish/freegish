@@ -53,7 +53,7 @@ void versusmodemenu(int versusnum)
 
   unlocked=0;
   for (count=0;count<6;count++)
-  if (player[count].unlock[1])
+  if (player[count].unlock[WON_HARD])
     unlocked=1;
 
   resetmenuitems();

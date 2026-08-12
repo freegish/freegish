@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 int lineintersectlevel(float *intersectpoint,float *normal,float *scale,float *startpoint,float *endpoint);
 void savelevel(char *filename);
-void loadlevel(char *filename);
+int loadlevel(char *filename);
 void createlevel(void);
 void getlevellines(int objectnum);
 void setuplevellines(int xstart,int ystart,int xend,int yend);
@@ -46,8 +46,52 @@ typedef enum {
         GAMETYPE_2COLLECTION = 15,
         GAMETYPE_2RACING = 16,
         GAMETYPE_4FOOTBALL = 17,
-        GAMETYPE_4SUMO = 18
+        GAMETYPE_4SUMO = 18,
 } gametype;
+
+extern int GAMETYPE_COUNT;
+extern const char* GAMETYPE_NAMES[];
+
+typedef enum {
+        LEVELAREA_WIN = 0,
+
+        LEVELAREA_WIN_GOOD = 1,
+        LEVELAREA_WIN_BAD = 2,
+
+        LEVELAREA_WARPZONE = 1,
+        LEVELAREA_WARPZONE2 = 2,
+        LEVELAREA_WARPZONE3 = 3,
+
+        LEVELAREA_TOUCHDOWN_GRAY = 0,
+        LEVELAREA_FIELDGOAL_GRAY = 1,
+        LEVELAREA_TOUCHDOWN_GISH = 2,
+        LEVELAREA_FIELDGOAL_GISH = 3,
+
+        LEVELAREA_SUMO_DEATH = 0,
+
+        LEVELAREA_DRAGSTER_GISH = 0,
+        LEVELAREA_DRAGSTER_GRAY = 1,
+        LEVELAREA_DRAGSTER_GREEN = 2,
+        LEVELAREA_DRAGSTER_YELLOW = 3,
+        LEVELAREA_DRAGSTER_RED = 4,
+
+        LEVELAREA_TUTORIAL_LINE_1_TO_2 = 1,
+        LEVELAREA_TUTORIAL_LINE_3_TO_4 = 2,
+        LEVELAREA_TUTORIAL_LINE_5_TO_7 = 3,
+        LEVELAREA_TUTORIAL_LINE_8_TO_12 = 4,
+        LEVELAREA_TUTORIAL_LINE_13_TO_14 = 5,
+        LEVELAREA_TUTORIAL_LINE_15_TO_19 = 6
+} levelarea;
+
+typedef enum {
+  LOADLEVELRESULT_OK = 0,
+  LOADLEVELRESULT_UNKNOWN = 1,
+  LOADLEVELRESULT_FILEERROR = 2,
+  LOADLEVELRESULT_TOO_MANY_OBJECTS = 3,
+  LOADLEVELRESULT_TOO_MANY_ROPES = 4,
+  LOADLEVELRESULT_TEXTURE_SIZEX_TOO_BIG = 5,
+  LOADLEVELRESULT_TOO_MANY_BLOCK_LINES = 6
+} loadlevelresult;
 
 typedef struct
   {
