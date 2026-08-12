@@ -35,6 +35,6 @@
 #define max(x1,x2) ((x1) > (x2) ? (x1):(x2))
 #endif
 
-typedef enum {FALSE = 0, TRUE = 1} bool;
+#include <stdbool.h>
 
 #endif /* GISH_CONFIG_H */
