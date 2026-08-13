@@ -42,13 +42,60 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../video/text.h"
 #include "../sdl/video.h"
 
+char* get_versus_filename(int versusnum, char* filename){
+  char* gametypeName = NULL;
+  bool is4Player = menuitem[5].active || menuitem[6].active;
+  switch (versusnum)
+	{
+	case 0: gametypeName = is4Player ? "4sumo" : "2sumo"; break;
+	case 1: gametypeName = is4Player ? "4football" : "2football"; break;
+	case 2: gametypeName = "2greed"; break;
+	case 3: gametypeName = "2duel"; break;
+	case 4: gametypeName = "2dragster"; break;
+	case 5: gametypeName = "2collection"; break;
+	case 6: gametypeName = "2racing"; break;
+	}
+	strcpy(filename, gametypeName);
+
+	// 2 player.
+	if (menuitem[1].active)      strcat(filename, "1");
+	else if (menuitem[2].active) strcat(filename, "2");
+	else if (menuitem[3].active) strcat(filename, "3");
+	else if (menuitem[4].active) strcat(filename, "4");
+	// 4 player.
+	else if (menuitem[5].active) strcat(filename, "1");
+	else if (menuitem[6].active) strcat(filename, "2");
+	strcat(filename, ".lvl");
+}
+
+char* get_versus_filename_original(int versusnum, char* filename){
+  char* gametypeName = NULL;
+  bool is4Player = menuitem[5].active || menuitem[6].active;
+  switch (versusnum)
+	{
+	case 0: gametypeName = is4Player ? "4bath" : "bathhouse"; break;
+	case 1: gametypeName = is4Player ? "4field" : "field"; break;
+	case 2: gametypeName = "amber"; break;
+	case 3: gametypeName = "fight"; break;
+	case 4: gametypeName = "dragster"; break;
+	case 5: gametypeName = "colvs"; break;
+	case 6: gametypeName = "racing"; break;
+	}
+	strcpy(filename, gametypeName);
+
+  if (menuitem[1].active) strcat(filename,".lvl");
+  else if (menuitem[2].active) strcat(filename,"2.lvl");
+  else if (menuitem[3].active) strcat(filename,"3.lvl");
+  else if (menuitem[4].active) strcat(filename,"4.lvl");
+  else if (menuitem[5].active) strcat(filename,".lvl");
+  else if (menuitem[6].active) strcat(filename,"2.lvl");
+}
+
 void versusmodemenu(int versusnum)
   {
   int count;
   int unlocked;
   char filename[32];
-  bool is4Player;
-  char* gametypeName;
   bool menuItemClicked = false;
 
   unlocked=0;
@@ -130,35 +177,19 @@ void versusmodemenu(int versusnum)
 	if (!(menuitem[1].active || menuitem[2].active || menuitem[3].active || menuitem[4].active || menuitem[5].active || menuitem[6].active))
 		continue;
 
-	is4Player = menuitem[5].active || menuitem[6].active;
-	gametypeName = NULL;
-	switch (versusnum)
-	{
-	case 0: gametypeName = is4Player ? "4sumo" : "2sumo"; break;
-	case 1: gametypeName = is4Player ? "4football" : "2football"; break;
-	case 2: gametypeName = "2greed"; break;
-	case 3: gametypeName = "2duel"; break;
-	case 4: gametypeName = "2dragster"; break;
-	case 5: gametypeName = "2collection"; break;
-	case 6: gametypeName = "2racing"; break;
-	}
-	strcpy(filename, gametypeName);
-
-	// 2 player.
-	if (menuitem[1].active)      strcat(filename, "1");
-	else if (menuitem[2].active) strcat(filename, "2");
-	else if (menuitem[3].active) strcat(filename, "3");
-	else if (menuitem[4].active) strcat(filename, "4");
-	// 4 player.
-	else if (menuitem[5].active) strcat(filename, "1");
-	else if (menuitem[6].active) strcat(filename, "2");
-	strcat(filename, ".lvl");
-
 	game.songnum=-1;
 	checkmusic();
 
 	game.levelnum=0;
-	loadlevel(filename);
+  get_versus_filename(versusnum, filename);
+	int result = loadlevel(filename);
+  if (result == LOADLEVELRESULT_FILEERROR){
+    get_versus_filename_original(versusnum, filename);
+    result = loadlevel(filename);
+    if (result == LOADLEVELRESULT_FILEERROR){
+      continue;
+    }
+  }
 	gameloop();
     }
 
