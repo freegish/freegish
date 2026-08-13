@@ -34,24 +34,21 @@ package gishleveltool;
  * The pioneering role of Dennis Ritchie and Bjarne Stroustrup, of AT&T, for
  * inventing predecessor languages C and C++ is also gratefully acknowledged.
  */
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.Vector;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Display a file system in a JTree view
@@ -97,9 +94,7 @@ public class FileTree extends JPanel {
                         System.err.println("RIGHT: " + s);
                         parentMaker.changeComparePath(s + "/");
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(FileTree.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchAlgorithmException ex) {
+                } catch (IOException | NoSuchAlgorithmException ex) {
                     Logger.getLogger(FileTree.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -118,7 +113,7 @@ public class FileTree extends JPanel {
         if (curTop != null) { // should only be null at root
             curTop.add(curDir);
         }
-        Vector ol = new Vector();
+        Vector<String> ol = new Vector<>();
         String[] tmp;
         if (isLeft) {
             tmp = dir.list();
@@ -130,15 +125,15 @@ public class FileTree extends JPanel {
                 }
             });
         }
-        for (int i = 0; i < tmp.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(tmp).length; i++) {
             ol.addElement(tmp[i]);
         }
-        Collections.sort(ol, String.CASE_INSENSITIVE_ORDER);
+        ol.sort(String.CASE_INSENSITIVE_ORDER);
         File f;
-        Vector files = new Vector();
+        Vector<String> files = new Vector<>();
         // Make two passes, one for Dirs and one for Files. This is #1.
         for (int i = 0; i < ol.size(); i++) {
-            String thisObject = (String) ol.elementAt(i);
+            String thisObject = ol.elementAt(i);
             String newPath;
             if (curPath.equals(".")) {
                 newPath = thisObject;

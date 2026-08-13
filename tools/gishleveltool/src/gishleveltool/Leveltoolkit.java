@@ -64,9 +64,7 @@ public class Leveltoolkit {
                                 String md5 = Gishlevel.getMD5fromImage(ImageIO.read(f));
                                 working_md5db.put(md5, path);
                             }
-                        } catch (NoSuchAlgorithmException ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
+                        } catch (NoSuchAlgorithmException | IOException ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }

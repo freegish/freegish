@@ -48,9 +48,8 @@ public class Main {
                     } else if (option.equals("m")) {
                         MD5dbmaker mD5dbmaker = new MD5dbmaker();
                         mD5dbmaker.setVisible(true);
-                        while (mD5dbmaker != null) {
+                        while (true) {
                         }
-                        System.exit(0);
                     } else {
                         System.out.println("**Unknown command: " + option);
                     }

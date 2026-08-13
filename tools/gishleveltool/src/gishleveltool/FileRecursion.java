@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class FileRecursion {
 
-    private int maxRecursions;
+    private final int maxRecursions;
 
     public FileRecursion(int maxRecursions) {
         this.maxRecursions = maxRecursions;

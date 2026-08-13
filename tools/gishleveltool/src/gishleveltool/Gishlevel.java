@@ -58,14 +58,6 @@ public class Gishlevel {
         }
     }
 
-//    public void addtextureblock(byte[] in1, byte[] in2) {
-//        byte[] block = cat(in1, in2);
-//        addtextureblock(block);
-//    }
-//
-//    public void addtextureblock(byte[] in1) {
-//        textures_and_blocks.add(in1);
-//    }
     public static Byte[] btoB(byte[] b1) {
         Byte[] b2 = new Byte[b1.length];
         for (int i = 0; i < b1.length; i++) {
@@ -100,14 +92,6 @@ public class Gishlevel {
 
         ArrayList<RenderedImage> images = new ArrayList<RenderedImage>();
 
-        /*
-        fread2(level.background,1,32,fp);
-        fread2(&level.tileset,4,1,fp);
-        fread2(&level.gametype,4,1,fp);
-        fread2(&level.time,4,1,fp);
-        fread2(level.area,4,64*4,fp);
-         */
-
         fs.read(version);
         int offset, read;
 
@@ -131,13 +115,6 @@ public class Gishlevel {
             //System.out.println("Read bytes for " + i + ": " + j);
         }
 
-
-        /*
-        fread2(level.backgrid,1,256*256,fp);
-        fread2(level.grid,1,256*256,fp);
-        fread2(level.foregrid,1,256*256,fp);
-         * */
-
         for (int i = 0; i < level_backgrid.length; i++) {
             int j = fs.read(level_backgrid[i]);
             //System.out.println("Read bytes for " + i + ": " + j);
@@ -151,12 +128,6 @@ public class Gishlevel {
             //System.out.println("Read bytes for " + i + ": " + j);
         }
 
-        /*
-        fread2(level.startposition,4,3,fp);
-        fread2(level.ambient,4,12,fp);
-        fread2(&level.numofobjects,4,1,fp);
-         */
-
         for (int i = 0; i < level_startposition.length; i++) {
             int j = fs.read(level_startposition[i]);
             //System.out.println("Read bytes for " + i + ": " + j);
@@ -167,40 +138,10 @@ public class Gishlevel {
         }
         fs.read(level_numofobjects);
 
-        /*
-         *OBJECT:
-        fread2(&level.object[count].type,4,1,fp);
-        fread2(&level.object[count].texturenum,4,1,fp);
-        fread2(&level.object[count].link,4,1,fp);
-        fread2(level.object[count].position,4,3,fp);
-        fread2(&level.object[count].angle,4,1,fp);
-        fread2(level.object[count].size,4,2,fp);
-        fread2(&level.object[count].mass,4,1,fp);
-        fread2(&level.object[count].friction,4,1,fp);
-        fread2(&level.object[count].lighttype,4,1,fp);
-        fread2(level.object[count].lightcolor,4,3,fp);
-        fread2(&level.object[count].lightintensity,4,1,fp);
-        fread2(&level.object[count].ai,4,1,fp);
-         */
-
         objects_data = new byte[(4 + 4 + 4 + (4 * 3) + 4 + (4 * 2) + 4 + 4 + 4 + (4 * 3) + 4 + 4) * (int) readCInt(level_numofobjects)];
         fs.read(objects_data);
 
-        /*
-        fread2(&level.numofropes,4,1,fp);
-         */
-
         fs.read(level_numofropes);
-
-        /*
-         * ROPE:
-        fread2(&level.rope[count].type,4,1,fp);
-        fread2(&level.rope[count].texturenum,4,1,fp);
-        fread2(&level.rope[count].obj1,4,1,fp);
-        fread2(&level.rope[count].obj1part,4,1,fp);
-        fread2(&level.rope[count].obj2,4,1,fp);
-        fread2(&level.rope[count].obj2part,4,1,fp);
-         */
 
         ropes_data = new byte[(4 + 4 + 4 + 4 + 4 + 4) * readCInt(level_numofropes)];
         fs.read(ropes_data);
@@ -233,23 +174,13 @@ public class Gishlevel {
 
 
             } else if (readCInt(sizex) == 0) {
-                //System.out.println("Tex" + i + " -- BLOB (EMPTY) ");
             } else {
-                /* fread2(&texture[count].sizey,4,1,fp);
-                fread2(&texture[count].magfilter,4,1,fp);
-                fread2(&texture[count].minfilter,4,1,fp);
-                free(texture[count].rgba[0]);
-                texture[count].rgba[0]=(unsigned int *) malloc(texture[count].sizex*texture[count].sizey*4);
-                fread(texture[count].rgba[0],4,texture[count].sizex*texture[count].sizey,fp);*/
                 byte[] sizey = new byte[4];
                 byte[] magfilter = new byte[4];
                 byte[] minfilter = new byte[4];
                 fs.read(sizey);
                 fs.read(magfilter);
                 fs.read(minfilter);
-                //addtextureblock(sizey);
-                //addtextureblock(magfilter);
-                //addtextureblock(minfilter);
                 tile.put("sizey", sizey);
                 tile.put("magfilter", magfilter);
                 tile.put("minfilter", minfilter);
@@ -258,7 +189,6 @@ public class Gishlevel {
 
 
                 byte[][] textureblob = new byte[sx * sy][4];
-                //System.out.println(" Textureblob size for tex" + i + ":" + textureblob.length);
                 int temp_tbsize = sx * sy * 4;
                 byte[] textureblob_single = new byte[temp_tbsize];
                 for (int ti = 0; ti < textureblob.length; ti++) {
@@ -273,52 +203,14 @@ public class Gishlevel {
                 }
 
                 tile.put("textureblob", textureblob_single);
-                //System.out.println("Tex" + i + " -- BLOB -- sizex:" + readCInt(sizex) + " sizey:" + readCInt(sizey) + " magfilter:" + readCInt(magfilter) + " minfilter:" + readCInt(minfilter));
             }
-            //END TEXTURE
-            //BLOCK
-            /*
-            fread2(&block[count].numoflines,4,1,fp);
-             */
             byte[] block_numoflines = new byte[4];
             fs.read(block_numoflines);
-            //addtextureblock(block_numoflines);
             tile.put("block_numoflines", block_numoflines);
-            //System.out.println("Numoflines for tex" + i + ": " + readCInt(block_numoflines));
-            //if (readCInt(block_numoflines) >= 0) {
 
             byte[] block_lines = new byte[8 * 4 * readCInt(block_numoflines)];
             fs.read(block_lines);
             tile.put("block_lines", block_lines);
-            //addtextureblock(block_lines); //FOOSH
-
-//            for (int li = 0; li < readCInt(block_numoflines); li++) {
-//            byte[][] block_line = new byte[8][4];
-//
-//            int temp_bsize = 8 * 4;
-//            byte[] block_lines = new byte[temp_bsize];
-//
-//            for (int lli = 0; lli < block_line.length; lli++) {
-//            fs.read(block_line[lli]);
-//            addtextureblock(block_line[lli]); //FOOSH
-//            block_lines = cat(block_lines, block_line[lli]);
-//            }
-//
-//            tile.put("block_lines", block_lines);
-//            }
-            //}
-            /*
-            fread2(&block[count].friction,4,1,fp);
-            fread2(&block[count].breakpoint,4,1,fp);
-            fread2(&block[count].middamage,4,1,fp);
-            fread2(&block[count].foredamage,4,1,fp);
-            fread2(&block[count].density,4,1,fp);
-            fread2(&block[count].drag,4,1,fp);
-            fread2(&block[count].animation,4,1,fp);
-            fread2(&block[count].animationspeed,4,1,fp);
-             */
-
-
 
             block_friction = new byte[4];
             block_breakpoint = new byte[4];
@@ -331,75 +223,25 @@ public class Gishlevel {
 
             fs.read(block_friction);
             tile.put("block_friction", block_friction);
-            //addtextureblock(block_friction);
             fs.read(block_breakpoint);
             tile.put("block_breakpoint", block_breakpoint);
-            //addtextureblock(block_breakpoint);
             fs.read(block_middamage);
             tile.put("block_middamage", block_middamage);
-            //addtextureblock(block_middamage);
             fs.read(block_foredamage);
             tile.put("block_foredamage", block_foredamage);
-            //addtextureblock(block_foredamage);
             fs.read(block_density);
             tile.put("block_density", block_density);
-            //addtextureblock(block_density);
             fs.read(block_drag);
             tile.put("block_drag", block_drag);
-            //addtextureblock(block_drag);
             fs.read(block_animation);
             tile.put("block_animation", block_animation);
-            //addtextureblock(block_animation);
             fs.read(block_animationspeed);
             tile.put("block_animationspeed", block_animationspeed);
-            //addtextureblock(block_animationspeed);
 
-            //END BLOCK
             tiles.add(tile);
-            //System.out.println("Tile size in bytes: " + tile.getTileData().length);
         }
-
-        //System.out.println("---READING DONE---");
 
         System.out.println("Version: " + readCInt(version));
-        /*System.out.println(
-        "Level tileset: " + readCInt(level_tileset));
-        System.out.println(
-        "Level gametype: " + readCInt(level_gametype));
-        System.out.println(
-        "Level time (?WRONG?): " + readCInt(level_time));
-        System.out.println(
-        "Level start position (?): " + readCInt(level_startposition[0]) + "," + readCInt(level_startposition[1]) + "," + readCInt(level_startposition[2]));
-         */
-
-        /*for (int i = 0;
-        i < level_ambient.length;
-        i++) {
-        System.out.println("Level_ambient[" + i + "]: " + readCFloat(level_ambient[i]));
-        }*/
-
-        //System.out.println("Num of objects: " + readCInt(level_numofobjects));
-        /*System.out.println(
-        "(Size of objects data: " + objects_data.length + " bytes)");
-         */
-        //System.out.println(
-        //        "Num of ropes: " + readCInt(level_numofropes));
-        /*System.out.println(
-        "(Size of ropes data: " + ropes_data.length + " bytes)");
-        System.out.println("num of tiles: " + tiles.size());
-         */
-
-        /*for (int y = 0; y < 256; y++) {
-        String out = "";
-        for (int x = 0; x < 256; x++) {
-        out += level_foregrid[(y * 256) + x][0];
-        }
-        System.out.println(out);
-        }
-
-        System.gc();
-        drawMap(level_foregrid);*/
-
     }
 
     public void savelevel(String path) {
@@ -426,11 +268,6 @@ public class Gishlevel {
                 //System.err.println("Writing tile with tileData size: " + t.getTileData().length);
                 fos.write(writeB);
             }
-
-//            for (byte[] b : textures_and_blocks) {
-//                fos.write(b);
-//            }
-
 
             fos.close();
         } catch (Exception e) {
@@ -498,40 +335,6 @@ public class Gishlevel {
         return bufferedImage;
     }
 
-//    //intent was to draw a map of the level.
-//    private static void drawMap(byte[][] grid) throws IOException {
-//        BufferedImage bufferedImage = new BufferedImage(8192, 8192, BITYPE);
-//        Graphics2D g2d = bufferedImage.createGraphics();
-//
-//        for (int y = 0; y < 256; y++) {
-//            for (int x = 0; x < 256; x++) {
-//                int color = Math.min(255, grid[(y * 256) + x][0] * 10);
-//                g2d.setColor(new Color(color, color, color));
-//                g2d.fillRect(x * 32, y * 32, 32, 32);
-//                //grid[(y * 256) + x][0];
-//            }
-//        }
-//
-//
-//        File f = new File("map.png");
-//        ImageIO.write(bufferedImage, "png", f);
-//    }
-//
-//    public static BufferedImage toBufferedImage(Image i) {
-//        if (i instanceof BufferedImage) {
-//            return (BufferedImage) i;
-//        }
-//        Image img;
-//        img = new ImageIcon(i).getImage();
-//        BufferedImage b;
-//        b = new BufferedImage(img.getWidth(null), img.getHeight(null), BITYPE);
-//        Graphics g = b.createGraphics();
-//        g.drawImage(img, 0, 0, null);
-//        g.dispose();
-//        return b;
-//    }
-
-    
     public void extract_and_convert(ArrayList<MD5db> md5dbs) throws IOException {
         if (readCInt(version) == 10) {
             version = inttoBarray(11);
@@ -579,7 +382,7 @@ public class Gishlevel {
                                         filenameTo = filenameTo.substring("texture/".length());
                                     }
                                     //System.err.println("Filenameto: " + filenameTo);
-                                    t.put("sizex", inttoBarray(0 - filenameTo.length()));
+                                    t.put("sizex", inttoBarray(-filenameTo.length()));
                                     t.put("sizey", null);
                                     t.put("textureblob", null);
                                     t.put("magfilter", null);
@@ -605,9 +408,6 @@ public class Gishlevel {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "png", baos);
         md.update(baos.toByteArray());
-
-        //byte[] data = ((DataBufferByte)image.getData().getDataBuffer()).getData();
-        //md.update(data);
         BigInteger bi = new BigInteger(1, md.digest());
         return bi.toString(16);
     }
