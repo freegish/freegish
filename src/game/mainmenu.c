@@ -54,6 +54,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../video/texture.h"
 #include "../sdl/video.h"
 
+#define VERSION "Version 2.0.0"
+
 void mainmenu(void)
   {
   int count,temp;
@@ -131,7 +133,7 @@ void mainmenu(void)
     if (game.turbomode)
       drawtext(TXT_TURBO_EDITION,(640|TEXT_END),470,10,1.0f,1.0f,1.0f,1.0f);
 
-    drawtext("Version 1.53",0,470,10,1.0f,1.0f,1.0f,1.0f);
+    drawtext(VERSION,0,470,10,1.0f,1.0f,1.0f,1.0f);
 
     drawtext(TXT_COPYRIGHT,(320|TEXT_CENTER),470,10,0.75f,0.75f,0.75f,1.0f);
 
@@ -722,7 +724,7 @@ void introscreen(void)
 
       if (game.turbomode)
         drawtext(TXT_TURBO_EDITION,(640|TEXT_END),470,10,1.0f,1.0f,1.0f,1.0f);
-      drawtext("Version 1.53",0,470,10,1.0f,1.0f,1.0f,1.0f);
+      drawtext(VERSION,0,470,10,1.0f,1.0f,1.0f,1.0f);
 
       drawtext(TXT_COPYRIGHT,(320|TEXT_CENTER),470,10,0.75f,0.75f,0.75f,alpha);
       }
