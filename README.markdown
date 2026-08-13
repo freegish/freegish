@@ -25,8 +25,6 @@ If you own the original assets, create a new directory named `original` in the `
 - texture
 - tile01 ... tile07
 
-Afterwards run `rename-levels.sh DIRECTORY_WITH_ASSETS` script to rename files so that they match Freegish naming convention (see https://github.com/freegish/freegish/issues/2#issuecomment-48749365).
-
 You may choose which datapack to use in the Options menu (`freegish` or `original`)
 
 # Compiling
