@@ -195,7 +195,7 @@ void loadconfig(void)
 
   for (count=0;count<numkeyboardpresets;count++){
     sprintf(tempstr,"keyboardpreset%dname=",count+1);
-    optionreadstring(&keyboardpresets[count].name, tempstr, 32);
+    optionreadstring(keyboardpresets[count].name, tempstr, 32);
     for (count2=0;count2<KEYALIAS_LENGTH;count2++){
       sprintf(tempstr,"keyboardpreset%dkey%d=",count+1,count2+1);
       optionreadint((int*)&keyboardpresets[count].key[count2],tempstr);
@@ -203,7 +203,7 @@ void loadconfig(void)
   }
   for (count=0; count<numjoystickpresets;count++){
     sprintf(tempstr,"joystickpreset%dname=",count+1);
-    optionreadstring(&joystickpresets[count].name, tempstr, 32);
+    optionreadstring(joystickpresets[count].name, tempstr, 32);
     sprintf(tempstr,"joystickpreset%djoysticknum=",count+1);
     optionreadint(&joystickpresets[count].joysticknum,tempstr);
 
