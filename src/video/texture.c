@@ -629,7 +629,7 @@ int load_all_text_textures(void){
 	for (int foldercount = 0; foldercount < 8; foldercount++)
 	for (int extensioncount = 0; extensioncount < 2; extensioncount++){
 		strcpy(current_folder, folders[foldercount]);
-	    listfiles(current_folder, extensions[extensioncount], texturelist, 0); // should memset 0 texturelist or not??
+	    listfiles(current_folder, extensions[extensioncount], texturelist, 1024, 0); // should memset 0 texturelist or not??
 	    numoftextures = 0;
         while (texturelist[numoftextures][0]!=0)
             numoftextures++;

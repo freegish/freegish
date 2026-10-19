@@ -196,7 +196,7 @@ void replaymenu(void)
   int pagenum;
   char path[PATH_MAX];
 
-  listfiles(userpath(path,"replay",NULL),"*.gre",levellist,0);
+  listfiles(userpath(path,"replay",NULL),"*.gre",levellist,1024,0);
 
   numoffiles=0;
   while (levellist[numoffiles][0]!=0)

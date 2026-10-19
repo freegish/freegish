@@ -232,7 +232,7 @@ void optionsmenu(void){
   int picking_dataset = 0;
   int debug_options = 0;
   int num_known_datapacks = 0;
-  char known_datapacks[1024][32];
+  char known_datapacks[32][32];
 
   joystickmenu=0;
   resetmenuitems();
@@ -498,7 +498,7 @@ void optionsmenu(void){
         if (menuitem[datapack_picker].active || menuitem[loaded_datapack_item].active){
             char path[PATH_MAX];
             strcpy(path, datapacks_folder);
-            listfiles(path,"*",known_datapacks,1);
+            listfiles(path,"*",known_datapacks,32,1);
             num_known_datapacks=0;
             while (known_datapacks[num_known_datapacks][0]!=0)
               num_known_datapacks++;

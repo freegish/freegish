@@ -157,7 +157,7 @@ void loadlevelmenu(void)
   int pagenum;
   char path[PATH_MAX];
 
-  listfiles(userpath(path,"level",NULL),"*.lvl",levellist,0);
+  listfiles(userpath(path,"level",NULL),"*.lvl",levellist,1024,0);
 
   numoffiles=0;
   while (levellist[numoffiles][0]!=0)
@@ -253,7 +253,7 @@ void playcampaignmenu(void)
   int pagenum;
   char path[PATH_MAX];
 
-  listfiles(userpath(path,"level",NULL),"*.gmp",levellist,0);
+  listfiles(userpath(path,"level",NULL),"*.gmp",levellist,1024,0);
 
   numoffiles=0;
   while (levellist[numoffiles][0]!=0)
