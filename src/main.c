@@ -180,8 +180,7 @@ int main (int argc,char *argv[])
     {
     notsupportedmenu();
 
-    SDL_MinimizeWindow(globalwindow);
-    SDL_Quit();
+    shutdownvideo();
     return(0);
     }
     
@@ -200,8 +199,7 @@ int main (int argc,char *argv[])
   if (config.sound)
     shutdownaudio();
 
-  SDL_MinimizeWindow(globalwindow);
-  SDL_Quit();
+  shutdownvideo();
 
   return(0);
   }
