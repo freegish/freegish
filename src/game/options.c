@@ -26,12 +26,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/debug.h"
 #include "../game/config.h"
 #include "../game/options.h"
+#include "../game/animation.h"
+#include "../game/music.h"
 #include "../game/english.h"
 #include "../input/keyboard.h"
 #include "../input/mouse.h"
 #include "../input/joystick.h"
+#include "../audio/audio.h"
 #include "../menu/menu.h"
 #include "../sdl/event.h"
+#include "../sdl/file.h"
 #include "../sdl/video.h"
 #include "../video/text.h"
 #include "../video/texture.h"
@@ -492,9 +496,9 @@ void optionsmenu(void){
             menuitem[create_button].active = 0;
         }
         if (menuitem[datapack_picker].active || menuitem[loaded_datapack_item].active){
-            char path[MAX_PATH];
+            char path[PATH_MAX];
             strcpy(path, datapacks_folder);
-            listfiles(path,"*",known_datapacks,1);
+            listfiles(path,"*",known_datapacks,32,1);
             num_known_datapacks=0;
             while (known_datapacks[num_known_datapacks][0]!=0)
               num_known_datapacks++;
@@ -582,13 +586,13 @@ void videooptionsmenu(void)
     setmenuitem(MO_HOTKEY,SCAN_A);
 
     count2=64;
-    sprintf_s(restext, 64, "%d videomodes found", numofsdlvideomodes);
+    snprintf(restext, 64, "%d videomodes found", numofsdlvideomodes);
     drawtext(restext, 0, 32, 16, 1.0f, 1.0f, 1.0f, 1.0f);
     for (count=numofsdlvideomodes-1;count>=0;count--)
     if (sdlvideomode[count].resolutionx>=640)
     if (sdlvideomode[count].bitsperpixel==32)
       {
-      sprintf_s(restext, 64, "%dx%d:%d", sdlvideomode[count].resolutionx, sdlvideomode[count].resolutiony, sdlvideomode[count].bitsperpixel);
+      snprintf(restext, 64, "%dx%d:%d", sdlvideomode[count].resolutionx, sdlvideomode[count].resolutiony, sdlvideomode[count].bitsperpixel);
       createmenuitem(restext,0,count2,16,1.0f,1.0f,1.0f,1.0f);
       setmenuitem(MO_SET,&videomodenum,count);
 

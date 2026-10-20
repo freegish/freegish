@@ -145,7 +145,7 @@ void loadconfig(void)
   for (count = 0; count < CONTROLS_LENGTH; count++){
     control[count].joysticknum = -1;
     for (count2 = 0; count2 < KEYALIAS_LENGTH; count2++){
-        control[count].key[count2] = -1;
+        control[count].key[count2] = SDL_SCANCODE_UNKNOWN;
         control[count].button[count2] = -1;
     }
     for (count2 = 0; count2 < 4; count2++){
@@ -195,7 +195,7 @@ void loadconfig(void)
 
   for (count=0;count<numkeyboardpresets;count++){
     sprintf(tempstr,"keyboardpreset%dname=",count+1);
-    optionreadstring(&keyboardpresets[count].name, tempstr, 32);
+    optionreadstring(keyboardpresets[count].name, tempstr, 32);
     for (count2=0;count2<KEYALIAS_LENGTH;count2++){
       sprintf(tempstr,"keyboardpreset%dkey%d=",count+1,count2+1);
       optionreadint((int*)&keyboardpresets[count].key[count2],tempstr);
@@ -203,7 +203,7 @@ void loadconfig(void)
   }
   for (count=0; count<numjoystickpresets;count++){
     sprintf(tempstr,"joystickpreset%dname=",count+1);
-    optionreadstring(&joystickpresets[count].name, tempstr, 32);
+    optionreadstring(joystickpresets[count].name, tempstr, 32);
     sprintf(tempstr,"joystickpreset%djoysticknum=",count+1);
     optionreadint(&joystickpresets[count].joysticknum,tempstr);
 
@@ -218,6 +218,9 @@ void loadconfig(void)
       optionreadint(&joystickpresets[count].button[count2],tempstr);
       }
   }
+  // menus read control[0] before any presets are bound to players
+  control[0] = keyboardpresets[0];
+
   optionreadint(&versus_numplayers,"versus_numplayers=");
   for (count=0; count<versus_numplayers;count++){
     sprintf(tempstr,"versus_is_joystick%d=",count+1);
@@ -301,7 +304,7 @@ void saveconfig(void)
     optionwriteint(fp, &joystickpresets[count].joysticknum,tempstr);
 
     for (count2=0;count2<KEYALIAS_LENGTH;count2++)
-        joystickpresets[count].key[count2] = -1;
+        joystickpresets[count].key[count2] = SDL_SCANCODE_UNKNOWN;
     for (count2=0;count2<4;count2++)
       {
       sprintf(tempstr,"joystickpreset%daxis%d=",count+1,count2+1);

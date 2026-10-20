@@ -65,7 +65,7 @@ int checkfilespec(char *filespec,char *filename)
   return(1);
   }
 
-void listfiles(char *path,char *filespec,char filelist[1024][32],int directories)
+void listfiles(char *path,char *filespec,char filelist[][32],int maxfiles,int directories)
   {
 #ifdef WINDOWS
   int count,count2;
@@ -81,7 +81,7 @@ void listfiles(char *path,char *filespec,char filelist[1024][32],int directories
 
   count=0;
   count2=handle;
-  while (count2!=-1 && count<1024)
+  while (count2!=-1 && count<maxfiles-1)
     {
     if (!directories)
       {
@@ -124,7 +124,7 @@ void listfiles(char *path,char *filespec,char filelist[1024][32],int directories
   count=0;
   if (dfd!=NULL)
     {
-    while ((dp=readdir(dfd))!=NULL)
+    while (count<maxfiles-1 && (dp=readdir(dfd))!=NULL)
       {
       strncpy(path+len+1,dp->d_name,PATH_MAX-len-1);
       path[PATH_MAX-1] = '\0'; /* Safety first! */

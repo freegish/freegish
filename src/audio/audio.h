@@ -38,6 +38,7 @@ int updateogg(void);
 int streamogg(int buffernum);
 void shutdownaudio(void);
 void loadwav(int buffernum,char *filename);
+void loadwavs(void);
 
 extern ALCcontext *alcontext;
 extern ALCdevice *aldevice;
