@@ -88,3 +88,18 @@ void listvideomodes(void)
         }
     }
   }
+
+void shutdownvideo(void)
+  {
+  if (globalwindow!=NULL)
+    {
+    // leave fullscreen first so the desktop video mode gets restored
+    SDL_SetWindowFullscreen(globalwindow, 0);
+    if (glcontext!=NULL)
+      SDL_GL_DeleteContext(glcontext);
+    SDL_DestroyWindow(globalwindow);
+    glcontext=NULL;
+    globalwindow=NULL;
+    }
+  SDL_Quit();
+  }
