@@ -44,6 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // extern
 _option option;
 _control control[CONTROLS_LENGTH];
+_control menucontrol;
 _control keyboardpresets[PRESETS_LENGTH];
 _control joystickpresets[PRESETS_LENGTH];
 int numkeyboardpresets;
@@ -68,11 +69,76 @@ void drawkeyboardkeyrow(char* text, keyalias keyalias_, _control* preset, int of
     else
       drawtext("?",320,y+offset*16,16,1.0f,1.0f,1.0f,1.0f);
 }
+char* joysticklabel(int joysticknum, int buttonnum, int shortlabel){
+    // axes and the hat are bound as virtual buttons placed after the real ones
+    static char labels[4][32];
+    static int nextlabel = 0;
+    char* hattexts[4] = {TXT_HAT_UP, TXT_HAT_RIGHT, TXT_HAT_DOWN, TXT_HAT_LEFT};
+    char* hatshorttexts[4] = {TXT_HAT_UP_SHORT, TXT_HAT_RIGHT_SHORT, TXT_HAT_DOWN_SHORT, TXT_HAT_LEFT_SHORT};
+    char* label;
+    int virtualnum;
+
+    label=labels[nextlabel];
+    nextlabel=(nextlabel+1)&3;
+    if (joysticknum!=-1)
+    if (buttonnum>=joystick[joysticknum].numofbuttons && buttonnum<joysticknumofinputs(joysticknum)){
+        virtualnum=buttonnum-joystick[joysticknum].numofbuttons;
+        if (virtualnum>=joystick[joysticknum].numofaxes*2){
+            virtualnum-=joystick[joysticknum].numofaxes*2;
+            return(shortlabel ? hatshorttexts[virtualnum] : hattexts[virtualnum]);
+        }
+        if (shortlabel)
+            sprintf(label,TXT_AXIS_SHORT"%d%c",virtualnum/2+1,(virtualnum&1) ? '+' : '-');
+        else
+            sprintf(label,TXT_AXIS" %d%c",virtualnum/2+1,(virtualnum&1) ? '+' : '-');
+        return(label);
+    }
+    if (shortlabel)
+        sprintf(label,TXT_BUTTON_SHORT"%d",buttonnum+1);
+    else
+        sprintf(label,TXT_BUTTON" %d",buttonnum+1);
+    return(label);
+}
+void drawjoystickbutton(int joysticknum, int buttonnum, int x, int y){
+    drawtext("/s",x,y,16,1.0f,1.0f,1.0f,1.0f,joysticklabel(joysticknum,buttonnum,0));
+}
+// short label of the key or joystick input the action is bound to, the same way getinputs() reads them
+char* controllabel(_control* preset, int keyalias_){
+    // movement without a binding comes from the first two axes (and the hat)
+    char* defaultmovement[4] = {TXT_AXIS_SHORT"1-", TXT_AXIS_SHORT"1+", TXT_AXIS_SHORT"2+", TXT_AXIS_SHORT"2-"};
+
+    if (preset->key[keyalias_]!=SDL_SCANCODE_UNKNOWN)
+        return(keyboardlabel[preset->key[keyalias_]]);
+    if (preset->joysticknum!=-1){
+        if (preset->button[keyalias_]!=-1)
+            return(joysticklabel(preset->joysticknum,preset->button[keyalias_],1));
+        if (keyalias_<=KEYALIAS_UP)
+            return(defaultmovement[keyalias_]);
+    }
+    return(keyboardlabel[SDL_SCANCODE_UNKNOWN]);
+}
+int controlpressed(_control* preset, int keyalias_){
+    if (preset->key[keyalias_]!=SDL_SCANCODE_UNKNOWN && keyboard[preset->key[keyalias_]])
+        return(1);
+    if (preset->joysticknum!=-1){
+        if (preset->button[keyalias_]!=-1 && joystick[preset->joysticknum].button[preset->button[keyalias_]])
+            return(1);
+        if (keyalias_==KEYALIAS_LEFT && joystick[preset->joysticknum].axis[0]<=-0.5f)
+            return(1);
+        if (keyalias_==KEYALIAS_RIGHT && joystick[preset->joysticknum].axis[0]>=0.5f)
+            return(1);
+        if (keyalias_==KEYALIAS_DOWN && joystick[preset->joysticknum].axis[1]<=-0.5f)
+            return(1);
+        if (keyalias_==KEYALIAS_UP && joystick[preset->joysticknum].axis[1]>=0.5f)
+            return(1);
+    }
+    return(0);
+}
 void drawjoystickkeyrow(char* text, keyalias keyalias_, _control* preset, int offset, int menuitem_offset, int y){
     drawtext(text,0,y+offset*16,16,0.75f,0.75f,0.75f,1.0f);
     if (!menuitem[menuitem_offset+offset].active){
       if (preset->button[offset]!=-1)
-        drawtext(TXT_BUTTON" /i",320,y+offset*16,16,1.0f,1.0f,1.0f,1.0f,preset->button[offset]+1);
+        drawjoystickbutton(preset->joysticknum,preset->button[offset],320,y+offset*16);
       else
         drawtext(TXT_AXIS,320,y+offset*16,16,1.0f,1.0f,1.0f,1.0f);
       }
@@ -101,7 +167,7 @@ void bindjoystickkeys(_control* preset, int first_corresponding_joystick_item){
     if (preset->joysticknum!=-1)
     for (int count=0;count<KEYALIAS_LENGTH;count++)
     if (menuitem[first_corresponding_joystick_item + count].active){
-        for (int count2=0;count2<joystick[preset->joysticknum].numofbuttons;count2++)
+        for (int count2=0;count2<joysticknumofinputs(preset->joysticknum);count2++)
         if (joystick[preset->joysticknum].button[count2] && !prevjoystick[preset->joysticknum].button[count2]){
             preset->button[count]=count2;
             menuitem[first_corresponding_joystick_item + count].active=0;

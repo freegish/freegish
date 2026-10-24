@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -218,8 +219,9 @@ void loadconfig(void)
       optionreadint(&joystickpresets[count].button[count2],tempstr);
       }
   }
-  // menus read control[0] before any presets are bound to players
+  // the game reads control[0] before any presets are bound to players
   control[0] = keyboardpresets[0];
+  bindmenucontrols();
 
   optionreadint(&versus_numplayers,"versus_numplayers=");
   for (count=0; count<versus_numplayers;count++){
@@ -243,6 +245,19 @@ void loadconfig(void)
   windowinfo.depthbits=config.depthbits;
   windowinfo.stencilbits=config.stencilbits;
   windowinfo.fullscreen=config.fullscreen;
+  }
+
+void bindmenucontrols(void)
+  {
+  // menus are controlled with the first keyboard preset together with the
+  // first joystick preset, whatever presets the players have
+  menucontrol = keyboardpresets[0];
+  if (numjoystickpresets>0)
+    {
+    menucontrol.joysticknum = joystickpresets[0].joysticknum;
+    memcpy(menucontrol.axis, joystickpresets[0].axis, sizeof(menucontrol.axis));
+    memcpy(menucontrol.button, joystickpresets[0].button, sizeof(menucontrol.button));
+    }
   }
 
 void saveconfig(void)

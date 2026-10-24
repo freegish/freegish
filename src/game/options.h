@@ -65,8 +65,13 @@ typedef struct
 
 extern _option option;
 extern _control control[CONTROLS_LENGTH];
+extern _control menucontrol;
 extern _control keyboardpresets[PRESETS_LENGTH];
 extern _control joystickpresets[PRESETS_LENGTH];
+
+char* joysticklabel(int joysticknum, int buttonnum, int shortlabel);
+char* controllabel(_control* preset, int keyalias_);
+int controlpressed(_control* preset, int keyalias_);
 extern int numkeyboardpresets;
 extern int numjoystickpresets;
 

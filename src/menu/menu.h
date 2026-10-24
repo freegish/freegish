@@ -39,6 +39,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MO_RESIZE       12
 #define MO_CURSOR       13
 #define MO_BACKGROUND   14
+#define MO_MOUSEONLY    15
+
+// ms between two moves of the menu selection with a joystick
+#define MENU_JOYSTICK_DEBOUNCE 150
 
 void checkmenuitems(void);
 void drawmenuitems(void);
@@ -77,6 +81,7 @@ typedef struct
   int texturenum;
   int cursornum;
   int background;
+  int mouseonly;
   void *inputpointer;
   void (*function)();
   } _menuitem;

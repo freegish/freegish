@@ -62,6 +62,19 @@ void setupjoysticks(void){
       }
       joystick[count].numofbuttons=SDL_JoystickNumButtons(joy[count]);
       joystick[count].numofhats=SDL_JoystickNumHats(joy[count]);
+      joystick[count].numofaxes=SDL_JoystickNumAxes(joy[count]);
+      // the counts are negative on an error
+      if (joystick[count].numofbuttons<0)
+        joystick[count].numofbuttons=0;
+      if (joystick[count].numofhats<0)
+        joystick[count].numofhats=0;
+      if (joystick[count].numofaxes<0)
+        joystick[count].numofaxes=0;
+      // leave room for the virtual buttons of the axes and the hat
+      if (joystick[count].numofbuttons>JOYSTICK_BUTTONS_LENGTH-4)
+        joystick[count].numofbuttons=JOYSTICK_BUTTONS_LENGTH-4;
+      if (joystick[count].numofbuttons+joystick[count].numofaxes*2+4>JOYSTICK_BUTTONS_LENGTH)
+        joystick[count].numofaxes=(JOYSTICK_BUTTONS_LENGTH-4-joystick[count].numofbuttons)/2;
       printf("Joystick %d done\n", count);
       fflush(stdout);
       }
@@ -70,9 +83,22 @@ void setupjoysticks(void){
     }
 }
 
+int joysticknumofinputs(int joysticknum)
+  {
+  int numofinputs;
+
+  numofinputs=joystick[joysticknum].numofbuttons+joystick[joysticknum].numofaxes*2;
+  if (joystick[joysticknum].numofhats>0)
+    numofinputs+=4;
+
+  return(numofinputs);
+  }
+
 void checkjoystick(void)
   {
   int count,count2;
+  int buttonnum;
+  int value;
 
   if (!config.joystick)
     return;
@@ -118,6 +144,21 @@ void checkjoystick(void)
           joystick[count].axis[0]=-1.0f;
         if (joystick[count].hat[0]==SDL_HAT_RIGHT || joystick[count].hat[0]==SDL_HAT_RIGHTUP || joystick[count].hat[0]==SDL_HAT_RIGHTDOWN)
           joystick[count].axis[0]=1.0f;
+        }
+
+      buttonnum=joystick[count].numofbuttons;
+      for (count2=0;count2<joystick[count].numofaxes;count2++)
+        {
+        value=SDL_JoystickGetAxis(joy[count],count2);
+        joystick[count].button[buttonnum++]=(value<-JOYSTICK_AXIS_THRESHOLD);
+        joystick[count].button[buttonnum++]=(value>JOYSTICK_AXIS_THRESHOLD);
+        }
+      if (joystick[count].numofhats>0)
+        {
+        joystick[count].button[buttonnum++]=((joystick[count].hat[0]&SDL_HAT_UP)!=0);
+        joystick[count].button[buttonnum++]=((joystick[count].hat[0]&SDL_HAT_RIGHT)!=0);
+        joystick[count].button[buttonnum++]=((joystick[count].hat[0]&SDL_HAT_DOWN)!=0);
+        joystick[count].button[buttonnum++]=((joystick[count].hat[0]&SDL_HAT_LEFT)!=0);
         }
       }
   }

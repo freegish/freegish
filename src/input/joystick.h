@@ -23,8 +23,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../sdl/sdl.h"
 
+// Axes and the first hat are also exposed as virtual buttons placed after the
+// real ones (negative and positive direction of each axis, then hat up, right,
+// down and left), so they can be bound to actions the same way as buttons.
+#define JOYSTICK_BUTTONS_LENGTH 64
+// the same threshold as for the movement read from the first two axes
+#define JOYSTICK_AXIS_THRESHOLD 10000
+
 void setupjoysticks(void);
 void checkjoystick(void);
+int joysticknumofinputs(int joysticknum);
 
 typedef struct {
   int x;
@@ -32,7 +40,8 @@ typedef struct {
   float axis[2];
   int throttle;
   int numofbuttons;
-  int button[32];
+  int numofaxes;
+  int button[JOYSTICK_BUTTONS_LENGTH];
   int numofhats;
   int hat[4];
   char name[64];
@@ -44,7 +53,8 @@ typedef struct {
   float axis[2];
   int throttle;
   int numofbuttons;
-  int button[32];
+  int numofaxes;
+  int button[JOYSTICK_BUTTONS_LENGTH];
   int numofhats;
   int hat[4];
   char name[64];

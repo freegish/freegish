@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h>
 
 #include "../menu/menu.h"
+#include "../game/config.h"
 #include "../game/english.h"
 #include "../game/options.h"
 #include "../input/joystick.h"
@@ -48,10 +49,51 @@ char menuinputtemp[SDL_NUM_SCANCODES];
 
 int joymenunum;
 int joystickmenu=1;
+unsigned int joymenumovetime=0;
 
 int currentmenuitem;
 
 char keyboardlabel[SDL_NUM_SCANCODES][16];
+
+// -1 or 1 when the joystick of the controls moves the menu selection up or down
+static int menujoystickmove(_control *controls)
+  {
+  int move;
+
+  move=0;
+  if (controls->joysticknum==-1)
+    return(move);
+
+  if (joystick[controls->joysticknum].axis[1]>=0.5f && prevjoystick[controls->joysticknum].axis[1]<0.5f)
+    move=-1;
+  if (joystick[controls->joysticknum].axis[1]<=-0.5f && prevjoystick[controls->joysticknum].axis[1]>-0.5f)
+    move=1;
+
+  if (controls->button[KEYALIAS_DOWN]!=-1)
+  if (joystick[controls->joysticknum].button[controls->button[KEYALIAS_DOWN]] && !prevjoystick[controls->joysticknum].button[controls->button[KEYALIAS_DOWN]])
+    move=1;
+  if (controls->button[KEYALIAS_UP]!=-1)
+  if (joystick[controls->joysticknum].button[controls->button[KEYALIAS_UP]] && !prevjoystick[controls->joysticknum].button[controls->button[KEYALIAS_UP]])
+    move=-1;
+
+  return(move);
+  }
+
+static int menujoystickconfirm(_control *controls)
+  {
+  if (controls->joysticknum==-1 || controls->button[KEYALIAS_START_PAUSE]==-1)
+    return(0);
+  return(joystick[controls->joysticknum].button[controls->button[KEYALIAS_START_PAUSE]] && !prevjoystick[controls->joysticknum].button[controls->button[KEYALIAS_START_PAUSE]]);
+  }
+
+static int menukeyboardmove(_control *controls)
+  {
+  if (keyboard[controls->key[KEYALIAS_UP]] && !prevkeyboard[controls->key[KEYALIAS_UP]])
+    return(-1);
+  if (keyboard[controls->key[KEYALIAS_DOWN]] && !prevkeyboard[controls->key[KEYALIAS_DOWN]])
+    return(1);
+  return(0);
+  }
 
 void checkmenuitems(void)
   {
@@ -108,39 +150,37 @@ void checkmenuitems(void)
     if (joymenunum>=numofmenuitems)
       joymenunum=0;
 
+    // menus are controlled with the menu controls, and in the game also with
+    // the controls of the first player
+    bindmenucontrols();
+
     if (menuitem[joymenunum].highlight!=0)
       {
       if (keyboard[SCAN_ENTER] && !prevkeyboard[SCAN_ENTER])
         menuitem[joymenunum].active=1;
 
-      if (control[0].joysticknum!=-1)
-      if (control[0].button[8]!=-1)
-      if (joystick[control[0].joysticknum].button[control[0].button[8]] && !prevjoystick[control[0].joysticknum].button[control[0].button[8]])
+      if (menujoystickconfirm(&menucontrol) || menujoystickconfirm(&control[0]))
         menuitem[joymenunum].active=1;
       }
     if (menuitem[joymenunum].highlight==1)
       menuitem[joymenunum].highlight=2;
 
-    count2=0;
-    if (control[0].joysticknum!=-1)
+    count2=menujoystickmove(&menucontrol);
+    if (count2==0)
+      count2=menujoystickmove(&control[0]);
+    if (count2!=0)
       {
-      if (joystick[control[0].joysticknum].axis[1]>=0.5f && prevjoystick[control[0].joysticknum].axis[1]<0.5f)
-        count2=-1;
-      if (joystick[control[0].joysticknum].axis[1]<=-0.5f && prevjoystick[control[0].joysticknum].axis[1]>-0.5f)
-        count2=1;
-  
-      if (control[0].button[2]!=-1)
-      if (joystick[control[0].joysticknum].button[control[0].button[2]] && !prevjoystick[control[0].joysticknum].button[control[0].button[2]])
-        count2=1;
-      if (control[0].button[3]!=-1)
-      if (joystick[control[0].joysticknum].button[control[0].button[3]] && !prevjoystick[control[0].joysticknum].button[control[0].button[3]])
-        count2=-1;
+      //moves of the selection with a joystick follow each other only after a while
+      if (SDL_GetTicks()-joymenumovetime<MENU_JOYSTICK_DEBOUNCE)
+        count2=0;
+      else
+        joymenumovetime=SDL_GetTicks();
       }
 
-    if (keyboard[control[0].key[KEYALIAS_UP]] && !prevkeyboard[control[0].key[KEYALIAS_UP]])
-      count2=-1;
-    if (keyboard[control[0].key[KEYALIAS_DOWN]] && !prevkeyboard[control[0].key[KEYALIAS_DOWN]])
-      count2=1;
+    if (menukeyboardmove(&menucontrol)!=0)
+      count2=menukeyboardmove(&menucontrol);
+    else if (menukeyboardmove(&control[0])!=0)
+      count2=menukeyboardmove(&control[0]);
 
     joymenunum+=count2;
 
@@ -149,7 +189,8 @@ void checkmenuitems(void)
     if (joymenunum>=numofmenuitems)
       joymenunum=0;
 
-    if (menuitem[joymenunum].highlight==0)
+    //items that can't be highlighted, or only with the mouse, are skipped
+    for (count=0;count<numofmenuitems && (menuitem[joymenunum].highlight==0 || menuitem[joymenunum].mouseonly);count++)
       {
       if (count2==0)
         count2=1;
@@ -342,6 +383,7 @@ int createmenuitem(char *label,int x,int y,int textsize,float r,float g,float b,
   menuitem[numofmenuitems].texturenum=-1;
   menuitem[numofmenuitems].cursornum=0;
   menuitem[numofmenuitems].background=0;
+  menuitem[numofmenuitems].mouseonly=0;
   return numofmenuitems++; // return value, then increment
   }
 
@@ -409,6 +451,8 @@ void setmenuitem(int option,...)
     menuitem[numofmenuitems-1].repeat=1;
   if (option==MO_IMAGE)
     menuitem[numofmenuitems-1].texturenum=va_arg(ap,int);
+  if (option==MO_MOUSEONLY)
+    menuitem[numofmenuitems-1].mouseonly=1;
   if (option==MO_RESIZE)
     {
     menuitem[numofmenuitems-1].x=va_arg(ap,int);

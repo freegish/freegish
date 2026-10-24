@@ -110,6 +110,7 @@ void mainmenu(void)
     createmenuitem("Cryptic Sea",0,0,1,1.0f,1.0f,1.0f,1.0f);
     setmenuitem(MO_IMAGE,528);
     setmenuitem(MO_RESIZE,16,0,96,48);
+    setmenuitem(MO_MOUSEONLY);
 
     checksystemmessages();
     checkkeyboard();
@@ -644,7 +645,7 @@ void introscreen(void)
 
     for (count=0;count<KEYALIAS_LENGTH;count++)
       {
-      if (keyboard[control[0].key[count]] && !prevkeyboard[control[0].key[count]])
+      if (keyboard[menucontrol.key[count]] && !prevkeyboard[menucontrol.key[count]])
         {
         if (count==count2)
           secretsequence++;
@@ -652,10 +653,10 @@ void introscreen(void)
           secretsequence=0;
         }
 
-      if (control[0].joysticknum!=-1)
+      if (menucontrol.joysticknum!=-1)
         {
         if (count==0)
-        if (joystick[control[0].joysticknum].axis[0]<=-0.5f && prevjoystick[control[0].joysticknum].axis[0]>-0.5f)
+        if (joystick[menucontrol.joysticknum].axis[0]<=-0.5f && prevjoystick[menucontrol.joysticknum].axis[0]>-0.5f)
           {
           if (count==count2)
             secretsequence++;
@@ -663,7 +664,7 @@ void introscreen(void)
             secretsequence=0;
           }
         if (count==1)
-        if (joystick[control[0].joysticknum].axis[0]>=0.5f && prevjoystick[control[0].joysticknum].axis[0]<0.5f)
+        if (joystick[menucontrol.joysticknum].axis[0]>=0.5f && prevjoystick[menucontrol.joysticknum].axis[0]<0.5f)
           {
           if (count==count2)
             secretsequence++;
@@ -671,7 +672,7 @@ void introscreen(void)
             secretsequence=0;
           }
         if (count==2)
-        if (joystick[control[0].joysticknum].axis[1]<=-0.5f && prevjoystick[control[0].joysticknum].axis[1]>-0.5f)
+        if (joystick[menucontrol.joysticknum].axis[1]<=-0.5f && prevjoystick[menucontrol.joysticknum].axis[1]>-0.5f)
           {
           if (count==count2)
             secretsequence++;
@@ -679,15 +680,15 @@ void introscreen(void)
             secretsequence=0;
           }
         if (count==3)
-        if (joystick[control[0].joysticknum].axis[1]>=0.5f && prevjoystick[control[0].joysticknum].axis[1]<0.5f)
+        if (joystick[menucontrol.joysticknum].axis[1]>=0.5f && prevjoystick[menucontrol.joysticknum].axis[1]<0.5f)
           {
           if (count==count2)
             secretsequence++;
           else
             secretsequence=0;
           }
-        if (control[0].button[count]!=-1)
-        if (joystick[control[0].joysticknum].button[control[0].button[count]] && !prevjoystick[control[0].joysticknum].button[control[0].button[count]])
+        if (menucontrol.button[count]!=-1)
+        if (joystick[menucontrol.joysticknum].button[menucontrol.button[count]] && !prevjoystick[menucontrol.joysticknum].button[menucontrol.button[count]])
           {
           if (count==count2)
             secretsequence++;

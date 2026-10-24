@@ -151,6 +151,11 @@ void playermenu(void)
 
     for (count=0;count<6;count++)
       {
+      //the slots are menu items without a label, so mark the one selected
+      //with the keyboard or a joystick next to its player line
+      if (playernum==-1 && menuitem[count+1].highlight>=2)
+        drawtext(">",44,128+count*40,16,1.0f,1.0f,1.0f,1.0f);
+
       if (count!=playernum || deleteplayer)
         {
         if (player[count].name[0]!=0)

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 char* userpath(char *result,char *subdir,char *file);
 void loadconfig(void);
 void saveconfig(void);
+void bindmenucontrols(void);
 void notsupportedmenu(void);
 void optionreadint(int *ptr,char *str);
 void optionwriteint(FILE *fp, int *ptr,char *str);
